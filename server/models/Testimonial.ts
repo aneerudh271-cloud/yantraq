@@ -8,6 +8,7 @@ export interface ITestimonial extends Document {
     rating: number;
     isActive: boolean;
     createdAt: Date;
+    image?: string;
 }
 
 const TestimonialSchema: Schema = new Schema({
@@ -17,7 +18,8 @@ const TestimonialSchema: Schema = new Schema({
     message: { type: String, required: true },
     rating: { type: Number, min: 1, max: 5, required: true },
     isActive: { type: Boolean, default: true },
-    createdAt: { type: Date, default: Date.now }
+    createdAt: { type: Date, default: Date.now },
+    image: { type: String }
 });
 
 export default mongoose.model<ITestimonial>('Testimonial', TestimonialSchema);

@@ -267,15 +267,28 @@ export const TestimonialManagement = () => {
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h4 className="font-semibold">{testimonial.name}</h4>
-                    <Badge variant={testimonial.isActive ? 'default' : 'secondary'}>
-                      {testimonial.isActive ? 'Active' : 'Inactive'}
-                    </Badge>
+                  <div className="flex items-center gap-4 mb-2">
+                    {testimonial.image ? (
+                      <div className="w-10 h-10 rounded-full overflow-hidden border">
+                        <img src={testimonial.image} alt={testimonial.name} className="w-full h-full object-cover" />
+                      </div>
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center border text-xs font-medium">
+                        {testimonial.name.slice(0, 2).toUpperCase()}
+                      </div>
+                    )}
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h4 className="font-semibold">{testimonial.name}</h4>
+                        <Badge variant={testimonial.isActive ? 'default' : 'secondary'}>
+                          {testimonial.isActive ? 'Active' : 'Inactive'}
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        {testimonial.designation} • {testimonial.industry}
+                      </p>
+                    </div>
                   </div>
-                  <p className="text-sm text-muted-foreground mb-2">
-                    {testimonial.designation} • {testimonial.industry}
-                  </p>
                   <p className="text-sm line-clamp-2">{testimonial.message}</p>
                   <div className="flex gap-1 mt-2">
                     {[...Array(5)].map((_, i) => (

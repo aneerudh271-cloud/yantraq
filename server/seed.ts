@@ -364,6 +364,7 @@ const testimonials = [
         rating: 5,
         isActive: true,
         createdAt: '2024-01-15',
+        image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400',
     },
     {
         id: 'test-2',
@@ -374,6 +375,7 @@ const testimonials = [
         rating: 5,
         isActive: true,
         createdAt: '2024-02-20',
+        image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400',
     },
     {
         id: 'test-3',
@@ -384,6 +386,7 @@ const testimonials = [
         rating: 5,
         isActive: true,
         createdAt: '2024-03-10',
+        image: 'https://images.unsplash.com/photo-1620067691653-da894371fa79?w=400',
     },
     {
         id: 'test-4',
@@ -394,6 +397,7 @@ const testimonials = [
         rating: 5,
         isActive: true,
         createdAt: '2024-04-05',
+        image: 'https://images.unsplash.com/photo-1559192823-e1d8e87def53?w=400',
     },
     {
         id: 'test-5',
@@ -404,6 +408,7 @@ const testimonials = [
         rating: 5,
         isActive: true,
         createdAt: '2024-05-12',
+        image: 'https://images.unsplash.com/photo-1628859155020-f579fc9c02d7?w=400',
     },
     {
         id: 'test-6',
@@ -414,6 +419,7 @@ const testimonials = [
         rating: 5,
         isActive: true,
         createdAt: '2024-06-18',
+        image: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=400',
     },
 ];
 
