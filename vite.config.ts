@@ -21,4 +21,19 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    chunkSizeWarningLimit: 1000, // Increase warning limit to 1000kb
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          if (id.includes('node_modules')) {
+            if (id.includes('lucide-react')) return 'icons';
+            if (id.includes('recharts')) return 'charts';
+            if (id.includes('framer-motion')) return 'animations';
+            return 'vendor'; // Put other node_modules in vendor
+          }
+        }
+      }
+    }
+  },
 }));
