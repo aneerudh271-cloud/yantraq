@@ -1,27 +1,45 @@
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
 import { Layout } from '@/components/layout/Layout';
 import { ContactForm } from '@/components/common/ContactForm';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { getProductById, categories } from '@/data/products';
-import { 
-  ShoppingCart, 
-  Clock, 
-  Wrench, 
+import { categories } from '@/data/products';
+import { api } from '@/lib/api';
+import { SEO } from '@/components/common/SEO';
+import {
+  ShoppingCart,
+  Clock,
+  Wrench,
   ArrowLeft,
   CheckCircle,
-  MessageCircle
+  Loader2
 } from 'lucide-react';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const action = searchParams.get('action') || 'buy';
-  
-  const product = getProductById(id || '');
+
+  const { data: product, isLoading } = useQuery({
+    queryKey: ['product', id],
+    queryFn: () => api.get(`/product/${id}`),
+    enabled: !!id,
+  });
+
   const category = categories.find(c => c.id === product?.category);
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-4 py-20 flex justify-center">
+          <Loader2 className="w-8 h-8 animate-spin" />
+        </div>
+      </Layout>
+    );
+  }
 
   if (!product) {
     return (
@@ -44,6 +62,7 @@ const ProductDetail = () => {
 
   return (
     <Layout>
+      <SEO title={product.name} description={product.description} image={product.image} />
       <div className="container mx-auto px-4 py-8">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
@@ -53,7 +72,7 @@ const ProductDetail = () => {
           </Link>
           <span>/</span>
           <Link to={`/products?category=${product.category}`} className="hover:text-foreground">
-            {category?.name}
+            {category?.name || product.category}
           </Link>
           <span>/</span>
           <span className="text-foreground">{product.name}</span>
@@ -75,7 +94,7 @@ const ProductDetail = () => {
 
             <div className="flex items-center gap-2 mb-4">
               <Badge variant="secondary">
-                {category?.icon} {category?.name}
+                {category?.icon} {category?.name || product.category}
               </Badge>
               {product.canBuy && <Badge className="bg-primary">Buy</Badge>}
               {product.canRent && <Badge className="bg-accent">Rent</Badge>}
@@ -83,7 +102,7 @@ const ProductDetail = () => {
             </div>
 
             <h1 className="font-display text-3xl font-bold mb-4">{product.name}</h1>
-            <p className="text-muted-foreground mb-6">{product.fullDescription}</p>
+            <p className="text-muted-foreground mb-6">{product.fullDescription || product.description}</p>
 
             <div className="flex flex-wrap gap-4 mb-6">
               {product.canBuy && (
@@ -102,7 +121,7 @@ const ProductDetail = () => {
 
             <h3 className="font-display font-semibold text-lg mb-3">Key Features</h3>
             <ul className="space-y-2 mb-6">
-              {product.features.map((feature, index) => (
+              {(product.features || []).map((feature: string, index: number) => (
                 <li key={index} className="flex items-center gap-2 text-muted-foreground">
                   <CheckCircle className="w-5 h-5 text-success" />
                   {feature}
@@ -146,9 +165,9 @@ const ProductDetail = () => {
                 <p className="text-muted-foreground text-sm mb-6">
                   Fill out the form below and we'll get back to you within 24 hours.
                 </p>
-                <ContactForm 
-                  defaultService={action} 
-                  productName={product.name} 
+                <ContactForm
+                  defaultService={action}
+                  productName={product.name}
                 />
               </CardContent>
             </Card>

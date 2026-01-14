@@ -1,34 +1,54 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { Layout } from '@/components/layout/Layout';
 import { SectionHeader } from '@/components/common/SectionHeader';
 import { ProductCard } from '@/components/common/ProductCard';
 import { TestimonialCard } from '@/components/common/TestimonialCard';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { products, categories } from '@/data/products';
-import { services, industries } from '@/data/services';
-import { getActiveTestimonials } from '@/data/testimonials';
+import { categories } from '@/data/products';
+import { industries } from '@/data/services';
 import { company, getWhatsAppLink } from '@/data/company';
-import { 
+import {
   ShoppingCart, Clock, Wrench, Phone, Shield, Award,
-  HeadphonesIcon, Zap, ArrowRight, CheckCircle, MessageCircle
+  HeadphonesIcon, Zap, ArrowRight, CheckCircle, MessageCircle, Loader2
 } from 'lucide-react';
+import { api } from '@/lib/api';
+import { SEO } from '@/components/common/SEO';
 
 const Index = () => {
-  const featuredProducts = products.slice(0, 6);
-  const testimonials = getActiveTestimonials().slice(0, 3);
   const whatsappLink = getWhatsAppLink();
+
+  const { data: products = [] } = useQuery({
+    queryKey: ['products'],
+    queryFn: () => api.get('/products'),
+  });
+
+  const { data: services = [] } = useQuery({
+    queryKey: ['services'],
+    queryFn: () => api.get('/services'),
+  });
+
+  const { data: testimonials = [] } = useQuery({
+    queryKey: ['testimonials'],
+    queryFn: () => api.get('/testimonials'),
+  });
+
+  const featuredProducts = products.slice(0, 6);
+  const featuredTestimonials = testimonials.slice(0, 3);
+  const featuredServices = services.slice(0, 4);
 
   return (
     <Layout>
+      <SEO title="Home" />
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center gradient-dark overflow-hidden">
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-20 left-10 w-72 h-72 bg-primary/30 rounded-full blur-3xl" />
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/30 rounded-full blur-3xl" />
         </div>
-        
+
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="text-white">
@@ -43,7 +63,7 @@ const Index = () => {
               <p className="text-lg text-gray-300 mb-8 max-w-xl">
                 {company.description}
               </p>
-              
+
               <div className="flex flex-wrap gap-4 mb-8">
                 <Link to="/products"><Button size="lg" className="gradient-primary gap-2"><ShoppingCart className="w-5 h-5" />Buy Products</Button></Link>
                 <Link to="/products?action=rent"><Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 gap-2"><Clock className="w-5 h-5" />Rent Equipment</Button></Link>
@@ -102,7 +122,11 @@ const Index = () => {
       <section className="py-20 bg-muted/50">
         <div className="container mx-auto px-4">
           <SectionHeader badge="Featured" title="Popular Products" description="Top-selling IT hardware and security equipment" />
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">{featuredProducts.map((product, index) => (<ProductCard key={product.id} product={product} index={index} />))}</div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featuredProducts.map((product: any, index: number) => (
+              <ProductCard key={product._id} product={{ ...product, id: product._id }} index={index} />
+            ))}
+          </div>
           <div className="text-center mt-10"><Link to="/products"><Button size="lg" variant="outline" className="gap-2">View All Products<ArrowRight className="w-5 h-5" /></Button></Link></div>
         </div>
       </section>
@@ -112,8 +136,8 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <SectionHeader badge="Our Services" title="What We Offer" description="Complete IT solutions from sales to support" />
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {services.map((service, index) => (
-              <motion.div key={service.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: index * 0.1 }}>
+            {featuredServices.map((service: any, index: number) => (
+              <motion.div key={service._id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: index * 0.1 }}>
                 <Card className="h-full hover:shadow-glow transition-all duration-300">
                   <CardContent className="p-6">
                     <div className="text-4xl mb-4">{service.icon}</div>
@@ -132,7 +156,11 @@ const Index = () => {
       <section className="py-20 bg-muted/50">
         <div className="container mx-auto px-4">
           <SectionHeader badge="Testimonials" title="What Our Clients Say" description="Trusted by 500+ businesses across industries" />
-          <div className="grid md:grid-cols-3 gap-6">{testimonials.map((testimonial, index) => (<TestimonialCard key={testimonial.id} testimonial={testimonial} index={index} />))}</div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {featuredTestimonials.map((testimonial: any, index: number) => (
+              <TestimonialCard key={testimonial._id} testimonial={{ ...testimonial, id: testimonial._id }} index={index} />
+            ))}
+          </div>
         </div>
       </section>
 

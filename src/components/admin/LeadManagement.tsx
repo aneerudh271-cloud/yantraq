@@ -15,8 +15,11 @@ import {
 import { Trash2, Phone, Mail, Calendar, Search, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
-// Define the API URL - could be moved to config/env
-const API_URL = 'http://localhost:5000/api/leads';
+import { api } from '@/lib/api';
+
+// ... (other imports)
+
+// API URL is now handled by api utility
 
 interface Lead {
   _id: string;
@@ -52,26 +55,13 @@ export const LeadManagement = () => {
   // Fetch leads
   const { data: leads = [], isLoading, error } = useQuery({
     queryKey: ['leads'],
-    queryFn: async () => {
-      const response = await fetch(API_URL);
-      if (!response.ok) {
-        throw new Error('Failed to fetch leads');
-      }
-      return response.json() as Promise<Lead[]>;
-    },
+    queryFn: () => api.get('/leads'),
   });
 
   // Update status mutation
   const updateStatusMutation = useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: Lead['status'] }) => {
-      const response = await fetch(`${API_URL}/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status }),
-      });
-      if (!response.ok) throw new Error('Failed to update status');
-      return response.json();
-    },
+    mutationFn: ({ id, status }: { id: string; status: Lead['status'] }) =>
+      api.put(`/leads/${id}`, { status }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['leads'] });
       toast.success('Lead status updated!');
@@ -83,12 +73,7 @@ export const LeadManagement = () => {
 
   // Delete lead mutation
   const deleteLeadMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const response = await fetch(`${API_URL}/${id}`, {
-        method: 'DELETE',
-      });
-      if (!response.ok) throw new Error('Failed to delete lead');
-    },
+    mutationFn: (id: string) => api.delete(`/leads/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['leads'] });
       toast.success('Lead removed!');

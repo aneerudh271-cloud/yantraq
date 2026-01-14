@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { toast } from 'sonner';
+import { api } from '@/lib/api';
 import { company, getWhatsAppLink } from '@/data/company';
 
 interface ContactFormProps {
@@ -35,20 +36,14 @@ export const ContactForm = ({ defaultService, productName }: ContactFormProps) =
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/leads', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          productService: formData.service,
-          enquiryType: formData.service as 'buy' | 'rent' | 'repair' | 'amc' | 'other',
-          message: formData.message,
-        }),
+      await api.post('/leads', {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        productService: formData.service,
+        enquiryType: formData.service as 'buy' | 'rent' | 'repair' | 'amc' | 'other',
+        message: formData.message,
       });
-
-      if (!response.ok) throw new Error('Failed to submit');
 
       toast.success('Thank you! We will contact you shortly.');
       setFormData({ name: '', email: '', phone: '', service: '', message: '' });

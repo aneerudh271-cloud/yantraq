@@ -1,74 +1,82 @@
-# Welcome to your Lovable project
+# YantraQ - IT Hardware Sales & Service Platform
 
-## Project info
+This is a full-stack web application for YantraQ, featuring a public-facing website for browsing products/services and an admin dashboard for content management.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Tech Stack
 
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
+**Frontend:**
+- React (Vite)
 - TypeScript
-- React
-- shadcn-ui
 - Tailwind CSS
+- Shadcn UI
+- Lucide React (Icons)
+- Framer Motion (Animations)
+- React Query (State Management)
+- React Router DOM
+- React Helmet Async (SEO)
 
-## How can I deploy this project?
+**Backend:**
+- Node.js & Express
+- MongoDB & Mongoose
+- Environment Variables (dotenv)
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## Getting Started
 
-## Can I connect a custom domain to my Lovable project?
+### Prerequisites
+- Node.js & npm
+- MongoDB Community Server (running locally) or Atlas URI
 
-Yes, you can!
+### Installation
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+1. **Clone the repository**
+   ```bash
+   git clone <repository_url>
+   cd yantraq
+   ```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
-# yantraq 
+2. **Install Dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Configure Environment**
+   Create a `.env` file in the root directory (if not exists) and add:
+   ```env
+   MONGODB_URI=mongodb://localhost:27017/yantraq
+   PORT=5000
+   ```
+
+### Running the Application
+
+1. **Start MongoDB**
+   Ensure your MongoDB server is running.
+
+2. **Run both Frontend and Backend**
+   The project is set up to run both concurrently (dev mode).
+   ```bash
+   npm run dev
+   ```
+   Or if you want to run the server only:
+   ```bash
+   npm run server
+   ```
+
+### Project Structure
+- `/src`: Frontend React application
+- `/server`: Backend Express application
+- `/public`: Static assets
+
+## Features
+- **Product Management**: CRUD operations for products (Admin)
+- **Service Management**: CRUD operations for services (Admin)
+- **Lead Management**: Track enquiries and status (Admin)
+- **Analytics**: Basic dashboard for leads and enquiry types (Admin)
+- **Public Website**:
+  - Responsive landing page
+  - Product catalog with filtering
+  - Service listings
+  - Contact forms
+  - SEO optimization
+
+## License
+[License Name]

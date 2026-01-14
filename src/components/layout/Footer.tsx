@@ -34,9 +34,7 @@ export const Footer = () => {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center">
-                <Shield className="w-6 h-6 text-white" />
-              </div>
+              <img src="/logo.jpg" alt="YantraQ Logo" className="w-10 h-auto object-contain bg-white rounded-md p-0.5" />
               <div>
                 <span className="font-display font-bold text-lg">{company.shortName}</span>
                 <p className="text-xs text-gray-400">IT Solutions</p>

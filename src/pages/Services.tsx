@@ -1,15 +1,32 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { Layout } from '@/components/layout/Layout';
 import { SectionHeader } from '@/components/common/SectionHeader';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { services } from '@/data/services';
-import { CheckCircle, ArrowRight, Phone } from 'lucide-react';
+import { CheckCircle, ArrowRight, Phone, Loader2 } from 'lucide-react';
+import { api } from '@/lib/api';
+import { SEO } from '@/components/common/SEO';
+
+interface Service {
+  _id: string;
+  title: string;
+  description: string;
+  icon: string;
+  features: string[];
+  image: string;
+}
 
 const Services = () => {
+  const { data: services = [], isLoading } = useQuery({
+    queryKey: ['services'],
+    queryFn: () => api.get('/services'),
+  });
+
   return (
     <Layout>
+      <SEO title="Services" description="Comprehensive IT services including sales, rentals, repairs, and AMC." />
       {/* Hero */}
       <section className="py-16 gradient-dark text-white">
         <div className="container mx-auto px-4">
@@ -31,52 +48,57 @@ const Services = () => {
       {/* Services Grid */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <div className="space-y-16">
-            {services.map((service, index) => (
-              <motion.div
-                key={service.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className={`grid md:grid-cols-2 gap-8 items-center ${
-                  index % 2 === 1 ? 'md:flex-row-reverse' : ''
-                }`}
-              >
-                <div className={index % 2 === 1 ? 'md:order-2' : ''}>
-                  <div className="aspect-[16/10] rounded-2xl overflow-hidden bg-muted">
-                    <img
-                      src={service.image}
-                      alt={service.title}
-                      className="w-full h-full object-cover"
-                    />
+          {isLoading ? (
+            <div className="flex justify-center py-20">
+              <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+            </div>
+          ) : (
+            <div className="space-y-16">
+              {services.map((service: Service, index: number) => (
+                <motion.div
+                  key={service._id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6 }}
+                  className={`grid md:grid-cols-2 gap-8 items-center ${index % 2 === 1 ? 'md:flex-row-reverse' : ''
+                    }`}
+                >
+                  <div className={index % 2 === 1 ? 'md:order-2' : ''}>
+                    <div className="aspect-[16/10] rounded-2xl overflow-hidden bg-muted">
+                      <img
+                        src={service.image}
+                        alt={service.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className={index % 2 === 1 ? 'md:order-1' : ''}>
-                  <span className="text-5xl mb-4 block">{service.icon}</span>
-                  <h2 className="font-display text-2xl md:text-3xl font-bold mb-4">
-                    {service.title}
-                  </h2>
-                  <p className="text-muted-foreground mb-6">
-                    {service.description}
-                  </p>
-                  <ul className="space-y-3 mb-6">
-                    {service.features.map((feature, i) => (
-                      <li key={i} className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-success mt-0.5" />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <Link to="/contact">
-                    <Button className="gap-2">
-                      Get Started <ArrowRight className="w-4 h-4" />
-                    </Button>
-                  </Link>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                  <div className={index % 2 === 1 ? 'md:order-1' : ''}>
+                    <span className="text-5xl mb-4 block">{service.icon}</span>
+                    <h2 className="font-display text-2xl md:text-3xl font-bold mb-4">
+                      {service.title}
+                    </h2>
+                    <p className="text-muted-foreground mb-6">
+                      {service.description}
+                    </p>
+                    <ul className="space-y-3 mb-6">
+                      {(service.features || []).map((feature, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <CheckCircle className="w-5 h-5 text-success mt-0.5" />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <Link to="/contact">
+                      <Button className="gap-2">
+                        Get Started <ArrowRight className="w-4 h-4" />
+                      </Button>
+                    </Link>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

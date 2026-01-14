@@ -1,22 +1,30 @@
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { 
-  Users, 
-  ShoppingCart, 
-  Clock, 
-  Wrench, 
+import {
+  Users,
+  ShoppingCart,
+  Clock,
+  Wrench,
   TrendingUp,
   Eye,
   MessageSquare,
   CheckCircle
 } from 'lucide-react';
-import { leads, getLeadStats } from '@/data/leads';
-import { products } from '@/data/products';
+import { useQuery } from '@tanstack/react-query';
+import { api } from '@/lib/api';
+import { Loader2 } from 'lucide-react';
+
+// ... (other imports)
 
 export const AnalyticsDashboard = () => {
-  const stats = getLeadStats();
-  
-  // Mock analytics data (in production, this would come from actual tracking)
+  const { data: stats, isLoading } = useQuery({
+    queryKey: ['analytics'],
+    queryFn: () => api.get('/analytics'),
+  });
+
+  const getCountByType = (type: string) => stats?.byType?.[type] || 0;
+
+  // Mock analytics data for sections not yet backed by API
   const monthlyData = [
     { month: 'Oct', enquiries: 45 },
     { month: 'Nov', enquiries: 62 },
@@ -39,36 +47,43 @@ export const AnalyticsDashboard = () => {
     { name: 'Refurbished Products', enquiries: 18 },
   ];
 
+  if (isLoading) {
+    return <div className="flex justify-center p-8"><Loader2 className="animate-spin" /></div>;
+  }
+
+  // Fallback if stats fail to load
+  const safeStats = stats || { total: 0, new: 0, inProgress: 0, closed: 0, byType: {} };
+
   return (
     <div className="space-y-6">
       {/* Overview Cards */}
       <div className="grid md:grid-cols-4 gap-4">
         {[
-          { 
-            label: 'Total Enquiries', 
-            value: stats.total, 
-            icon: MessageSquare, 
+          {
+            label: 'Total Enquiries',
+            value: safeStats.total,
+            icon: MessageSquare,
             color: 'text-blue-500',
             bgColor: 'bg-blue-500/10',
           },
-          { 
-            label: 'New Leads', 
-            value: stats.new, 
-            icon: Users, 
+          {
+            label: 'New Leads',
+            value: safeStats.new,
+            icon: Users,
             color: 'text-green-500',
             bgColor: 'bg-green-500/10',
           },
-          { 
-            label: 'In Progress', 
-            value: stats.inProgress, 
-            icon: Clock, 
+          {
+            label: 'In Progress',
+            value: safeStats.inProgress,
+            icon: Clock,
             color: 'text-yellow-500',
             bgColor: 'bg-yellow-500/10',
           },
-          { 
-            label: 'Closed Deals', 
-            value: stats.closed, 
-            icon: CheckCircle, 
+          {
+            label: 'Closed Deals',
+            value: safeStats.closed,
+            icon: CheckCircle,
             color: 'text-purple-500',
             bgColor: 'bg-purple-500/10',
           },
@@ -105,12 +120,13 @@ export const AnalyticsDashboard = () => {
         <CardContent>
           <div className="grid md:grid-cols-5 gap-4">
             {[
-              { type: 'Buy', count: stats.byType.buy, icon: ShoppingCart, color: 'bg-green-500' },
-              { type: 'Rent', count: stats.byType.rent, icon: Clock, color: 'bg-blue-500' },
-              { type: 'Repair', count: stats.byType.repair, icon: Wrench, color: 'bg-orange-500' },
-              { type: 'AMC', count: stats.byType.amc, icon: CheckCircle, color: 'bg-purple-500' },
-              { type: 'Other', count: stats.byType.other, icon: MessageSquare, color: 'bg-gray-500' },
+              { type: 'Buy', count: getCountByType('buy'), icon: ShoppingCart, color: 'bg-green-500' },
+              { type: 'Rent', count: getCountByType('rent'), icon: Clock, color: 'bg-blue-500' },
+              { type: 'Repair', count: getCountByType('repair'), icon: Wrench, color: 'bg-orange-500' },
+              { type: 'AMC', count: getCountByType('amc'), icon: CheckCircle, color: 'bg-purple-500' },
+              { type: 'Other', count: getCountByType('other'), icon: MessageSquare, color: 'bg-gray-500' },
             ].map((item, i) => (
+
               <div key={i} className="p-4 bg-muted/50 rounded-xl text-center">
                 <div className={`w-10 h-10 mx-auto rounded-full ${item.color} flex items-center justify-center mb-2`}>
                   <item.icon className="w-5 h-5 text-white" />

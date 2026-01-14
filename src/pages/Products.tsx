@@ -1,37 +1,59 @@
 import { useState, useMemo } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
 import { Layout } from '@/components/layout/Layout';
 import { SectionHeader } from '@/components/common/SectionHeader';
 import { ProductCard } from '@/components/common/ProductCard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { products, categories } from '@/data/products';
-import { Search, X } from 'lucide-react';
+import { categories } from '@/data/products';
+import { Search, X, Loader2 } from 'lucide-react';
+import { api } from '@/lib/api';
+import { SEO } from '@/components/common/SEO';
+
+interface Product {
+  _id: string;
+  name: string;
+  category: string;
+  description: string;
+  fullDescription?: string;
+  features?: string[];
+  image: string;
+  price: string;
+  canBuy: boolean;
+  canRent: boolean;
+  canRepair: boolean;
+}
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState('');
-  
+
   const selectedCategory = searchParams.get('category') || 'all';
+
+  const { data: products = [], isLoading } = useQuery({
+    queryKey: ['products'],
+    queryFn: () => api.get('/products'),
+  });
 
   const filteredProducts = useMemo(() => {
     let result = products;
-    
+
     if (selectedCategory !== 'all') {
-      result = result.filter(p => p.category === selectedCategory);
+      result = result.filter((p: Product) => p.category === selectedCategory);
     }
-    
+
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      result = result.filter(p => 
+      result = result.filter((p: Product) =>
         p.name.toLowerCase().includes(query) ||
         p.description.toLowerCase().includes(query)
       );
     }
-    
+
     return result;
-  }, [selectedCategory, searchQuery]);
+  }, [products, selectedCategory, searchQuery]);
 
   const handleCategoryChange = (categoryId: string) => {
     if (categoryId === 'all') {
@@ -44,6 +66,7 @@ const Products = () => {
 
   return (
     <Layout>
+      <SEO title="Products" description="Browse our wide range of IT hardware and security products." />
       {/* Hero */}
       <section className="py-16 gradient-dark text-white">
         <div className="container mx-auto px-4">
@@ -109,10 +132,14 @@ const Products = () => {
           </div>
 
           {/* Products Grid */}
-          {filteredProducts.length > 0 ? (
+          {isLoading ? (
+            <div className="flex justify-center py-20">
+              <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+            </div>
+          ) : filteredProducts.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredProducts.map((product, index) => (
-                <ProductCard key={product.id} product={product} index={index} />
+              {filteredProducts.map((product: Product, index: number) => (
+                <ProductCard key={product._id} product={{ ...product, id: product._id }} index={index} />
               ))}
             </div>
           ) : (
