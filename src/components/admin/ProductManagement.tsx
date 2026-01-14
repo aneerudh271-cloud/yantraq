@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Package, Settings, Plus, Edit, Trash2, Loader2 } from 'lucide-react';
+import { Package, Settings, Plus, Edit, Trash2, Loader2, Upload } from 'lucide-react';
 import { api } from '@/lib/api';
 import { toast } from 'sonner';
 import { categories } from '@/data/products'; // Keep categories for now or fetch them if they were dynamic
@@ -52,6 +52,7 @@ export const ProductManagement = () => {
         canRepair: true,
         price: '',
         rentPrice: '',
+        features: [],
     });
 
     const { data: products = [], isLoading } = useQuery({
@@ -111,6 +112,7 @@ export const ProductManagement = () => {
             canRepair: true,
             price: '',
             rentPrice: '',
+            features: [],
         });
         setEditingProduct(null);
     };
@@ -132,7 +134,7 @@ export const ProductManagement = () => {
             return;
         }
 
-        const payload = { ...formData, features: [] }; // Handle features later if needed
+        const payload = { ...formData }; // Features are now in formData
 
         if (editingProduct) {
             updateMutation.mutate({ id: editingProduct._id, data: payload });
@@ -215,8 +217,78 @@ export const ProductManagement = () => {
                                         </div>
                                     </div>
                                     <div className="space-y-2">
-                                        <Label>Image URL</Label>
-                                        <Input value={formData.image} onChange={e => setFormData({ ...formData, image: e.target.value })} />
+                                        <Label>Image</Label>
+                                        <div className="flex gap-2 items-center">
+                                            <Input
+                                                value={formData.image}
+                                                onChange={e => setFormData({ ...formData, image: e.target.value })}
+                                                placeholder="Image URL"
+                                                className="flex-1"
+                                            />
+                                            <div className="relative">
+                                                <Input
+                                                    type="file"
+                                                    className="absolute inset-0 opacity-0 cursor-pointer"
+                                                    onChange={async (e) => {
+                                                        const file = e.target.files?.[0];
+                                                        if (!file) return;
+
+                                                        const uploadFormData = new FormData();
+                                                        uploadFormData.append('file', file);
+
+                                                        const promise = fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/upload`, {
+                                                            method: 'POST',
+                                                            body: uploadFormData,
+                                                        }).then(async res => {
+                                                            if (!res.ok) throw new Error('Upload failed');
+                                                            const data = await res.json();
+                                                            setFormData(prev => ({ ...prev, image: data.url }));
+                                                            return data;
+                                                        });
+
+                                                        toast.promise(promise, {
+                                                            loading: 'Uploading image...',
+                                                            success: 'Image uploaded!',
+                                                            error: 'Upload failed. Check token.'
+                                                        });
+                                                    }}
+                                                />
+                                                <Button type="button" variant="outline" size="icon"><Upload className="w-4 h-4" /></Button>
+                                            </div>
+                                        </div>
+                                        {formData.image && <img src={formData.image} alt="Preview" className="w-20 h-20 object-cover rounded mt-2 border" />}
+                                    </div>
+
+                                    <div className="space-y-4 border p-4 rounded-md bg-muted/10">
+                                        <div className="flex items-center justify-between">
+                                            <Label>Key Features (Special Bullet Points)</Label>
+                                            <Button type="button" variant="outline" size="sm" onClick={() => setFormData(prev => ({ ...prev, features: [...(prev.features || []), ''] }))} className="gap-2">
+                                                <Plus className="w-3 h-3" /> Add Feature
+                                            </Button>
+                                        </div>
+                                        <div className="space-y-2">
+                                            {(formData.features || []).map((feature, i) => (
+                                                <div key={i} className="flex gap-2 items-center">
+                                                    <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0 ring-2 ring-primary ring-offset-2" /> {/* Special Dot */}
+                                                    <Input
+                                                        value={feature}
+                                                        onChange={e => {
+                                                            const newFeatures = [...(formData.features || [])];
+                                                            newFeatures[i] = e.target.value;
+                                                            setFormData({ ...formData, features: newFeatures });
+                                                        }}
+                                                        placeholder="Feature description"
+                                                    />
+                                                    <Button type="button" variant="ghost" size="icon" className="text-destructive h-8 w-8" onClick={() => {
+                                                        const newFeatures = [...(formData.features || [])].filter((_, idx) => idx !== i);
+                                                        setFormData({ ...formData, features: newFeatures });
+                                                    }}>
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </Button>
+                                                </div>
+                                            ))}
+                                            {(!formData.features || formData.features.length === 0) && <p className="text-sm text-muted-foreground italic">No features added yet.</p>}
+                                        </div>
                                     </div>
                                     <div className="flex gap-4">
                                         <div className="flex items-center gap-2">

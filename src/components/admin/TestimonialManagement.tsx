@@ -15,7 +15,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import { Plus, Edit, Trash2, Star, Loader2 } from 'lucide-react';
+import { Plus, Edit, Trash2, Star, Loader2, Upload } from 'lucide-react';
 import { api } from '@/lib/api';
 import { toast } from 'sonner';
 
@@ -28,6 +28,7 @@ interface Testimonial {
   rating: number;
   isActive: boolean;
   createdAt: string;
+  image?: string;
 }
 
 export const TestimonialManagement = () => {
@@ -41,6 +42,7 @@ export const TestimonialManagement = () => {
     message: '',
     rating: 5,
     isActive: true,
+    image: '',
   });
 
   const { data: testimonials = [], isLoading } = useQuery({
@@ -80,7 +82,7 @@ export const TestimonialManagement = () => {
   });
 
   const resetForm = () => {
-    setFormData({ name: '', designation: '', industry: '', message: '', rating: 5, isActive: true });
+    setFormData({ name: '', designation: '', industry: '', message: '', rating: 5, isActive: true, image: '' });
     setEditingTestimonial(null);
   };
 
@@ -94,6 +96,7 @@ export const TestimonialManagement = () => {
         message: testimonial.message,
         rating: testimonial.rating,
         isActive: testimonial.isActive,
+        image: testimonial.image || '',
       });
     } else {
       resetForm();
@@ -148,6 +151,49 @@ export const TestimonialManagement = () => {
               </DialogTitle>
             </DialogHeader>
             <div className="space-y-4 pt-4">
+              <div className="flex justify-center mb-4">
+                <div className="relative group">
+                  <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-border bg-muted">
+                    {formData.image ? (
+                      <img src={formData.image} alt="Preview" className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                        <Upload className="w-8 h-8" />
+                      </div>
+                    )}
+                  </div>
+                  <Input
+                    type="file"
+                    className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+
+                      const uploadFormData = new FormData();
+                      uploadFormData.append('file', file);
+
+                      const promise = fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/upload`, {
+                        method: 'POST',
+                        body: uploadFormData,
+                      }).then(async res => {
+                        if (!res.ok) throw new Error('Upload failed');
+                        const data = await res.json();
+                        setFormData(prev => ({ ...prev, image: data.url }));
+                        return data;
+                      });
+
+                      toast.promise(promise, {
+                        loading: 'Uploading image...',
+                        success: 'Image uploaded!',
+                        error: 'Upload failed'
+                      });
+                    }}
+                  />
+                  <div className="absolute bottom-0 right-0 bg-primary text-primary-foreground rounded-full p-1 shadow-sm">
+                    <Edit className="w-3 h-3" />
+                  </div>
+                </div>
+              </div>
               <div className="space-y-2">
                 <Label>Client Name *</Label>
                 <Input

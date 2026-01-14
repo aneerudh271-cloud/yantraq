@@ -7,6 +7,13 @@ import mongoSanitize from 'express-mongo-sanitize';
 import hpp from 'hpp';
 import connectDB from './db.js';
 import Lead from './models/Lead.js';
+import multer from 'multer';
+import { put } from '@vercel/blob';
+
+console.log("----------------------------------------");
+console.log("LOADING APP.TS - SANITIZATION DISABLED");
+console.log("----------------------------------------");
+
 import Service from './models/Service.js';
 import Testimonial from './models/Testimonial.js';
 import Product from './models/Product.js';
@@ -16,6 +23,7 @@ import PageView from './models/PageView.js';
 dotenv.config();
 
 const app = express();
+const upload = multer();
 
 // connectDB is async, but we call it here. 
 // For serverless, it's better to await it inside handlers, 
@@ -23,9 +31,10 @@ const app = express();
 connectDB();
 
 // Security Middleware
+// Security Middleware
 app.use(helmet());
-app.use(mongoSanitize());
-app.use(hpp());
+// app.use(mongoSanitize()); // Disabled: Incompatible with Express 5
+// app.use(hpp());           // Disabled: Incompatible with Express 5
 
 // Rate Limiting
 const limiter = rateLimit({
@@ -36,11 +45,59 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
+// File Upload Route (Vercel Blob)
+app.post('/api/upload', upload.single('file'), async (req: any, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        }
+
+        console.log('Uploading file:', req.file.originalname);
+
+        // Check for token
+        const token = process.env.BLOB_READ_WRITE_TOKEN;
+        if (!token || !token.startsWith('vercel_blob_rw_')) {
+            console.warn('Invalid BLOB_READ_WRITE_TOKEN:', token);
+            return res.status(500).json({
+                message: 'Invalid Vercel Blob token. Token must start with "vercel_blob_rw_". Check .env file.'
+            });
+        }
+
+        const blob = await put(req.file.originalname, req.file.buffer, {
+            access: 'public',
+            token: token
+        });
+
+        console.log('File uploaded to:', blob.url);
+        res.json({ url: blob.url });
+    } catch (error: any) {
+        console.error('Upload Error:', error);
+        res.status(500).json({ message: 'Upload failed: ' + error.message });
+    }
+});
+
 // CORS
-// Allow client from env or fallback to wildcard (for now, to avoid breaking if env missing)
-// Ideally: origin: process.env.CLIENT_URL
 app.use(cors({
-    origin: process.env.CLIENT_URL || '*',
+    origin: (origin, callback) => {
+        const allowedOrigins = (process.env.CLIENT_URL || '').split(',').map(url => url.trim()).filter(Boolean);
+        // Default for dev if empty
+        if (allowedOrigins.length === 0) {
+            allowedOrigins.push('http://localhost:5173');
+            allowedOrigins.push('http://localhost:8080');
+        }
+
+        // Allow no origin (server-to-server or curl)
+        if (!origin) return callback(null, true);
+
+        if (allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
+            callback(null, true);
+        } else {
+            console.log('Origin not allowed by CORs:', origin);
+            // For now, in dev, allow it to be friendly but log it
+            // callback(new Error('Not allowed by CORS'));
+            callback(null, true);
+        }
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));

@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
-import { Edit, Save, X, Trash2, Plus, Loader2 } from 'lucide-react';
+import { Edit, Save, X, Trash2, Plus, Loader2, Upload } from 'lucide-react';
 import { api } from '@/lib/api';
 import { toast } from 'sonner';
 
@@ -25,7 +25,7 @@ export const ServiceManagement = () => {
   const queryClient = useQueryClient();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(false);
-  const [form, setForm] = useState({ title: '', description: '', icon: '🔧', image: '/placeholder.svg' });
+  const [form, setForm] = useState({ title: '', description: '', icon: '🔧', image: '/placeholder.svg', features: [] as string[] });
 
   const { data: services = [], isLoading } = useQuery({
     queryKey: ['services'],
@@ -62,7 +62,7 @@ export const ServiceManagement = () => {
     onError: () => toast.error('Failed to delete service'),
   });
 
-  const resetForm = () => setForm({ title: '', description: '', icon: '🔧', image: '/placeholder.svg' });
+  const resetForm = () => setForm({ title: '', description: '', icon: '🔧', image: '/placeholder.svg', features: [] });
 
   const handleEdit = (service: Service) => {
     setEditingId(service._id);
@@ -70,7 +70,8 @@ export const ServiceManagement = () => {
       title: service.title,
       description: service.description,
       icon: service.icon,
-      image: service.image
+      image: service.image,
+      features: service.features || []
     });
     setIsAdding(false);
   };
@@ -118,11 +119,77 @@ export const ServiceManagement = () => {
                     placeholder="Icon (Emoji)"
                     className="w-32"
                   />
-                  <Input
-                    value={form.image}
-                    onChange={e => setForm({ ...form, image: e.target.value })}
-                    placeholder="Image URL"
-                  />
+                  <div className="flex-1 min-w-[200px]">
+                    <div className="flex gap-2 items-center">
+                      <Input
+                        value={form.image}
+                        onChange={e => setForm({ ...form, image: e.target.value })}
+                        placeholder="Image URL"
+                        className="flex-1"
+                      />
+                      <div className="relative">
+                        <Input
+                          type="file"
+                          className="absolute inset-0 opacity-0 cursor-pointer"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+
+                            const uploadFormData = new FormData();
+                            uploadFormData.append('file', file);
+
+                            const promise = fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/upload`, {
+                              method: 'POST',
+                              body: uploadFormData,
+                            }).then(async res => {
+                              if (!res.ok) throw new Error('Upload failed');
+                              const data = await res.json();
+                              setForm(prev => ({ ...prev, image: data.url }));
+                              return data;
+                            });
+
+                            toast.promise(promise, {
+                              loading: 'Uploading image...',
+                              success: 'Image uploaded!',
+                              error: 'Upload failed'
+                            });
+                          }}
+                        />
+                        <Button type="button" variant="outline" size="icon"><Upload className="w-4 h-4" /></Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4 border p-4 rounded-md bg-background">
+                  <div className="flex items-center justify-between">
+                    <h5 className="text-sm font-medium">Key Features</h5>
+                    <Button type="button" variant="outline" size="sm" onClick={() => setForm(prev => ({ ...prev, features: [...(prev.features || []), ''] }))} className="gap-2">
+                      <Plus className="w-3 h-3" /> Add
+                    </Button>
+                  </div>
+                  <div className="space-y-2">
+                    {(form.features || []).map((feature, i) => (
+                      <div key={i} className="flex gap-2 items-center">
+                        <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0 ring-2 ring-primary ring-offset-2" />
+                        <Input
+                          value={feature}
+                          onChange={e => {
+                            const newFeatures = [...(form.features || [])];
+                            newFeatures[i] = e.target.value;
+                            setForm({ ...form, features: newFeatures });
+                          }}
+                          placeholder="Feature description"
+                        />
+                        <Button type="button" variant="ghost" size="icon" className="text-destructive h-8 w-8" onClick={() => {
+                          const newFeatures = [...(form.features || [])].filter((_, idx) => idx !== i);
+                          setForm({ ...form, features: newFeatures });
+                        }}>
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
                 <div className="flex gap-2">
                   <Button size="sm" onClick={() => handleSave()} disabled={createMutation.isPending}>Save</Button>
@@ -159,11 +226,77 @@ export const ServiceManagement = () => {
                       placeholder="Icon (Emoji)"
                       className="w-32"
                     />
-                    <Input
-                      value={form.image}
-                      onChange={e => setForm({ ...form, image: e.target.value })}
-                      placeholder="Image URL"
-                    />
+                    <div className="flex-1 min-w-[200px]">
+                      <div className="flex gap-2 items-center">
+                        <Input
+                          value={form.image}
+                          onChange={e => setForm({ ...form, image: e.target.value })}
+                          placeholder="Image URL"
+                          className="flex-1"
+                        />
+                        <div className="relative">
+                          <Input
+                            type="file"
+                            className="absolute inset-0 opacity-0 cursor-pointer"
+                            onChange={async (e) => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+
+                              const uploadFormData = new FormData();
+                              uploadFormData.append('file', file);
+
+                              const promise = fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/upload`, {
+                                method: 'POST',
+                                body: uploadFormData,
+                              }).then(async res => {
+                                if (!res.ok) throw new Error('Upload failed');
+                                const data = await res.json();
+                                setForm(prev => ({ ...prev, image: data.url }));
+                                return data;
+                              });
+
+                              toast.promise(promise, {
+                                loading: 'Uploading image...',
+                                success: 'Image uploaded!',
+                                error: 'Upload failed'
+                              });
+                            }}
+                          />
+                          <Button type="button" variant="outline" size="icon"><Upload className="w-4 h-4" /></Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 border p-4 rounded-md">
+                    <div className="flex items-center justify-between">
+                      <h5 className="text-sm font-medium">Key Features</h5>
+                      <Button type="button" variant="outline" size="sm" onClick={() => setForm(prev => ({ ...prev, features: [...(prev.features || []), ''] }))} className="gap-2">
+                        <Plus className="w-3 h-3" /> Add
+                      </Button>
+                    </div>
+                    <div className="space-y-2">
+                      {(form.features || []).map((feature, i) => (
+                        <div key={i} className="flex gap-2 items-center">
+                          <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0 ring-2 ring-primary ring-offset-2" />
+                          <Input
+                            value={feature}
+                            onChange={e => {
+                              const newFeatures = [...(form.features || [])];
+                              newFeatures[i] = e.target.value;
+                              setForm({ ...form, features: newFeatures });
+                            }}
+                            placeholder="Feature description"
+                          />
+                          <Button type="button" variant="ghost" size="icon" className="text-destructive h-8 w-8" onClick={() => {
+                            const newFeatures = [...(form.features || [])].filter((_, idx) => idx !== i);
+                            setForm({ ...form, features: newFeatures });
+                          }}>
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                   <div className="flex gap-2">
                     <Button size="sm" onClick={() => handleSave(service._id)} className="gap-2" disabled={updateMutation.isPending}>
@@ -196,7 +329,7 @@ export const ServiceManagement = () => {
                           label: "Delete",
                           onClick: () => deleteMutation.mutate(service._id)
                         },
-                        cancel: { label: "Cancel" }
+                        cancel: { label: "Cancel", onClick: () => { } }
                       });
                     }}>
                       <Trash2 className="w-4 h-4" />
