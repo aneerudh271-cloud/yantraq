@@ -27,7 +27,7 @@ interface Lead {
   email: string;
   phone: string;
   productService: string;
-  enquiryType: 'buy' | 'rent' | 'repair' | 'amc' | 'other';
+  enquiryType: 'buy' | 'buy-refurbished' | 'rent' | 'repair' | 'amc' | 'other';
   message: string;
   status: 'new' | 'in-progress' | 'closed';
   createdAt: string;
@@ -41,6 +41,7 @@ const statusColors = {
 
 const typeLabels = {
   buy: 'Buy',
+  'buy-refurbished': 'Refurbished',
   rent: 'Rent',
   repair: 'Repair',
   amc: 'AMC',
@@ -225,7 +226,16 @@ export const LeadManagement = () => {
                         size="icon"
                         variant="ghost"
                         className="text-destructive"
-                        onClick={() => deleteLeadMutation.mutate(lead._id)}
+                        onClick={() => {
+                          toast("Delete lead?", {
+                            description: "This action cannot be undone.",
+                            action: {
+                              label: "Delete",
+                              onClick: () => deleteLeadMutation.mutate(lead._id)
+                            },
+                            cancel: { label: "Cancel", onClick: () => { } }
+                          });
+                        }}
                         disabled={deleteLeadMutation.isPending}
                       >
                         {deleteLeadMutation.isPending ? (

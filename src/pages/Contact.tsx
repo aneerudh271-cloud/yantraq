@@ -3,9 +3,10 @@ import { Layout } from '@/components/layout/Layout';
 import { ContactForm } from '@/components/common/ContactForm';
 import { Card, CardContent } from '@/components/ui/card';
 import { Phone, Mail, MapPin, Clock, MessageCircle } from 'lucide-react';
+import { company, getWhatsAppLink } from '@/data/company';
 
 const Contact = () => {
-  const whatsappLink = 'https://wa.me/919876543210?text=Hi!%20I%20am%20interested%20in%20your%20IT%20services.';
+  const whatsappLink = getWhatsAppLink();
 
   return (
     <Layout>
@@ -37,7 +38,7 @@ const Contact = () => {
               className="space-y-6"
             >
               <h2 className="font-display text-2xl font-bold mb-6">Get In Touch</h2>
-              
+
               <Card>
                 <CardContent className="p-6 flex items-start gap-4">
                   <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
@@ -45,12 +46,8 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Phone</h3>
-                    <a href="tel:+919876543210" className="text-muted-foreground hover:text-primary">
-                      +91 98765 43210
-                    </a>
-                    <br />
-                    <a href="tel:+919876543211" className="text-muted-foreground hover:text-primary">
-                      +91 98765 43211
+                    <a href={`tel:${company.contact.phone.replace(/\s/g, '')}`} className="text-muted-foreground hover:text-primary">
+                      {company.contact.phone}
                     </a>
                   </div>
                 </CardContent>
@@ -63,13 +60,10 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Email</h3>
-                    <a href="mailto:info@securenet.com" className="text-muted-foreground hover:text-primary">
-                      info@securenet.com
+                    <a href={`mailto:${company.contact.emails.sales}`} className="text-muted-foreground hover:text-primary">
+                      {company.contact.emails.sales}
                     </a>
-                    <br />
-                    <a href="mailto:sales@securenet.com" className="text-muted-foreground hover:text-primary">
-                      sales@securenet.com
-                    </a>
+
                   </div>
                 </CardContent>
               </Card>
@@ -82,9 +76,9 @@ const Contact = () => {
                   <div>
                     <h3 className="font-semibold mb-1">Address</h3>
                     <p className="text-muted-foreground">
-                      123 Tech Park, Sector 15<br />
-                      Bangalore, Karnataka 560001<br />
-                      India
+                      {company.address.line1}<br />
+                      {company.address.line2}<br />
+                      {company.address.city}, {company.address.state}
                     </p>
                   </div>
                 </CardContent>
@@ -98,8 +92,8 @@ const Contact = () => {
                   <div>
                     <h3 className="font-semibold mb-1">Business Hours</h3>
                     <p className="text-muted-foreground">
-                      Monday - Saturday<br />
-                      9:00 AM - 7:00 PM
+                      {company.businessHours.days}<br />
+                      {company.businessHours.time}
                     </p>
                   </div>
                 </CardContent>
@@ -147,7 +141,7 @@ const Contact = () => {
       {/* Map */}
       <section className="h-96 bg-muted">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3887.7851848736396!2d77.59015371534478!3d12.984305318579965!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1670c9b44e6d%3A0xf8dfc3e8517e4fe0!2sBengaluru%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin"
+          src={company.address.mapUrl}
           width="100%"
           height="100%"
           style={{ border: 0 }}

@@ -17,12 +17,15 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+import { AnalyticsTracker } from "@/components/common/AnalyticsTracker";
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <AnalyticsTracker />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/products" element={<Products />} />

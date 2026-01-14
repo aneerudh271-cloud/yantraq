@@ -78,5 +78,24 @@ This is a full-stack web application for YantraQ, featuring a public-facing webs
   - Contact forms
   - SEO optimization
 
+## Deployment
+
+### Vercel (Recommended)
+This project is configured for Vercel deployment.
+1. Push to GitHub.
+2. Import project in Vercel.
+3. Vercel will auto-detect the configuration (`vercel.json`).
+4. Set Environment Variables (`MONGODB_URI`, `SMTP_...`, `CLIENT_URL`).
+
+### Manual Deployment
+- **Frontend**: `npm run build` -> `dist/`
+- **Backend**: `npm run server`
+
+### Full Stack Setup
+For best performance, we recommend:
+1. **Backend**: Render or Railway (Node.js)
+2. **Frontend**: Vercel (Static)
+   - Set `VITE_API_URL` to your Backend URL.
+
 ## License
-[License Name]
+MIT

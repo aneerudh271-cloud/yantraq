@@ -5,7 +5,7 @@ export interface ILead extends Document {
     email: string;
     phone: string;
     productService: string;
-    enquiryType: 'buy' | 'rent' | 'repair' | 'amc' | 'other';
+    enquiryType: 'buy' | 'buy-refurbished' | 'rent' | 'repair' | 'amc' | 'other';
     message: string;
     status: 'new' | 'in-progress' | 'closed';
     createdAt: Date;
@@ -18,7 +18,7 @@ const LeadSchema: Schema = new Schema({
     productService: { type: String, required: true },
     enquiryType: {
         type: String,
-        enum: ['buy', 'rent', 'repair', 'amc', 'other'],
+        enum: ['buy', 'buy-refurbished', 'rent', 'repair', 'amc', 'other'],
         required: true
     },
     message: { type: String, required: true },

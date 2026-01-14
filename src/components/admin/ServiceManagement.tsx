@@ -189,7 +189,16 @@ export const ServiceManagement = () => {
                     <Button size="icon" variant="ghost" onClick={() => handleEdit(service)}>
                       <Edit className="w-4 h-4" />
                     </Button>
-                    <Button size="icon" variant="ghost" className="text-destructive" onClick={() => deleteMutation.mutate(service._id)}>
+                    <Button size="icon" variant="ghost" className="text-destructive" onClick={() => {
+                      toast("Delete service?", {
+                        description: "This action cannot be undone.",
+                        action: {
+                          label: "Delete",
+                          onClick: () => deleteMutation.mutate(service._id)
+                        },
+                        cancel: { label: "Cancel" }
+                      });
+                    }}>
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>

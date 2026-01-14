@@ -52,13 +52,20 @@ export const AnalyticsDashboard = () => {
   }
 
   // Fallback if stats fail to load
-  const safeStats = stats || { total: 0, new: 0, inProgress: 0, closed: 0, byType: {} };
+  const safeStats = stats || { total: 0, new: 0, inProgress: 0, closed: 0, byType: {}, pageViews: { total: 0, topPages: [] } };
 
   return (
     <div className="space-y-6">
       {/* Overview Cards */}
       <div className="grid md:grid-cols-4 gap-4">
         {[
+          {
+            label: 'Total Page Views',
+            value: safeStats.pageViews?.total || 0,
+            icon: Eye,
+            color: 'text-indigo-500',
+            bgColor: 'bg-indigo-500/10',
+          },
           {
             label: 'Total Enquiries',
             value: safeStats.total,
@@ -195,12 +202,12 @@ export const AnalyticsDashboard = () => {
         </Card>
       </div>
 
-      {/* Top Products */}
+      {/* Top Pages */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Eye className="w-5 h-5" />
-            Most Viewed Products
+            Most Visited Pages
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -209,24 +216,16 @@ export const AnalyticsDashboard = () => {
               <thead>
                 <tr className="border-b">
                   <th className="text-left p-3 font-medium">Rank</th>
-                  <th className="text-left p-3 font-medium">Product</th>
+                  <th className="text-left p-3 font-medium">Path</th>
                   <th className="text-right p-3 font-medium">Views</th>
-                  <th className="text-right p-3 font-medium">Enquiries</th>
-                  <th className="text-right p-3 font-medium">Conversion</th>
                 </tr>
               </thead>
               <tbody>
-                {topProducts.map((product, i) => (
+                {(safeStats.pageViews?.topPages || []).map((page: any, i: number) => (
                   <tr key={i} className="border-b hover:bg-muted/50">
                     <td className="p-3 font-bold text-muted-foreground">{i + 1}</td>
-                    <td className="p-3 font-medium">{product.name}</td>
-                    <td className="p-3 text-right">{product.views}</td>
-                    <td className="p-3 text-right">{product.enquiries}</td>
-                    <td className="p-3 text-right">
-                      <span className="text-green-500 font-medium">
-                        {((product.enquiries / product.views) * 100).toFixed(1)}%
-                      </span>
-                    </td>
+                    <td className="p-3 font-medium">{page.path}</td>
+                    <td className="p-3 text-right">{page.count}</td>
                   </tr>
                 ))}
               </tbody>

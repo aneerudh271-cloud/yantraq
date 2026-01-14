@@ -266,7 +266,16 @@ export const ProductManagement = () => {
                                         <td className="p-3 text-center"><Switch checked={product.canRepair} onCheckedChange={() => toggleAvailability(product._id, 'canRepair', product.canRepair)} /></td>
                                         <td className="p-3 text-right">
                                             <Button variant="ghost" size="icon" onClick={() => handleOpenDialog(product)}><Edit className="w-4 h-4" /></Button>
-                                            <Button variant="ghost" size="icon" className="text-destructive" onClick={() => deleteMutation.mutate(product._id)}><Trash2 className="w-4 h-4" /></Button>
+                                            <Button variant="ghost" size="icon" className="text-destructive" onClick={() => {
+                                                toast("Delete product?", {
+                                                    description: "This action cannot be undone.",
+                                                    action: {
+                                                        label: "Delete",
+                                                        onClick: () => deleteMutation.mutate(product._id)
+                                                    },
+                                                    cancel: { label: "Cancel", onClick: () => { } }
+                                                });
+                                            }}><Trash2 className="w-4 h-4" /></Button>
                                         </td>
                                     </motion.tr>
                                 ))}

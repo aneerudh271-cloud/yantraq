@@ -115,9 +115,14 @@ export const TestimonialManagement = () => {
   };
 
   const handleDelete = (id: string) => {
-    if (confirm('Are you sure you want to delete this testimonial?')) {
-      deleteMutation.mutate(id);
-    }
+    toast("Delete testimonial?", {
+      description: "This action cannot be undone.",
+      action: {
+        label: "Delete",
+        onClick: () => deleteMutation.mutate(id)
+      },
+      cancel: { label: "Cancel", onClick: () => { } }
+    });
   };
 
   const toggleActive = (id: string, currentStatus: boolean) => {

@@ -41,7 +41,7 @@ export const ContactForm = ({ defaultService, productName }: ContactFormProps) =
         email: formData.email,
         phone: formData.phone,
         productService: formData.service,
-        enquiryType: formData.service as 'buy' | 'rent' | 'repair' | 'amc' | 'other',
+        enquiryType: formData.service as 'buy' | 'buy-refurbished' | 'rent' | 'repair' | 'amc' | 'other',
         message: formData.message,
       });
 
