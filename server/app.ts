@@ -92,10 +92,16 @@ app.post('/api/upload', protect, admin, upload.single('file'), async (req: any, 
 
 // CORS
 app.use(cors({
-    origin: '*',
+    origin: [
+        'http://localhost:8080',
+        'https://yantraq.vercel.app',
+        'https://yantraq.com',
+        'https://www.yantraq.com'
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true
 }));
+
 
 app.use(express.json());
 
