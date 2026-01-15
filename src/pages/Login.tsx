@@ -7,6 +7,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/componen
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { api } from '@/lib/api';
+import { Helmet } from 'react-helmet-async';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -38,43 +39,48 @@ const Login = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-muted/20 p-4">
-            <Card className="w-full max-w-md">
-                <CardHeader>
-                    <CardTitle className="text-2xl text-center">Admin Login</CardTitle>
-                </CardHeader>
-                <form onSubmit={handleSubmit}>
-                    <CardContent className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="email">Email</Label>
-                            <Input
-                                id="email"
-                                type="email"
-                                placeholder="name@example.com"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="password">Password</Label>
-                            <Input
-                                id="password"
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
-                        </div>
-                    </CardContent>
-                    <CardFooter>
-                        <Button type="submit" className="w-full" disabled={loading}>
-                            {loading ? 'Logging in...' : 'Sign In'}
-                        </Button>
-                    </CardFooter>
-                </form>
-            </Card>
-        </div>
+        <>
+            <Helmet>
+                <meta name="robots" content="noindex, nofollow" />
+            </Helmet>
+            <div className="flex justify-center items-center min-h-screen bg-muted/20 p-4">
+                <Card className="w-full max-w-md">
+                    <CardHeader>
+                        <CardTitle className="text-2xl text-center">Admin Login</CardTitle>
+                    </CardHeader>
+                    <form onSubmit={handleSubmit}>
+                        <CardContent className="space-y-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="email">Email</Label>
+                                <Input
+                                    id="email"
+                                    type="email"
+                                    placeholder="name@example.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="password">Password</Label>
+                                <Input
+                                    id="password"
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
+                            </div>
+                        </CardContent>
+                        <CardFooter>
+                            <Button type="submit" className="w-full" disabled={loading}>
+                                {loading ? 'Logging in...' : 'Sign In'}
+                            </Button>
+                        </CardFooter>
+                    </form>
+                </Card>
+            </div>
+        </>
     );
 };
 

@@ -80,7 +80,7 @@ const Index = () => {
             <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="hidden lg:block">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 rounded-3xl blur-2xl" />
-                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600" alt="IT Hardware Solutions" className="relative rounded-3xl shadow-2xl animate-float" />
+                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600" alt="IT Hardware Solutions" className="relative rounded-3xl shadow-2xl animate-float" loading="lazy" />
               </div>
             </motion.div>
           </div>

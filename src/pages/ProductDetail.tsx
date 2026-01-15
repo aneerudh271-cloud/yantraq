@@ -60,9 +60,43 @@ const ProductDetail = () => {
     repair: 'Repair Service',
   };
 
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.name,
+    "description": product.description,
+    "image": product.image,
+    "brand": {
+      "@type": "Brand",
+      "name": "YantraQ"
+    },
+    "offers": [
+      product.canBuy && {
+        "@type": "Offer",
+        "price": product.price?.replace(/[^\d.]/g, ''),
+        "priceCurrency": "INR",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+          "@type": "Organization",
+          "name": "YantraQ IT Solutions"
+        }
+      },
+      product.canRent && {
+        "@type": "Offer",
+        "price": product.rentPrice?.replace(/[^\d.]/g, ''),
+        "priceCurrency": "INR",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+          "@type": "Organization",
+          "name": "YantraQ IT Solutions"
+        }
+      }
+    ].filter(Boolean)
+  };
+
   return (
     <Layout>
-      <SEO title={product.name} description={product.description} image={product.image} />
+      <SEO title={product.name} description={product.description} image={product.image} schema={productSchema} />
       <div className="container mx-auto px-4 py-8">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
