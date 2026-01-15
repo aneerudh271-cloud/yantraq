@@ -47,6 +47,18 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
+// Database Connection Middleware
+// Ensures DB is connected before handling any request (crucial for serverless with bufferCommands: false)
+app.use(async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (error) {
+        console.error('Database connection failed:', error);
+        res.status(500).json({ message: 'Database connection failed' });
+    }
+});
+
 // File Upload Route (Vercel Blob)
 app.post('/api/upload', protect, admin, upload.single('file'), async (req: any, res) => {
     try {
