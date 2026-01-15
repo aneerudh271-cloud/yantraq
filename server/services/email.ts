@@ -16,6 +16,9 @@ const transporter = nodemailer.createTransport({
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
     },
+    tls: {
+        ciphers: 'SSLv3'
+    }
 });
 
 export const sendEmail = async (to: string, subject: string, html: string) => {
@@ -25,11 +28,15 @@ export const sendEmail = async (to: string, subject: string, html: string) => {
             return false;
         }
 
+        // Create a simple text version by stripping HTML tags
+        const text = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+
         const info = await transporter.sendMail({
             from: `"YantraQ Admin" <${process.env.SMTP_USER}>`,
             to,
             subject,
             html,
+            text, // Plain text fallback improves deliverability
         });
 
         console.log('Message sent: %s', info.messageId);
