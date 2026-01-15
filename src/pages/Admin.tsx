@@ -6,6 +6,7 @@ import { ServiceManagement } from '@/components/admin/ServiceManagement';
 import { TestimonialManagement } from '@/components/admin/TestimonialManagement';
 import { LeadManagement } from '@/components/admin/LeadManagement';
 import { ProductManagement } from '@/components/admin/ProductManagement';
+import { UserManagement } from '@/components/admin/UserManagement';
 import { AnalyticsDashboard } from '@/components/admin/AnalyticsDashboard';
 import { Shield, ArrowLeft, Package, Settings, BarChart3, Star, Users } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
@@ -48,12 +49,13 @@ const Admin = () => {
 
         <div className="container mx-auto px-4 py-8">
           <Tabs defaultValue="analytics" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-5">
+            <TabsList className="grid w-full grid-cols-6">
               <TabsTrigger value="analytics" className="gap-2"><BarChart3 className="w-4 h-4" />Analytics</TabsTrigger>
               <TabsTrigger value="products" className="gap-2"><Package className="w-4 h-4" />Products</TabsTrigger>
               <TabsTrigger value="services" className="gap-2"><Settings className="w-4 h-4" />Services</TabsTrigger>
               <TabsTrigger value="testimonials" className="gap-2"><Star className="w-4 h-4" />Testimonials</TabsTrigger>
               <TabsTrigger value="leads" className="gap-2"><Users className="w-4 h-4" />Leads</TabsTrigger>
+              <TabsTrigger value="users" className="gap-2"><Users className="w-4 h-4" />Users</TabsTrigger>
             </TabsList>
 
             <TabsContent value="analytics"><AnalyticsDashboard /></TabsContent>
@@ -61,6 +63,7 @@ const Admin = () => {
             <TabsContent value="services"><ServiceManagement /></TabsContent>
             <TabsContent value="testimonials"><TestimonialManagement /></TabsContent>
             <TabsContent value="leads"><LeadManagement /></TabsContent>
+            <TabsContent value="users"><UserManagement /></TabsContent>
           </Tabs>
         </div>
       </div>

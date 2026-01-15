@@ -14,7 +14,10 @@ export const api = {
         const headers: any = {};
         if (token) headers['Authorization'] = `Bearer ${token}`;
 
-        const res = await fetch(`${API_URL}${endpoint}`, { headers });
+        const res = await fetch(`${API_URL}${endpoint}`, {
+            headers,
+            cache: 'no-store'
+        });
         if (!res.ok) throw new Error(`API Error: ${res.statusText}`);
         return res.json();
     },

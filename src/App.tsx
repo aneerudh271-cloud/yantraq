@@ -15,7 +15,16 @@ import Terms from "./pages/Terms";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60, // Data is fresh for 1 minute
+      gcTime: 1000 * 60 * 5, // Garbage collect after 5 minutes
+      refetchOnWindowFocus: true, // Sync when returning to tab
+      retry: 1, // Retry failed requests once
+    },
+  },
+});
 
 import { AnalyticsTracker } from "@/components/common/AnalyticsTracker";
 
