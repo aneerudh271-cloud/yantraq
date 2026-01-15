@@ -9,7 +9,19 @@ import { ProductManagement } from '@/components/admin/ProductManagement';
 import { AnalyticsDashboard } from '@/components/admin/AnalyticsDashboard';
 import { Shield, ArrowLeft, Package, Settings, BarChart3, Star, Users } from 'lucide-react';
 
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
+// ... other imports
+
 const Admin = () => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
   return (
     <div className="min-h-screen bg-muted/30">
       <header className="bg-card border-b sticky top-0 z-50">
@@ -22,7 +34,10 @@ const Admin = () => {
               <span className="font-display font-bold">{company.shortName} Admin</span>
             </Link>
           </div>
-          <Link to="/"><Button variant="outline" size="sm" className="gap-2"><ArrowLeft className="w-4 h-4" /> Back to Site</Button></Link>
+          <div className="flex gap-2">
+            <Link to="/"><Button variant="ghost" size="sm" className="gap-2"><ArrowLeft className="w-4 h-4" /> Back to Site</Button></Link>
+            <Button variant="outline" size="sm" onClick={handleLogout} className="gap-2">Logout</Button>
+          </div>
         </div>
       </header>
 

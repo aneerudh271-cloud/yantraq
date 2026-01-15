@@ -1,32 +1,52 @@
 export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
+const getHeaders = () => {
+    const token = localStorage.getItem('token');
+    return {
+        'Content-Type': 'application/json',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+    };
+};
+
 export const api = {
     get: async (endpoint: string) => {
-        const res = await fetch(`${API_URL}${endpoint}`);
+        const token = localStorage.getItem('token');
+        const headers: any = {};
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+
+        const res = await fetch(`${API_URL}${endpoint}`, { headers });
         if (!res.ok) throw new Error(`API Error: ${res.statusText}`);
         return res.json();
     },
     post: async (endpoint: string, data: any) => {
         const res = await fetch(`${API_URL}${endpoint}`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getHeaders(),
             body: JSON.stringify(data),
         });
-        if (!res.ok) throw new Error(`API Error: ${res.statusText}`);
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => ({}));
+            throw new Error(errorData.message || `API Error: ${res.statusText}`);
+        }
         return res.json();
     },
     put: async (endpoint: string, data: any) => {
         const res = await fetch(`${API_URL}${endpoint}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getHeaders(),
             body: JSON.stringify(data),
         });
         if (!res.ok) throw new Error(`API Error: ${res.statusText}`);
         return res.json();
     },
     delete: async (endpoint: string) => {
+        const token = localStorage.getItem('token');
+        const headers: any = {};
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+
         const res = await fetch(`${API_URL}${endpoint}`, {
             method: 'DELETE',
+            headers
         });
         if (!res.ok) throw new Error(`API Error: ${res.statusText}`);
         return res.json();

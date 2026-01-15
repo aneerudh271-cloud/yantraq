@@ -19,6 +19,8 @@ import Testimonial from './models/Testimonial.js';
 import Product from './models/Product.js';
 import { sendEmail } from './services/email.js';
 import PageView from './models/PageView.js';
+import authRoutes from './routes/authRoutes.js';
+import { protect, admin } from './middleware/authMiddleware.js';
 
 dotenv.config();
 
@@ -46,7 +48,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // File Upload Route (Vercel Blob)
-app.post('/api/upload', upload.single('file'), async (req: any, res) => {
+app.post('/api/upload', protect, admin, upload.single('file'), async (req: any, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ message: 'No file uploaded' });
@@ -109,8 +111,11 @@ app.get('/', (req, res) => {
     res.send('API is running successfully');
 });
 
+// Auth Routes
+app.use('/api/auth', authRoutes);
+
 // Leads
-app.get('/api/leads', async (req, res) => {
+app.get('/api/leads', protect, admin, async (req: any, res) => {
     try {
         const leads = await Lead.find().sort({ createdAt: -1 });
         res.json(leads);
@@ -136,6 +141,7 @@ app.post('/api/leads', async (req, res) => {
                 <p><strong>Type:</strong> ${savedLead.enquiryType}</p>
                 <p><strong>Message:</strong> ${savedLead.message}</p>
             `;
+            // Optional: Use environment variable for admin email if preferred
             await sendEmail(process.env.ADMIN_EMAIL || 'connect@yantraq.com', emailSubject, emailBody);
         } catch (emailError) {
             console.error('Failed to send email:', emailError);
@@ -147,7 +153,7 @@ app.post('/api/leads', async (req, res) => {
     }
 });
 
-app.put('/api/leads/:id', async (req, res) => {
+app.put('/api/leads/:id', protect, admin, async (req: any, res) => {
     try {
         const updatedLead = await Lead.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.json(updatedLead);
@@ -156,7 +162,7 @@ app.put('/api/leads/:id', async (req, res) => {
     }
 });
 
-app.delete('/api/leads/:id', async (req, res) => {
+app.delete('/api/leads/:id', protect, admin, async (req: any, res) => {
     try {
         await Lead.findByIdAndDelete(req.params.id);
         res.json({ message: 'Lead deleted' });
@@ -175,7 +181,7 @@ app.get('/api/services', async (req, res) => {
     }
 });
 
-app.post('/api/services', async (req, res) => {
+app.post('/api/services', protect, admin, async (req: any, res) => {
     try {
         const service = new Service(req.body);
         const savedService = await service.save();
@@ -185,7 +191,7 @@ app.post('/api/services', async (req, res) => {
     }
 });
 
-app.put('/api/services/:id', async (req, res) => {
+app.put('/api/services/:id', protect, admin, async (req: any, res) => {
     try {
         const updatedService = await Service.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.json(updatedService);
@@ -194,7 +200,7 @@ app.put('/api/services/:id', async (req, res) => {
     }
 });
 
-app.delete('/api/services/:id', async (req, res) => {
+app.delete('/api/services/:id', protect, admin, async (req: any, res) => {
     try {
         await Service.findByIdAndDelete(req.params.id);
         res.json({ message: 'Service deleted' });
@@ -222,7 +228,7 @@ app.get('/api/testimonials/all', async (req, res) => {
     }
 });
 
-app.post('/api/testimonials', async (req, res) => {
+app.post('/api/testimonials', protect, admin, async (req: any, res) => {
     try {
         const testimonial = new Testimonial(req.body);
         const savedTestimonial = await testimonial.save();
@@ -232,7 +238,7 @@ app.post('/api/testimonials', async (req, res) => {
     }
 });
 
-app.put('/api/testimonials/:id', async (req, res) => {
+app.put('/api/testimonials/:id', protect, admin, async (req: any, res) => {
     try {
         const updatedTestimonial = await Testimonial.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.json(updatedTestimonial);
@@ -241,7 +247,7 @@ app.put('/api/testimonials/:id', async (req, res) => {
     }
 });
 
-app.delete('/api/testimonials/:id', async (req, res) => {
+app.delete('/api/testimonials/:id', protect, admin, async (req: any, res) => {
     try {
         await Testimonial.findByIdAndDelete(req.params.id);
         res.json({ message: 'Testimonial deleted' });
@@ -278,7 +284,7 @@ app.get('/api/product/:id', async (req, res) => {
     }
 });
 
-app.post('/api/products', async (req, res) => {
+app.post('/api/products', protect, admin, async (req: any, res) => {
     try {
         const product = new Product(req.body);
         const savedProduct = await product.save();
@@ -288,7 +294,7 @@ app.post('/api/products', async (req, res) => {
     }
 });
 
-app.put('/api/products/:id', async (req, res) => {
+app.put('/api/products/:id', protect, admin, async (req: any, res) => {
     try {
         const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.json(updatedProduct);
@@ -297,7 +303,7 @@ app.put('/api/products/:id', async (req, res) => {
     }
 });
 
-app.delete('/api/products/:id', async (req, res) => {
+app.delete('/api/products/:id', protect, admin, async (req: any, res) => {
     try {
         await Product.findByIdAndDelete(req.params.id);
         res.json({ message: 'Product deleted' });
@@ -317,7 +323,7 @@ app.post('/api/analytics/track', async (req, res) => {
     }
 });
 
-app.get('/api/analytics', async (req, res) => {
+app.get('/api/analytics', protect, admin, async (req: any, res) => {
     try {
         const totalLeads = await Lead.countDocuments();
         const newLeads = await Lead.countDocuments({ status: 'new' });

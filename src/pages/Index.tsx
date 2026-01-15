@@ -66,8 +66,8 @@ const Index = () => {
 
               <div className="flex flex-wrap gap-4 mb-8">
                 <Link to="/products"><Button size="lg" className="gradient-primary gap-2"><ShoppingCart className="w-5 h-5" />Buy Products</Button></Link>
-                <Link to="/products?action=rent"><Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 gap-2"><Clock className="w-5 h-5" />Rent Equipment</Button></Link>
-                <Link to="/services"><Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 gap-2"><Wrench className="w-5 h-5" />Repair Service</Button></Link>
+                <Link to="/products?action=rent"><Button size="lg" variant="outline" className="border-white/30 text-white bg-white/10 gap-2"><Clock className="w-5 h-5" />Rent Equipment</Button></Link>
+                <Link to="/services"><Button size="lg" variant="outline" className="border-white/30 text-white bg-white/10 gap-2"><Wrench className="w-5 h-5" />Repair Service</Button></Link>
               </div>
 
               <div className="flex items-center gap-6 text-sm text-gray-400">
@@ -208,7 +208,7 @@ const Index = () => {
             <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto">Contact us today for a free consultation. Our team is ready to help you find the perfect IT solutions.</p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/contact"><Button size="lg" variant="secondary" className="gap-2"><Phone className="w-5 h-5" />Get Free Quote</Button></Link>
-              <a href={whatsappLink} target="_blank" rel="noopener noreferrer"><Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 gap-2"><MessageCircle className="w-5 h-5" />WhatsApp Us</Button></a>
+              <a href={whatsappLink} target="_blank" rel="noopener noreferrer"><Button size="lg" variant="outline" className="border-white/30 text-white bg-white/10 gap-2"><MessageCircle className="w-5 h-5" />WhatsApp Us</Button></a>
             </div>
           </motion.div>
         </div>
