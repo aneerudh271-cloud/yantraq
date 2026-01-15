@@ -7,6 +7,7 @@ export interface Testimonial {
   rating: number;
   isActive: boolean;
   createdAt: string;
+  image?: string;
 }
 
 export const testimonials: Testimonial[] = [
@@ -19,6 +20,7 @@ export const testimonials: Testimonial[] = [
     rating: 5,
     isActive: true,
     createdAt: '2024-01-15',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
   },
   {
     id: 'test-2',
@@ -29,6 +31,7 @@ export const testimonials: Testimonial[] = [
     rating: 5,
     isActive: true,
     createdAt: '2024-02-20',
+    image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
   },
   {
     id: 'test-3',
@@ -39,6 +42,7 @@ export const testimonials: Testimonial[] = [
     rating: 5,
     isActive: true,
     createdAt: '2024-03-10',
+    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
   },
   {
     id: 'test-4',
@@ -49,6 +53,7 @@ export const testimonials: Testimonial[] = [
     rating: 5,
     isActive: true,
     createdAt: '2024-04-05',
+    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
   },
   {
     id: 'test-5',
@@ -59,6 +64,7 @@ export const testimonials: Testimonial[] = [
     rating: 5,
     isActive: true,
     createdAt: '2024-05-12',
+    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face',
   },
   {
     id: 'test-6',
@@ -69,6 +75,7 @@ export const testimonials: Testimonial[] = [
     rating: 5,
     isActive: true,
     createdAt: '2024-06-18',
+    image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face',
   },
 ];
 

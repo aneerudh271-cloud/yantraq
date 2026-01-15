@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Layout } from '@/components/layout/Layout';
 import { SectionHeader } from '@/components/common/SectionHeader';
 import { ProductCard } from '@/components/common/ProductCard';
-import { TestimonialCard } from '@/components/common/TestimonialCard';
+import { TestimonialsCarousel } from '@/components/common/TestimonialsCarousel';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { categories } from '@/data/products';
@@ -156,11 +156,7 @@ const Index = () => {
       <section className="py-20 bg-muted/50">
         <div className="container mx-auto px-4">
           <SectionHeader badge="Testimonials" title="What Our Clients Say" description="Trusted by 500+ businesses across industries" />
-          <div className="grid md:grid-cols-3 gap-6">
-            {featuredTestimonials.map((testimonial: any, index: number) => (
-              <TestimonialCard key={testimonial._id} testimonial={{ ...testimonial, id: testimonial._id }} index={index} />
-            ))}
-          </div>
+          <TestimonialsCarousel testimonials={testimonials.map((t: any) => ({ ...t, id: t._id }))} />
         </div>
       </section>
 
