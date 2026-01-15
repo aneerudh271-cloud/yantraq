@@ -19,6 +19,16 @@ import { company, getWhatsAppLink } from '@/data/company';
 interface ContactFormProps {
   defaultService?: string;
   productName?: string;
+  initialData?: Partial<{
+    name: string;
+    email: string;
+    phone: string;
+    service: string;
+    message: string;
+  }>;
+  onSubmit?: (data: any) => Promise<void>;
+  submitButtonText?: string;
+  showWhatsApp?: boolean;
 }
 
 export const ContactForm = ({ defaultService, productName }: ContactFormProps) => {

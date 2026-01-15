@@ -138,8 +138,15 @@ export const ServiceManagement = () => {
                             const uploadFormData = new FormData();
                             uploadFormData.append('file', file);
 
+                            const token = localStorage.getItem('token');
+                            const headers: HeadersInit = {};
+                            if (token) {
+                              headers['Authorization'] = `Bearer ${token}`;
+                            }
+
                             const promise = fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/upload`, {
                               method: 'POST',
+                              headers,
                               body: uploadFormData,
                             }).then(async res => {
                               if (!res.ok) throw new Error('Upload failed');
@@ -245,8 +252,15 @@ export const ServiceManagement = () => {
                               const uploadFormData = new FormData();
                               uploadFormData.append('file', file);
 
+                              const token = localStorage.getItem('token');
+                              const headers: HeadersInit = {};
+                              if (token) {
+                                headers['Authorization'] = `Bearer ${token}`;
+                              }
+
                               const promise = fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/upload`, {
                                 method: 'POST',
+                                headers,
                                 body: uploadFormData,
                               }).then(async res => {
                                 if (!res.ok) throw new Error('Upload failed');

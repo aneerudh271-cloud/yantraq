@@ -27,6 +27,8 @@ import { protect, admin } from './middleware/authMiddleware.js';
 dotenv.config();
 
 const app = express();
+app.use(cors({ origin: true, credentials: true }));
+app.use(express.json());
 const upload = multer();
 
 // connectDB is async, but we call it here. 
@@ -81,7 +83,8 @@ app.post('/api/upload', protect, admin, upload.single('file'), async (req: any, 
 
         const blob = await put(req.file.originalname, req.file.buffer, {
             access: 'public',
-            token: token
+            token: token,
+            addRandomSuffix: true
         });
 
         console.log('File uploaded to:', blob.url);
@@ -92,20 +95,7 @@ app.post('/api/upload', protect, admin, upload.single('file'), async (req: any, 
     }
 });
 
-// CORS
-app.use(cors({
-    origin: [
-        'http://localhost:8080',
-        'https://yantraq.vercel.app',
-        'https://yantraq.com',
-        'https://www.yantraq.com',
-    ],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    credentials: true
-}));
 
-
-app.use(express.json());
 
 // Routes
 app.get('/', (req, res) => {
