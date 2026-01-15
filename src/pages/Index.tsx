@@ -20,7 +20,7 @@ import { SEO } from '@/components/common/SEO';
 const Index = () => {
   const whatsappLink = getWhatsAppLink();
 
-  const { data: products = [] } = useQuery({
+  const { data } = useQuery({
     queryKey: ['products'],
     queryFn: () => api.get('/products'),
   });
@@ -35,6 +35,7 @@ const Index = () => {
     queryFn: () => api.get('/testimonials'),
   });
 
+  const products = data?.products || [];
   const featuredProducts = products.slice(0, 6);
   const featuredTestimonials = testimonials.slice(0, 3);
   const featuredServices = services.slice(0, 4);

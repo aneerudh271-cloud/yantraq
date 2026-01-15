@@ -31,7 +31,7 @@ export const TestimonialsCarousel = ({ testimonials }: TestimonialsCarouselProps
     );
 
     return (
-        <div className="relative">
+        <div className="relative px-12">
             <Carousel
                 setApi={setApi}
                 className="w-full"
