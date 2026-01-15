@@ -88,7 +88,7 @@ export const ServiceManagement = () => {
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
+      <CardHeader className="flex flex-col md:flex-row items-center justify-between gap-4">
         <CardTitle>Service Management</CardTitle>
         {!isAdding && !editingId && (
           <Button onClick={() => { setIsAdding(true); resetForm(); }} className="gap-2">

@@ -196,14 +196,14 @@ export const ProductManagement = () => {
             </div>
 
             <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
+                <CardHeader className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                     <CardTitle>Products Management</CardTitle>
-                    <div className="flex gap-2">
-                        <div className="relative">
+                    <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto">
+                        <div className="relative w-full md:w-auto">
                             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                             <Input
                                 placeholder="Search products..."
-                                className="w-64 pl-9"
+                                className="w-full md:w-64 pl-9"
                                 value={search}
                                 onChange={(e) => handleSearch(e.target.value)}
                             />

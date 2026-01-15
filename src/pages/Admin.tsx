@@ -50,14 +50,14 @@ const Admin = () => {
 
         <div className="container mx-auto px-4 py-8">
           <Tabs defaultValue="analytics" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-7">
-              <TabsTrigger value="analytics" className="gap-2"><BarChart3 className="w-4 h-4" />Analytics</TabsTrigger>
-              <TabsTrigger value="products" className="gap-2"><Package className="w-4 h-4" />Products</TabsTrigger>
-              <TabsTrigger value="services" className="gap-2"><Settings className="w-4 h-4" />Services</TabsTrigger>
-              <TabsTrigger value="testimonials" className="gap-2"><Star className="w-4 h-4" />Testimonials</TabsTrigger>
-              <TabsTrigger value="leads" className="gap-2"><Users className="w-4 h-4" />Leads</TabsTrigger>
-              <TabsTrigger value="users" className="gap-2"><Users className="w-4 h-4" />Users</TabsTrigger>
-              <TabsTrigger value="amc" className="gap-2"><Calendar className="w-4 h-4" />AMC</TabsTrigger>
+            <TabsList className="flex flex-wrap w-full h-auto gap-2 bg-card p-2">
+              <TabsTrigger value="analytics" className="gap-2 flex-grow md:flex-grow-0"><BarChart3 className="w-4 h-4" />Analytics</TabsTrigger>
+              <TabsTrigger value="products" className="gap-2 flex-grow md:flex-grow-0"><Package className="w-4 h-4" />Products</TabsTrigger>
+              <TabsTrigger value="services" className="gap-2 flex-grow md:flex-grow-0"><Settings className="w-4 h-4" />Services</TabsTrigger>
+              <TabsTrigger value="testimonials" className="gap-2 flex-grow md:flex-grow-0"><Star className="w-4 h-4" />Testimonials</TabsTrigger>
+              <TabsTrigger value="leads" className="gap-2 flex-grow md:flex-grow-0"><Users className="w-4 h-4" />Leads</TabsTrigger>
+              <TabsTrigger value="users" className="gap-2 flex-grow md:flex-grow-0"><Users className="w-4 h-4" />Users</TabsTrigger>
+              <TabsTrigger value="amc" className="gap-2 flex-grow md:flex-grow-0"><Calendar className="w-4 h-4" />AMC</TabsTrigger>
             </TabsList>
 
             <TabsContent value="analytics"><AnalyticsDashboard /></TabsContent>
