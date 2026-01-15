@@ -20,6 +20,8 @@ import Product from './models/Product.js';
 import { sendEmail } from './services/email.js';
 import PageView from './models/PageView.js';
 import authRoutes from './routes/authRoutes.js';
+import amcRoutes from './routes/amcRoutes.js';
+import amcPlanRoutes from './routes/amcPlanRoutes.js';
 import { protect, admin } from './middleware/authMiddleware.js';
 
 dotenv.config();
@@ -96,7 +98,7 @@ app.use(cors({
         'http://localhost:8080',
         'https://yantraq.vercel.app',
         'https://yantraq.com',
-        'https://www.yantraq.com'
+        'https://www.yantraq.com',
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true
@@ -112,6 +114,10 @@ app.get('/', (req, res) => {
 
 // Auth Routes
 app.use('/api/auth', authRoutes);
+
+// AMC Routes
+app.use('/api/amc', amcRoutes);
+app.use('/api/amc-plans', amcPlanRoutes);
 
 // Leads
 app.get('/api/leads', protect, admin, async (req: any, res) => {
@@ -256,10 +262,40 @@ app.delete('/api/testimonials/:id', protect, admin, async (req: any, res) => {
 });
 
 // Products
-app.get('/api/products', async (req, res) => {
+app.get('/api/products', async (req: any, res) => {
     try {
-        const products = await Product.find();
-        res.json(products);
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = parseInt(req.query.limit as string) || 20;
+        const category = req.query.category as string;
+        const search = req.query.search as string;
+
+        const query: any = {};
+
+        if (category && category !== 'all') {
+            query.category = category;
+        }
+
+        if (search) {
+            query.$or = [
+                { name: { $regex: search, $options: 'i' } },
+                { description: { $regex: search, $options: 'i' } }
+            ];
+        }
+
+        const skip = (page - 1) * limit;
+
+        const total = await Product.countDocuments(query);
+        const products = await Product.find(query).skip(skip).limit(limit);
+
+        res.json({
+            products,
+            pagination: {
+                total,
+                pages: Math.ceil(total / limit),
+                page,
+                limit
+            }
+        });
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }

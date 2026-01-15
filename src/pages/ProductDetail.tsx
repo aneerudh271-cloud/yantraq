@@ -112,7 +112,7 @@ const ProductDetail = () => {
           <span className="text-foreground">{product.name}</span>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Product Info */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -163,7 +163,7 @@ const ProductDetail = () => {
               ))}
             </ul>
 
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3">
               {product.canBuy && (
                 <Button className="gap-2" size="lg">
                   <ShoppingCart className="w-5 h-5" />
@@ -191,7 +191,7 @@ const ProductDetail = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <Card className="sticky top-24">
+            <Card className="md:sticky md:top-24">
               <CardContent className="p-6">
                 <h2 className="font-display text-xl font-bold mb-2">
                   {actionLabels[action as keyof typeof actionLabels]}

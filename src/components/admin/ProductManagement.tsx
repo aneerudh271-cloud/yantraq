@@ -15,10 +15,18 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Package, Settings, Plus, Edit, Trash2, Loader2, Upload } from 'lucide-react';
+import { Package, Settings, Plus, Edit, Trash2, Loader2, Upload, Search, X } from 'lucide-react';
 import { api } from '@/lib/api';
 import { toast } from 'sonner';
-import { categories } from '@/data/products'; // Keep categories for now or fetch them if they were dynamic
+import { categories } from '@/data/products';
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "@/components/ui/pagination";
 
 interface Product {
     _id: string;
@@ -38,8 +46,10 @@ interface Product {
 export const ProductManagement = () => {
     const queryClient = useQueryClient();
     const [search, setSearch] = useState('');
+    const [page, setPage] = useState(1);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+
     // Basic form data
     const [formData, setFormData] = useState<Partial<Product>>({
         name: '',
@@ -55,10 +65,19 @@ export const ProductManagement = () => {
         features: [],
     });
 
-    const { data: products = [], isLoading } = useQuery({
-        queryKey: ['products'],
-        queryFn: () => api.get('/products'),
+    const { data, isLoading } = useQuery({
+        queryKey: ['products', page, search],
+        queryFn: () => {
+            const params = new URLSearchParams();
+            params.set('page', page.toString());
+            params.set('limit', '20');
+            if (search) params.set('search', search); // Server-side search
+            return api.get(`/products?${params.toString()}`);
+        },
     });
+
+    const products: Product[] = data?.products || [];
+    const pagination = data?.pagination;
 
     const createMutation = useMutation({
         mutationFn: (data: any) => api.post('/products', data),
@@ -134,7 +153,7 @@ export const ProductManagement = () => {
             return;
         }
 
-        const payload = { ...formData }; // Features are now in formData
+        const payload = { ...formData };
 
         if (editingProduct) {
             updateMutation.mutate({ id: editingProduct._id, data: payload });
@@ -147,18 +166,25 @@ export const ProductManagement = () => {
         updateStatusMutation.mutate({ id, data: { [field]: !currentValue } });
     };
 
-    const filteredProducts = products.filter((p: Product) => p.name.toLowerCase().includes(search.toLowerCase()));
+    const handleSearch = (s: string) => {
+        setSearch(s);
+        setPage(1);
+    };
 
     if (isLoading) return <div className="p-8 flex justify-center"><Loader2 className="animate-spin" /></div>;
+
+    // Use pagination.total for correct count if available, else products.length (but products is partial)
+    // For dashboard stats, we ideally need separate stats API or get total from pagination
+    const totalProducts = pagination?.total || products.length;
 
     return (
         <div className="space-y-6">
             <div className="grid md:grid-cols-4 gap-4">
                 {[
-                    { label: 'Total Products', value: products.length, icon: Package },
+                    { label: 'Total Products', value: totalProducts, icon: Package },
                     { label: 'Categories', value: categories.length, icon: Settings },
-                    { label: 'For Sale', value: products.filter((p: Product) => p.canBuy).length, icon: Package },
-                    { label: 'For Rent', value: products.filter((p: Product) => p.canRent).length, icon: Package },
+                    { label: 'Displaying', value: products.length, icon: Package }, // Showing current page count
+                    // Stats for filter types might require separate API or be removed if incorrect
                 ].map((stat, i) => (
                     <Card key={i}>
                         <CardContent className="p-6 flex items-center gap-4">
@@ -173,7 +199,20 @@ export const ProductManagement = () => {
                 <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>Products Management</CardTitle>
                     <div className="flex gap-2">
-                        <Input placeholder="Search products..." className="w-64" value={search} onChange={(e) => setSearch(e.target.value)} />
+                        <div className="relative">
+                            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                            <Input
+                                placeholder="Search products..."
+                                className="w-64 pl-9"
+                                value={search}
+                                onChange={(e) => handleSearch(e.target.value)}
+                            />
+                            {search && (
+                                <button onClick={() => handleSearch('')} className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground">
+                                    <X className="w-4 h-4" />
+                                </button>
+                            )}
+                        </div>
                         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                             <DialogTrigger asChild>
                                 <Button className="gap-2" onClick={() => handleOpenDialog()}><Plus className="w-4 h-4" /> Add Product</Button>
@@ -311,7 +350,7 @@ export const ProductManagement = () => {
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <div className="overflow-x-auto">
+                    <div className="overflow-x-auto mb-4">
                         <table className="w-full">
                             <thead>
                                 <tr className="border-b">
@@ -324,7 +363,7 @@ export const ProductManagement = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredProducts.map((product: Product) => (
+                                {products.map((product: Product) => (
                                     <motion.tr key={product._id} className="border-b hover:bg-muted/50" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                                         <td className="p-3">
                                             <div className="flex items-center gap-3">
@@ -354,6 +393,43 @@ export const ProductManagement = () => {
                             </tbody>
                         </table>
                     </div>
+
+                    {pagination && pagination.pages > 1 && (
+                        <div className="py-2">
+                            <Pagination>
+                                <PaginationContent>
+                                    <PaginationItem>
+                                        <PaginationPrevious
+                                            href="#"
+                                            onClick={(e) => { e.preventDefault(); if (page > 1) setPage(page - 1); }}
+                                            className={page <= 1 ? "pointer-events-none opacity-50" : ""}
+                                        />
+                                    </PaginationItem>
+
+                                    {/* Simple pagination logic for now - can be improved for many pages */}
+                                    {Array.from({ length: pagination.pages }, (_, i) => i + 1).map((p) => (
+                                        <PaginationItem key={p}>
+                                            <PaginationLink
+                                                href="#"
+                                                isActive={page === p}
+                                                onClick={(e) => { e.preventDefault(); setPage(p); }}
+                                            >
+                                                {p}
+                                            </PaginationLink>
+                                        </PaginationItem>
+                                    ))}
+
+                                    <PaginationItem>
+                                        <PaginationNext
+                                            href="#"
+                                            onClick={(e) => { e.preventDefault(); if (page < pagination.pages) setPage(page + 1); }}
+                                            className={page >= pagination.pages ? "pointer-events-none opacity-50" : ""}
+                                        />
+                                    </PaginationItem>
+                                </PaginationContent>
+                            </Pagination>
+                        </div>
+                    )}
                 </CardContent>
             </Card>
         </div>

@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { CheckCircle, ArrowRight, Phone, Loader2 } from 'lucide-react';
 import { api } from '@/lib/api';
 import { SEO } from '@/components/common/SEO';
+import { AMCPlansList } from '@/components/common/AMCPlansList';
 
 interface Service {
   _id: string;
@@ -111,59 +112,7 @@ const Services = () => {
             description="Ensure uninterrupted operation with our comprehensive AMC plans"
           />
 
-          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            {[
-              {
-                name: 'Basic',
-                price: '₹5,000/year',
-                features: ['Quarterly maintenance visits', 'Phone support', 'Basic troubleshooting', 'Software updates'],
-              },
-              {
-                name: 'Standard',
-                price: '₹12,000/year',
-                features: ['Monthly maintenance visits', '24/7 phone support', 'On-site repairs', 'Parts at discount', 'Priority response'],
-                popular: true,
-              },
-              {
-                name: 'Premium',
-                price: '₹25,000/year',
-                features: ['Weekly checkups', '24/7 dedicated support', 'Free parts replacement', 'Same-day response', 'Backup equipment'],
-              },
-            ].map((plan, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Card className={`h-full ${plan.popular ? 'border-primary shadow-glow' : ''}`}>
-                  <CardContent className="p-6">
-                    {plan.popular && (
-                      <span className="inline-block px-3 py-1 bg-primary text-primary-foreground text-xs font-medium rounded-full mb-4">
-                        Most Popular
-                      </span>
-                    )}
-                    <h3 className="font-display text-xl font-bold mb-2">{plan.name}</h3>
-                    <p className="font-display text-3xl font-bold text-primary mb-6">{plan.price}</p>
-                    <ul className="space-y-3 mb-6">
-                      {plan.features.map((feature, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm">
-                          <CheckCircle className="w-4 h-4 text-success mt-0.5" />
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                    <Link to="/contact">
-                      <Button className="w-full" variant={plan.popular ? 'default' : 'outline'}>
-                        Get Quote
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
+          <AMCPlansList />
         </div>
       </section>
 
