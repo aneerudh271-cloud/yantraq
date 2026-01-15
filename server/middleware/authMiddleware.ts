@@ -21,21 +21,20 @@ export const protect = async (req: AuthRequest, res: Response, next: NextFunctio
             req.user = await User.findById(decoded.userId).select('-password');
 
             if (!req.user) {
-                res.status(401).json({ message: 'Not authorized, user not found' });
+                res.status(401).json({ success: false, message: 'Session expired. Please log in again.' });
                 return;
             }
 
             next();
             return;
         } catch (error) {
-            console.error(error);
-            res.status(401).json({ message: 'Not authorized, token failed' });
+            res.status(401).json({ success: false, message: 'Session expired. Please log in again.' });
             return;
         }
     }
 
     if (!token) {
-        res.status(401).json({ message: 'Not authorized, no token' });
+        res.status(401).json({ success: false, message: 'Not authorized, no token' });
         return;
     }
 };

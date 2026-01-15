@@ -18,6 +18,14 @@ export const api = {
             headers,
             cache: 'no-store'
         });
+
+        if (res.status === 401) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/login';
+            throw new Error('Session expired');
+        }
+
         if (!res.ok) throw new Error(`API Error: ${res.statusText}`);
         return res.json();
     },
@@ -27,6 +35,12 @@ export const api = {
             headers: getHeaders(),
             body: JSON.stringify(data),
         });
+        if (res.status === 401) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/login';
+            throw new Error('Session expired');
+        }
         if (!res.ok) {
             const errorData = await res.json().catch(() => ({}));
             throw new Error(errorData.message || `API Error: ${res.statusText}`);
@@ -39,6 +53,12 @@ export const api = {
             headers: getHeaders(),
             body: JSON.stringify(data),
         });
+        if (res.status === 401) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/login';
+            throw new Error('Session expired');
+        }
         if (!res.ok) throw new Error(`API Error: ${res.statusText}`);
         return res.json();
     },
@@ -51,6 +71,12 @@ export const api = {
             method: 'DELETE',
             headers
         });
+        if (res.status === 401) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/login';
+            throw new Error('Session expired');
+        }
         if (!res.ok) throw new Error(`API Error: ${res.statusText}`);
         return res.json();
     }
