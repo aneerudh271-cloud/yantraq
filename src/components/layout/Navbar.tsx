@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/context/AuthContext';
 import { company } from '@/data/company';
 
 /* ================= TYPES ================= */
@@ -22,6 +23,7 @@ const navLinks: NavLink[] = [
 
 /* ================= COMPONENT ================= */
 export const Navbar: React.FC = () => {
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const location = useLocation();
 
@@ -62,8 +64,8 @@ export const Navbar: React.FC = () => {
                   key={link.name}
                   to={link.href}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${location.pathname === link.href
-                      ? 'text-primary bg-primary/10'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                    ? 'text-primary bg-primary/10'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                     }`}
                 >
                   {link.name}
@@ -72,13 +74,15 @@ export const Navbar: React.FC = () => {
             </div>
 
             {/* Desktop CTA */}
-            <div className="hidden md:flex items-center gap-3">
-              <Link to="/admin">
-                <Button variant="ghost" size="sm">
-                  Admin
-                </Button>
-              </Link>
-            </div>
+            {user?.role === 'admin' && (
+              <div className="hidden md:flex items-center gap-3">
+                <Link to="/admin">
+                  <Button variant="ghost" size="sm">
+                    Dashboard
+                  </Button>
+                </Link>
+              </div>
+            )}
 
             {/* Mobile Menu Button */}
             <button
@@ -133,8 +137,8 @@ export const Navbar: React.FC = () => {
                     key={link.name}
                     to={link.href}
                     className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${location.pathname === link.href
-                        ? 'bg-primary/10 text-primary'
-                        : 'hover:bg-muted'
+                      ? 'bg-primary/10 text-primary'
+                      : 'hover:bg-muted'
                       }`}
                   >
                     {link.name}
@@ -142,14 +146,15 @@ export const Navbar: React.FC = () => {
                 ))}
               </div>
 
-              {/* Footer */}
-              <div className="p-4 border-t">
-                <Link to="/admin">
-                  <Button variant="outline" className="w-full">
-                    Admin Dashboard
-                  </Button>
-                </Link>
-              </div>
+              {user?.role === 'admin' && (
+                <div className="p-4 border-t">
+                  <Link to="/admin">
+                    <Button variant="outline" className="w-full">
+                      Dashboard
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </motion.div>
           </>
         )}
