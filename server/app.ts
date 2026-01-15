@@ -80,27 +80,8 @@ app.post('/api/upload', protect, admin, upload.single('file'), async (req: any, 
 
 // CORS
 app.use(cors({
-    origin: (origin, callback) => {
-        const allowedOrigins = (process.env.CLIENT_URL || '').split(',').map(url => url.trim()).filter(Boolean);
-        // Default for dev if empty
-        if (allowedOrigins.length === 0) {
-            allowedOrigins.push('http://localhost:5173');
-            allowedOrigins.push('http://localhost:8080');
-        }
-
-        // Allow no origin (server-to-server or curl)
-        if (!origin) return callback(null, true);
-
-        if (allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
-            callback(null, true);
-        } else {
-            console.log('Origin not allowed by CORs:', origin);
-            // For now, in dev, allow it to be friendly but log it
-            // callback(new Error('Not allowed by CORS'));
-            callback(null, true);
-        }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true
 }));
 
