@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { api } from '@/lib/api';
 import { SEO } from '@/components/common/SEO';
+import Leadership from '@/components/common/Leadership';
 
 const Index = () => {
   const whatsappLink = getWhatsAppLink();
@@ -152,6 +153,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Leadership */}
+      <Leadership />
 
       {/* Testimonials */}
       <section className="py-20 bg-muted/50">

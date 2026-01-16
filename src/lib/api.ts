@@ -1,4 +1,24 @@
-export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+// Smart API URL configuration for multi-environment support
+// Development: Uses localhost:5000
+// Production (Vercel): Uses relative /api path (same-origin)
+const getApiUrl = () => {
+    // If VITE_API_URL is explicitly set, use it
+    if (import.meta.env.VITE_API_URL) {
+        return import.meta.env.VITE_API_URL;
+    }
+    
+    // In production (when Vercel deploys), use relative path
+    // This ensures API calls go to yantraq.com/api instead of vercel.app
+    if (import.meta.env.PROD) {
+        return '/api';
+    }
+    
+    // Development fallback
+    return 'http://localhost:5000/api';
+};
+
+export const API_URL = getApiUrl();
+
 
 const getHeaders = () => {
     const token = localStorage.getItem('token');

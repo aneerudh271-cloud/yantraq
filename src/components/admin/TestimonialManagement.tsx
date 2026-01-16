@@ -17,6 +17,7 @@ import {
 import { Label } from '@/components/ui/label';
 import { Plus, Edit, Trash2, Star, Loader2, Upload } from 'lucide-react';
 import { api } from '@/lib/api';
+import { getUploadUrl } from '@/lib/uploadUtils';
 import { toast } from 'sonner';
 
 interface Testimonial {
@@ -178,7 +179,7 @@ export const TestimonialManagement = () => {
                         headers['Authorization'] = `Bearer ${token}`;
                       }
 
-                      const promise = fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/upload`, {
+                      const promise = fetch(getUploadUrl(), {
                         method: 'POST',
                         headers,
                         body: uploadFormData,

@@ -9,6 +9,7 @@ import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { Edit, Save, X, Trash2, Plus, Loader2, Upload } from 'lucide-react';
 import { api } from '@/lib/api';
+import { getUploadUrl } from '@/lib/uploadUtils';
 import { toast } from 'sonner';
 
 interface Service {
@@ -144,7 +145,7 @@ export const ServiceManagement = () => {
                               headers['Authorization'] = `Bearer ${token}`;
                             }
 
-                            const promise = fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/upload`, {
+                            const promise = fetch(getUploadUrl(), {
                               method: 'POST',
                               headers,
                               body: uploadFormData,
@@ -258,7 +259,7 @@ export const ServiceManagement = () => {
                                 headers['Authorization'] = `Bearer ${token}`;
                               }
 
-                              const promise = fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/upload`, {
+                              const promise = fetch(getUploadUrl(), {
                                 method: 'POST',
                                 headers,
                                 body: uploadFormData,

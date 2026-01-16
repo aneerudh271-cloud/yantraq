@@ -17,6 +17,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Package, Settings, Plus, Edit, Trash2, Loader2, Upload, Search, X } from 'lucide-react';
 import { api } from '@/lib/api';
+import { getUploadUrl } from '@/lib/uploadUtils';
 import { toast } from 'sonner';
 import { categories } from '@/data/products';
 import {
@@ -281,7 +282,7 @@ export const ProductManagement = () => {
                                                             headers['Authorization'] = `Bearer ${token}`;
                                                         }
 
-                                                        const promise = fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/upload`, {
+                                                        const promise = fetch(getUploadUrl(), {
                                                             method: 'POST',
                                                             headers,
                                                             body: uploadFormData,
