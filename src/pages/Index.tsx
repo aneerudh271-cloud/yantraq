@@ -17,6 +17,7 @@ import {
 import { api } from '@/lib/api';
 import { SEO } from '@/components/common/SEO';
 import Leadership from '@/components/common/Leadership';
+import FAQ, { faqSchema } from '@/components/common/FAQ';
 
 const Index = () => {
   const whatsappLink = getWhatsAppLink();
@@ -43,7 +44,12 @@ const Index = () => {
 
   return (
     <Layout>
-      <SEO title="Home" />
+      <SEO
+        title="Home"
+        description="YantraQ (yantraq.com) is Bhopal's #1 trusted IT hardware sales and rental company. Buy or rent laptops, servers, desktops, networking equipment for businesses, startups & enterprises. Best prices, fast delivery, expert support in Bhopal, Madhya Pradesh."
+        keywords="yantraq, yantra q, yantraq.com, yantraq bhopal, IT hardware sales bhopal, IT hardware rental bhopal, laptop rental bhopal, server rental bhopal, computer hardware shop bhopal, best IT hardware company bhopal, IT products near me, IT equipment rental near me, affordable IT hardware bhopal, enterprise IT solutions bhopal"
+        schema={faqSchema}
+      />
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center gradient-dark overflow-hidden">
         <div className="absolute inset-0 opacity-20">
@@ -55,15 +61,18 @@ const Index = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="text-white">
               <span className="inline-block px-4 py-2 bg-white/10 backdrop-blur rounded-full text-sm font-medium mb-6">
-                🔒 Enterprise IT Solutions Provider
+                🔒 Bhopal's Leading IT Hardware Provider
               </span>
               <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-                Complete IT Hardware{' '}
-                <span className="text-gradient">Sales, Service & Rental</span>{' '}
-                Solutions
+                Best IT Hardware{' '}
+                <span className="text-gradient">Sales & Rental</span>{' '}
+                Company in Bhopal
               </h1>
               <p className="text-lg text-gray-300 mb-8 max-w-xl">
-                {company.description}
+                <strong>YantraQ</strong> (yantraq.com) is Bhopal's most trusted IT hardware sales and rental company,
+                offering enterprise-grade laptops, servers, desktops, and networking equipment with flexible
+                rental solutions and complete IT infrastructure support for businesses, startups, and enterprises
+                across Madhya Pradesh.
               </p>
 
               <div className="flex flex-wrap gap-4 mb-8">
@@ -200,6 +209,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* FAQ Section */}
+      <FAQ />
 
       {/* CTA */}
       <section className="py-20 bg-primary text-white">
