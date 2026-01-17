@@ -30,32 +30,31 @@ export const Footer = () => {
   return (
     <footer className="bg-tech-navy text-white text-sm py-12">
       <div className="container mx-auto px-4">
-        {/* Brand Section - Full Width */}
-        <div className="mb-8 pb-8 border-b border-gray-800">
-          <div className="flex items-center gap-2 mb-4">
-            <img src="/logo.jpg" alt="YantraQ Logo" className="w-10 h-auto object-contain bg-white rounded p-0.5" />
-            <span className="font-display font-bold text-xl">{company.shortName}</span>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+
+          {/* Brand & Social */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <img src="/logo.jpg" alt="YantraQ Logo" className="w-8 h-auto object-contain bg-white rounded p-0.5" />
+              <span className="font-display font-bold text-lg">{company.shortName}</span>
+            </div>
+            <p className="text-gray-400 leading-relaxed max-w-xs">
+              {company.tagline}
+            </p>
+            <a
+              href={whatsappLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-green-400 hover:text-green-300 transition-colors"
+            >
+              <MessageCircle className="w-4 h-4" />
+              Start a Chat
+            </a>
           </div>
-          <p className="text-gray-400 leading-relaxed max-w-2xl mb-4">
-            {company.tagline}
-          </p>
-          <a
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-green-400 hover:text-green-300 transition-colors"
-          >
-            <MessageCircle className="w-4 h-4" />
-            Start a Chat on WhatsApp
-          </a>
-        </div>
 
-        {/* Navigation & Contact - Flex Layout */}
-        <div className="flex flex-col md:flex-row gap-8 mb-8">
-
-          {/* Navigation - 1/4 width on desktop */}
-          <div className="md:w-1/4">
-            <h4 className="font-semibold mb-4 text-gray-200">Quick Links</h4>
+          {/* Quick Links */}
+          <div>
+            <h4 className="font-semibold mb-4 text-gray-200">Navigation</h4>
             <div className="flex flex-col gap-2">
               {quickLinks.map((link) => (
                 <Link key={link.name} to={link.href} className="text-gray-400 hover:text-primary transition-colors w-fit">
@@ -65,45 +64,23 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* Contact - 3/4 width on desktop */}
-          <div className="md:w-3/4">
+          {/* Contact */}
+          <div>
             <h4 className="font-semibold mb-4 text-gray-200">Contact Us</h4>
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Address */}
-              <div className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 mt-1 flex-shrink-0 text-primary" />
-                <div>
-                  <p className="text-gray-400 font-medium mb-1">Our Office</p>
-                  <p className="text-gray-400 leading-relaxed">
-                    {company.address.line1}, {company.address.line2},<br />
-                    {company.address.city}, {company.address.state} {company.address.pincode}
-                  </p>
-                </div>
-              </div>
-
-              {/* Phone & Email */}
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <Phone className="w-5 h-5 flex-shrink-0 text-primary" />
-                  <div>
-                    <p className="text-gray-400 font-medium mb-1">Call Us</p>
-                    <a href={`tel:${company.contact.phone.replace(/\s/g, '')}`} className="text-gray-400 hover:text-white transition-colors">
-                      {company.contact.phone}
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 flex-shrink-0 text-primary" />
-                  <div>
-                    <p className="text-gray-400 font-medium mb-1">Email Us</p>
-                    <a href={`mailto:${company.contact.emails.sales}`} className="text-gray-400 hover:text-white transition-colors">
-                      {company.contact.emails.sales}
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ul className="space-y-3 text-gray-400">
+              <li className="flex items-start gap-3">
+                <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
+                <span>{company.address.line1}, {company.address.line2}, {company.address.city}, {company.address.state} {company.address.pincode}</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <Phone className="w-4 h-4 flex-shrink-0" />
+                <a href={`tel:${company.contact.phone.replace(/\s/g, '')}`} className="hover:text-white transition-colors">{company.contact.phone}</a>
+              </li>
+              <li className="flex items-center gap-3">
+                <Mail className="w-4 h-4 flex-shrink-0" />
+                <a href={`mailto:${company.contact.emails.sales}`} className="hover:text-white transition-colors">{company.contact.emails.sales}</a>
+              </li>
+            </ul>
           </div>
         </div>
 
