@@ -36,15 +36,6 @@ const ChatBot = () => {
         return () => clearTimeout(timer);
     }, []);
 
-    useEffect(() => {
-        if (isOpen && !isFullScreen) {
-            const handleScroll = () => {
-                setIsOpen(false);
-            };
-            window.addEventListener('scroll', handleScroll);
-            return () => window.removeEventListener('scroll', handleScroll);
-        }
-    }, [isOpen, isFullScreen]);
 
     const renderMessage = (text: string) => {
         // Simple bold rendering for **text**
