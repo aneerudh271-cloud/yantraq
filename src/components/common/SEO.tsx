@@ -17,7 +17,7 @@ export const SEO = ({
     image = '/logo.jpg',
     schema,
     noindex = false,
-    keywords = "yantraq, yantra q, yantraq bhopal, IT hardware sales bhopal, IT hardware rental bhopal, laptop rental bhopal, server rental bhopal, computer hardware shop bhopal, IT equipment rent near me, networking hardware supplier bhopal, enterprise IT hardware bhopal"
+    keywords = "yantraq, yantra q, yantraq.com, yantarq, yantra-q, yantraq bhopal, yantra q bhopal, IT hardware sales bhopal, IT hardware rental bhopal, laptop rental bhopal, server rental bhopal, desktop rental bhopal, computer hardware shop bhopal, IT equipment rent near me, networking hardware supplier bhopal, enterprise IT hardware bhopal, best IT company bhopal, laptop shop bhopal, server dealer bhopal, IT solutions bhopal"
 }: SEOProps) => {
     const { pathname } = useLocation();
     const siteUrl = 'https://yantraq.com';
@@ -63,7 +63,7 @@ export const SEO = ({
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
         "name": "YantraQ",
-        "alternateName": ["Yantra Q", "yantraq.com", "YantraQ Bhopal"],
+        "alternateName": ["Yantra Q", "yantraq.com", "YantraQ Bhopal", "Yantra-Q", "yantarq", "yantraq bhopal"],
         "description": "Leading IT hardware sales and rental company in Bhopal providing laptops, servers, desktops, networking equipment for businesses and enterprises",
         "url": siteUrl,
         "logo": `${siteUrl}/logo.jpg`,

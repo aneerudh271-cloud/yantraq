@@ -1,14 +1,13 @@
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
+# YantraQ - IT Hardware Sales & Rental Bhopal
+# Allow all search engines to crawl the entire site
 
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://yantraq.com/sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1

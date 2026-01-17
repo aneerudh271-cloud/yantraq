@@ -2,14 +2,21 @@ import { motion } from 'framer-motion';
 import { Layout } from '@/components/layout/Layout';
 import { ContactForm } from '@/components/common/ContactForm';
 import { Card, CardContent } from '@/components/ui/card';
-import { Phone, Mail, MapPin, Clock, MessageCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Phone, Mail, MapPin, Clock, MessageCircle, ExternalLink } from 'lucide-react';
 import { company, getWhatsAppLink } from '@/data/company';
+import { SEO } from '@/components/common/SEO';
 
 const Contact = () => {
   const whatsappLink = getWhatsAppLink();
 
   return (
     <Layout>
+      <SEO
+        title="Contact Us"
+        description="Contact YantraQ (yantraq.com) - Bhopal's best IT hardware sales and rental company. Get instant support for laptops, servers, desktops, networking equipment. Call now or visit our Bhopal office for IT solutions."
+        keywords="contact yantraq, yantraq contact, yantra q bhopal contact, IT hardware shop bhopal contact, laptop rental bhopal contact number, server sales bhopal phone, IT support bhopal, yantraq address bhopal, computer shop near me bhopal"
+      />
       {/* Hero */}
       <section className="py-16 gradient-dark text-white">
         <div className="container mx-auto px-4">
@@ -69,18 +76,32 @@ const Contact = () => {
               </Card>
 
               <Card>
-                <CardContent className="p-6 flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-6 h-6 text-primary" />
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-1">Address</h3>
+                      <p className="text-muted-foreground">
+                        {company.address.line1}<br />
+                        {company.address.line2}<br />
+                        {company.address.city}, {company.address.state} {company.address.pincode}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-semibold mb-1">Address</h3>
-                    <p className="text-muted-foreground">
-                      {company.address.line1}<br />
-                      {company.address.line2}<br />
-                      {company.address.city}, {company.address.state}
-                    </p>
-                  </div>
+                  <a
+                    href={company.address.googleMapsLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full"
+                  >
+                    <Button variant="outline" className="w-full gap-2">
+                      <MapPin className="w-4 h-4" />
+                      Open in Google Maps
+                      <ExternalLink className="w-4 h-4" />
+                    </Button>
+                  </a>
                 </CardContent>
               </Card>
 

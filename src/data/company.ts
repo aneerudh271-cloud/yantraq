@@ -16,14 +16,15 @@ export const company = {
   },
 
   address: {
-    line1: '2nd Floor, 1, Aadi Parishar',
-    line2: 'Bagsewaniya, Sant Ashram Nagar',
-    line3: 'BHEL Sangam Colony, Phase-2',
+    line1: '1, Adi Parisar',
+    line2: 'Bagsewaniya, Bagh Swaniya',
     city: 'Bhopal',
     state: 'Madhya Pradesh',
+    pincode: '462026',
     country: 'India',
-    full: '2nd Floor, 1, Aadi Parishar, Bagsewaniya, Sant Ashram Nagar, BHEL Sangam Colony, Phase-2, Bhopal, Madhya Pradesh, India',
-    mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14665.967882260124!2d77.4646543!3d23.2351984!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x397c4270da6d2673%3A0x8909890538058284!2sBag%20Sewaniya%2C%20Bhopal%2C%20Madhya%20Pradesh!5e0!3m2!1sen!2sin!4v1705234567890!5m2!1sen!2sin',
+    full: '1,1, Adi Parisar, Bagsewaniya, Bagh Swaniya, Bhopal, Madhya Pradesh 462026',
+    mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3665.967882260124!2d77.4646543!3d23.2351984!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x397c4270da6d2673%3A0x8909890538058284!2sBagsewaniya%2C%20Bhopal%2C%20Madhya%20Pradesh%20462026!5e0!3m2!1sen!2sin!4v1705234567890!5m2!1sen!2sin',
+    googleMapsLink: 'https://www.google.com/maps/place/Pushpako2/@23.1987744,77.4619296,17z/data=!3m1!4b1!4m6!3m5!1s0x87de1398d45f4f7d:0x562aeff123c01dd4!8m2!3d23.1987744!4d77.4619296!16s%2Fg%2F11mz04vqbh?entry=ttu&g_ep=EgoyMDI2MDExMy4wIKXMDSoKLDEwMDc5MjA2N0gBUAM%3D',
   },
 
   businessHours: {
