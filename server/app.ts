@@ -22,6 +22,7 @@ import PageView from './models/PageView.js';
 import authRoutes from './routes/authRoutes.js';
 import amcRoutes from './routes/amcRoutes.js';
 import amcPlanRoutes from './routes/amcPlanRoutes.js';
+import chatRoutes from './routes/chatRoutes.js';
 import { protect, admin } from './middleware/authMiddleware.js';
 
 dotenv.config();
@@ -108,6 +109,9 @@ app.use('/api/auth', authRoutes);
 // AMC Routes
 app.use('/api/amc', amcRoutes);
 app.use('/api/amc-plans', amcPlanRoutes);
+
+// Chat Routes
+app.use('/api', chatRoutes);
 
 // Leads
 app.get('/api/leads', protect, admin, async (req: any, res) => {
