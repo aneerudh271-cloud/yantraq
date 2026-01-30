@@ -71,6 +71,7 @@ This is a full-stack web application for YantraQ, featuring a public-facing webs
 - **Service Management**: CRUD operations for services (Admin)
 - **Lead Management**: Track enquiries and status (Admin)
 - **Analytics**: Basic dashboard for leads and enquiry types (Admin)
+- 
 - **Public Website**:
   - Responsive landing page
   - Product catalog with filtering
