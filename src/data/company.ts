@@ -2,6 +2,7 @@ export const company = {
   name: 'Y.A.N.T.R.A.Q. Pvt. Ltd.',
   shortName: 'YANTRAQ',
   tagline: 'Yield-Driven Advanced Networked Technology Research Quotient',
+  slogan: 'Engineering The Future',
   description: 'Your trusted partner for enterprise IT hardware sales, services, and rental solutions. From CCTV surveillance and biometric systems to servers and networking infrastructure — we deliver comprehensive IT solutions for businesses of all sizes.',
   sisterCompany: 'PushpakO2',
   domain: 'https://yantraq.com',

@@ -52,7 +52,7 @@ export const Navbar: React.FC = () => {
                   {company.shortName}
                 </span>
                 <span className="text-xs text-muted-foreground">
-                  IT Solutions
+                  {company.slogan}
                 </span>
               </div>
             </Link>

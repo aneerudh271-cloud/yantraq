@@ -36,6 +36,7 @@ interface Product {
     description: string;
     fullDescription: string;
     image: string;
+    images?: string[];
     features: string[];
     canBuy: boolean;
     canRent: boolean;
@@ -58,6 +59,7 @@ export const ProductManagement = () => {
         description: '',
         fullDescription: '',
         image: '/placeholder.svg',
+        images: [],
         canBuy: true,
         canRent: true,
         canRepair: true,
@@ -127,6 +129,7 @@ export const ProductManagement = () => {
             description: '',
             fullDescription: '',
             image: '/placeholder.svg',
+            images: [],
             canBuy: true,
             canRent: true,
             canRepair: true,
@@ -256,54 +259,117 @@ export const ProductManagement = () => {
                                             <Input value={formData.rentPrice} onChange={e => setFormData({ ...formData, rentPrice: e.target.value })} />
                                         </div>
                                     </div>
-                                    <div className="space-y-2">
-                                        <Label>Image</Label>
-                                        <div className="flex gap-2 items-center">
-                                            <Input
-                                                value={formData.image}
-                                                onChange={e => setFormData({ ...formData, image: e.target.value })}
-                                                placeholder="Image URL"
-                                                className="flex-1"
-                                            />
-                                            <div className="relative">
+                                    <div className="space-y-4 border p-4 rounded-md bg-muted/10">
+                                        <Label className="font-semibold">Product Images</Label>
+
+                                        {/* Primary Image */}
+                                        <div className="space-y-2">
+                                            <Label>Primary Image</Label>
+                                            <div className="flex gap-2 items-center">
                                                 <Input
-                                                    type="file"
-                                                    className="absolute inset-0 opacity-0 cursor-pointer"
-                                                    onChange={async (e) => {
-                                                        const file = e.target.files?.[0];
-                                                        if (!file) return;
-
-                                                        const uploadFormData = new FormData();
-                                                        uploadFormData.append('file', file);
-
-                                                        const token = localStorage.getItem('token');
-                                                        const headers: HeadersInit = {};
-                                                        if (token) {
-                                                            headers['Authorization'] = `Bearer ${token}`;
-                                                        }
-
-                                                        const promise = fetch(getUploadUrl(), {
-                                                            method: 'POST',
-                                                            headers,
-                                                            body: uploadFormData,
-                                                        }).then(async res => {
-                                                            if (!res.ok) throw new Error('Upload failed');
-                                                            const data = await res.json();
-                                                            setFormData(prev => ({ ...prev, image: data.url }));
-                                                            return data;
-                                                        });
-
-                                                        toast.promise(promise, {
-                                                            loading: 'Uploading image...',
-                                                            success: 'Image uploaded!',
-                                                            error: 'Upload failed. Check token.'
-                                                        });
-                                                    }}
+                                                    value={formData.image}
+                                                    onChange={e => setFormData({ ...formData, image: e.target.value })}
+                                                    placeholder="Primary Image URL"
+                                                    className="flex-1"
                                                 />
-                                                <Button type="button" variant="outline" size="icon"><Upload className="w-4 h-4" /></Button>
+                                                <div className="relative">
+                                                    <Input
+                                                        type="file"
+                                                        className="absolute inset-0 opacity-0 cursor-pointer"
+                                                        onChange={async (e) => {
+                                                            const file = e.target.files?.[0];
+                                                            if (!file) return;
+
+                                                            const uploadFormData = new FormData();
+                                                            uploadFormData.append('file', file);
+                                                            const token = localStorage.getItem('token');
+                                                            const headers: HeadersInit = token ? { 'Authorization': `Bearer ${token}` } : {};
+
+                                                            try {
+                                                                toast.loading('Uploading...', { id: 'upload-primary' });
+                                                                const res = await fetch(getUploadUrl(), { method: 'POST', headers, body: uploadFormData });
+                                                                if (!res.ok) throw new Error('Upload failed');
+                                                                const data = await res.json();
+                                                                setFormData(prev => ({ ...prev, image: data.url }));
+                                                                toast.success('Uploaded!', { id: 'upload-primary' });
+                                                            } catch (err) {
+                                                                toast.error('Upload failed', { id: 'upload-primary' });
+                                                            }
+                                                        }}
+                                                    />
+                                                    <Button type="button" variant="outline" size="icon"><Upload className="w-4 h-4" /></Button>
+                                                </div>
                                             </div>
+                                            {formData.image && <img src={formData.image} alt="Primary" className="w-20 h-20 object-cover rounded mt-2 border" />}
                                         </div>
-                                        {formData.image && <img src={formData.image} alt="Preview" className="w-20 h-20 object-cover rounded mt-2 border" />}
+
+                                        {/* Additional Images */}
+                                        <div className="space-y-2">
+                                            <div className="flex items-center justify-between">
+                                                <Label>Additional Images (Carousel)</Label>
+                                                <div className="relative overflow-hidden">
+                                                    <Button type="button" variant="secondary" size="sm" className="gap-2">
+                                                        <Plus className="w-3 h-3" /> Add Image
+                                                    </Button>
+                                                    <Input
+                                                        type="file"
+                                                        multiple
+                                                        className="absolute inset-0 opacity-0 cursor-pointer"
+                                                        onChange={async (e) => {
+                                                            const files = e.target.files;
+                                                            if (!files || files.length === 0) return;
+
+                                                            const token = localStorage.getItem('token');
+                                                            const headers: HeadersInit = token ? { 'Authorization': `Bearer ${token}` } : {};
+
+                                                            const newImages = [...(formData.images || [])];
+
+                                                            for (let i = 0; i < files.length; i++) {
+                                                                const file = files[i];
+                                                                const uploadFormData = new FormData();
+                                                                uploadFormData.append('file', file);
+
+                                                                try {
+                                                                    toast.loading(`Uploading ${i + 1}/${files.length}...`, { id: 'upload-multi' });
+                                                                    const res = await fetch(getUploadUrl(), { method: 'POST', headers, body: uploadFormData });
+                                                                    if (!res.ok) throw new Error('Upload failed');
+                                                                    const data = await res.json();
+                                                                    newImages.push(data.url);
+                                                                } catch (err) {
+                                                                    console.error(err);
+                                                                    toast.error(`Failed to upload ${file.name}`);
+                                                                }
+                                                            }
+
+                                                            setFormData(prev => ({ ...prev, images: newImages }));
+                                                            toast.success('Finished uploading', { id: 'upload-multi' });
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
+                                                {(formData.images || []).map((img, i) => (
+                                                    <div key={i} className="relative group border rounded-md overflow-hidden">
+                                                        <img src={img} alt={`Gallery ${i}`} className="w-full h-24 object-cover" />
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                const newImages = [...(formData.images || [])];
+                                                                newImages.splice(i, 1);
+                                                                setFormData({ ...formData, images: newImages });
+                                                            }}
+                                                            className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                                        >
+                                                            <X className="w-3 h-3" />
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            {(!formData.images || formData.images.length === 0) && (
+                                                <p className="text-sm text-muted-foreground italic">No additional images added.</p>
+                                            )}
+                                        </div>
                                     </div>
 
                                     <div className="space-y-4 border p-4 rounded-md bg-muted/10">

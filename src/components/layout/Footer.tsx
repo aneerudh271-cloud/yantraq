@@ -38,7 +38,10 @@ export const Footer = () => {
               <img src="/logo.jpg" alt="YantraQ Logo" className="w-8 h-auto object-contain bg-white rounded p-0.5" />
               <span className="font-display font-bold text-lg">{company.shortName}</span>
             </div>
-            <p className="text-gray-400 leading-relaxed max-w-xs">
+            <p className="text-gray-400 leading-relaxed max-w-xs font-medium">
+              {company.slogan}
+            </p>
+            <p className="text-gray-500 text-xs mt-1 leading-tight max-w-xs">
               {company.tagline}
             </p>
             <a

@@ -17,6 +17,12 @@ import {
   CheckCircle,
   Loader2
 } from 'lucide-react';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -119,11 +125,31 @@ const ProductDetail = () => {
             animate={{ opacity: 1, x: 0 }}
           >
             <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-muted mb-6">
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-full object-cover"
-              />
+              {product.images && product.images.length > 1 ? (
+                <Carousel
+                  plugins={[Autoplay({ delay: 3000 })]}
+                  opts={{ align: "start", loop: true }}
+                  className="w-full h-full"
+                >
+                  <CarouselContent>
+                    {product.images.map((img: string, i: number) => (
+                      <CarouselItem key={i} className="basis-full">
+                        <img
+                          src={img}
+                          alt={`${product.name} ${i + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                </Carousel>
+              ) : (
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+              )}
             </div>
 
             <div className="flex items-center gap-2 mb-4">

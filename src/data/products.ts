@@ -5,6 +5,7 @@ export interface Product {
   description: string;
   fullDescription: string;
   image: string;
+  images?: string[];
   features: string[];
   canBuy: boolean;
   canRent: boolean;

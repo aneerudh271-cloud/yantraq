@@ -20,6 +20,7 @@ const connectDB = async () => {
     if (!cached.promise) {
         const opts = {
             bufferCommands: false, // Vital for serverless to fail fast if no connection
+            family: 4, // Force IPv4 to avoid querySrv ECONNREFUSED errors on some networks
         };
 
         cached.promise = mongoose.connect(mongoURI, opts).then((mongoose) => {

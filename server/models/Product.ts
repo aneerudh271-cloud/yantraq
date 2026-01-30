@@ -6,6 +6,7 @@ export interface IProduct extends Document {
     description: string;
     fullDescription: string;
     image: string;
+    images?: string[];
     features: string[];
     canBuy: boolean;
     canRent: boolean;
@@ -20,6 +21,7 @@ const ProductSchema: Schema = new Schema({
     description: { type: String, required: true },
     fullDescription: { type: String, required: true },
     image: { type: String, required: true },
+    images: [{ type: String }],
     features: [{ type: String }],
     canBuy: { type: Boolean, default: true },
     canRent: { type: Boolean, default: true },
