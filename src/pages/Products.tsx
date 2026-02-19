@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
@@ -7,7 +7,7 @@ import { SectionHeader } from '@/components/common/SectionHeader';
 import { ProductCard } from '@/components/common/ProductCard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { categories } from '@/data/products';
+import { categories as staticCategories } from '@/data/products';
 import { Search, X, Loader2 } from 'lucide-react';
 import { api } from '@/lib/api';
 import { SEO } from '@/components/common/SEO';
@@ -26,8 +26,8 @@ interface ApiProduct {
   name: string;
   category: string;
   description: string;
-  fullDescription?: string;
-  features?: string[];
+  fullDescription: string;
+  features: string[];
   image: string;
   price: string;
   canBuy: boolean;
@@ -56,6 +56,34 @@ const Products = () => {
     },
   });
 
+  const { data: fetchedCategories = [] } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => api.get('/products/categories'),
+  });
+
+  const allCategories = useMemo(() => {
+    const uniqueCategories = new Map();
+
+    // Add static categories first to preserve icons and nice names
+    staticCategories.forEach(c => {
+      uniqueCategories.set(c.id, { id: c.id, name: c.name, icon: c.icon });
+    });
+
+    // Add fetched categories if not present
+    if (Array.isArray(fetchedCategories)) {
+      fetchedCategories.forEach((cat: string) => {
+        if (!uniqueCategories.has(cat)) {
+          // Capitalize first letter for display name if it's a simple string ID
+          const name = cat.charAt(0).toUpperCase() + cat.slice(1).replace(/-/g, ' ');
+          // Provide a default icon for new categories
+          uniqueCategories.set(cat, { id: cat, name: name, icon: '📦' });
+        }
+      });
+    }
+
+    return Array.from(uniqueCategories.values());
+  }, [fetchedCategories]);
+
   const products: ApiProduct[] = data?.products || [];
   const pagination = data?.pagination;
 
@@ -78,6 +106,8 @@ const Products = () => {
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     searchParams.set('page', '1'); // Reset to page 1
+    // If searching, maybe clear category? Or keep it to search within category. 
+    // Usually search is global or within context. Let's keep category context if set.
     setSearchParams(searchParams);
   };
 
@@ -134,7 +164,7 @@ const Products = () => {
             >
               All Products
             </Button>
-            {categories.map((cat) => (
+            {allCategories.map((cat) => (
               <Button
                 key={cat.id}
                 variant={selectedCategory === cat.id ? 'default' : 'outline'}

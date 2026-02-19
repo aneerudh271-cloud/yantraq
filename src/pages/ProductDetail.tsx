@@ -36,6 +36,8 @@ const ProductDetail = () => {
   });
 
   const category = categories.find(c => c.id === product?.category);
+  const categoryName = category?.name || (product?.category ? product.category.charAt(0).toUpperCase() + product.category.slice(1).replace(/-/g, ' ') : '');
+
 
   if (isLoading) {
     return (
@@ -112,7 +114,7 @@ const ProductDetail = () => {
           </Link>
           <span>/</span>
           <Link to={`/products?category=${product.category}`} className="hover:text-foreground">
-            {category?.name || product.category}
+            {categoryName}
           </Link>
           <span>/</span>
           <span className="text-foreground">{product.name}</span>
@@ -154,7 +156,7 @@ const ProductDetail = () => {
 
             <div className="flex items-center gap-2 mb-4">
               <Badge variant="secondary">
-                {category?.icon} {category?.name || product.category}
+                {category?.icon} {categoryName}
               </Badge>
               {product.canBuy && <Badge className="bg-primary">Buy</Badge>}
               {product.canRent && <Badge className="bg-accent">Rent</Badge>}

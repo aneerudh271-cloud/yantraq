@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,12 +14,25 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Package, Settings, Plus, Edit, Trash2, Loader2, Upload, Search, X } from 'lucide-react';
+import { Package, Settings, Plus, Edit, Trash2, Loader2, Upload, Search, X, Check, ChevronsUpDown } from 'lucide-react';
 import { api } from '@/lib/api';
 import { getUploadUrl } from '@/lib/uploadUtils';
 import { toast } from 'sonner';
-import { categories } from '@/data/products';
+import { categories as staticCategories } from '@/data/products';
+import { cn } from "@/lib/utils";
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+} from "@/components/ui/command";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
 import {
     Pagination,
     PaginationContent,
@@ -28,6 +41,13 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 interface Product {
     _id: string;
@@ -48,9 +68,12 @@ interface Product {
 export const ProductManagement = () => {
     const queryClient = useQueryClient();
     const [search, setSearch] = useState('');
+    const [filterCategory, setFilterCategory] = useState("all");
     const [page, setPage] = useState(1);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+    const [openCategory, setOpenCategory] = useState(false);
+    const [searchValue, setSearchValue] = useState("");
 
     // Basic form data
     const [formData, setFormData] = useState<Partial<Product>>({
@@ -68,16 +91,60 @@ export const ProductManagement = () => {
         features: [],
     });
 
-    const { data, isLoading } = useQuery({
-        queryKey: ['products', page, search],
+    const [debouncedSearch, setDebouncedSearch] = useState('');
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearch(search);
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [search]);
+
+    const { data, isLoading, isFetching } = useQuery({
+        queryKey: ['products', page, debouncedSearch, filterCategory],
         queryFn: () => {
             const params = new URLSearchParams();
             params.set('page', page.toString());
             params.set('limit', '20');
-            if (search) params.set('search', search); // Server-side search
+            if (debouncedSearch) params.set('search', debouncedSearch); // Server-side search
+            if (filterCategory && filterCategory !== 'all') params.set('category', filterCategory);
             return api.get(`/products?${params.toString()}`);
         },
     });
+
+    const { data: fetchedCategories = [] } = useQuery({
+        queryKey: ['categories'],
+        queryFn: () => api.get('/products/categories'),
+    });
+
+    const allCategories = useMemo(() => {
+        const uniqueCategories = new Map();
+
+        // Add static categories first
+        staticCategories.forEach(c => {
+            uniqueCategories.set(c.id, { id: c.id, name: c.name });
+        });
+
+        // Add fetched categories if not present
+        if (Array.isArray(fetchedCategories)) {
+            fetchedCategories.forEach((cat: string) => {
+                if (!uniqueCategories.has(cat)) {
+                    // Capitalize first letter for display name if it's a simple string ID
+                    const name = cat.charAt(0).toUpperCase() + cat.slice(1).replace(/-/g, ' ');
+                    uniqueCategories.set(cat, { id: cat, name: name });
+                }
+            });
+        }
+
+        // Also add the current form category if it's new/custom
+        if (formData.category && !uniqueCategories.has(formData.category)) {
+            const name = formData.category.charAt(0).toUpperCase() + formData.category.slice(1).replace(/-/g, ' ');
+            uniqueCategories.set(formData.category, { id: formData.category, name: name });
+        }
+
+        return Array.from(uniqueCategories.values());
+    }, [fetchedCategories, formData.category]);
+
 
     const products: Product[] = data?.products || [];
     const pagination = data?.pagination;
@@ -86,6 +153,7 @@ export const ProductManagement = () => {
         mutationFn: (data: any) => api.post('/products', data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['products'] });
+            queryClient.invalidateQueries({ queryKey: ['categories'] });
             toast.success('Product added successfully!');
             setIsDialogOpen(false);
             resetForm();
@@ -97,6 +165,7 @@ export const ProductManagement = () => {
         mutationFn: ({ id, data }: { id: string; data: any }) => api.put(`/products/${id}`, data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['products'] });
+            queryClient.invalidateQueries({ queryKey: ['categories'] });
             toast.success('Product updated successfully!');
             setIsDialogOpen(false);
             resetForm();
@@ -108,6 +177,7 @@ export const ProductManagement = () => {
         mutationFn: (id: string) => api.delete(`/products/${id}`),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['products'] });
+            queryClient.invalidateQueries({ queryKey: ['categories'] });
             toast.success('Product deleted successfully!');
         },
         onError: () => toast.error('Failed to delete product'),
@@ -138,6 +208,7 @@ export const ProductManagement = () => {
             features: [],
         });
         setEditingProduct(null);
+        setSearchValue("");
     };
 
     const handleOpenDialog = (product?: Product) => {
@@ -175,10 +246,8 @@ export const ProductManagement = () => {
         setPage(1);
     };
 
-    if (isLoading) return <div className="p-8 flex justify-center"><Loader2 className="animate-spin" /></div>;
+    if (isLoading && !data) return <div className="p-8 flex justify-center"><Loader2 className="animate-spin" /></div>;
 
-    // Use pagination.total for correct count if available, else products.length (but products is partial)
-    // For dashboard stats, we ideally need separate stats API or get total from pagination
     const totalProducts = pagination?.total || products.length;
 
     return (
@@ -186,9 +255,8 @@ export const ProductManagement = () => {
             <div className="grid md:grid-cols-4 gap-4">
                 {[
                     { label: 'Total Products', value: totalProducts, icon: Package },
-                    { label: 'Categories', value: categories.length, icon: Settings },
+                    { label: 'Categories', value: allCategories.length, icon: Settings },
                     { label: 'Displaying', value: products.length, icon: Package }, // Showing current page count
-                    // Stats for filter types might require separate API or be removed if incorrect
                 ].map((stat, i) => (
                     <Card key={i}>
                         <CardContent className="p-6 flex items-center gap-4">
@@ -207,15 +275,38 @@ export const ProductManagement = () => {
                             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                             <Input
                                 placeholder="Search products..."
-                                className="w-full md:w-64 pl-9"
+                                className="w-full md:w-64 pl-9 pr-10"
                                 value={search}
                                 onChange={(e) => handleSearch(e.target.value)}
                             />
-                            {search && (
+                            {isFetching ? (
+                                <Loader2 className="absolute right-3 top-2.5 h-4 w-4 animate-spin text-muted-foreground" />
+                            ) : search ? (
                                 <button onClick={() => handleSearch('')} className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground">
                                     <X className="w-4 h-4" />
                                 </button>
-                            )}
+                            ) : null}
+                        </div>
+                        <div className="w-[180px]">
+                            <Select
+                                value={filterCategory}
+                                onValueChange={(val) => {
+                                    setFilterCategory(val);
+                                    setPage(1);
+                                }}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="All Categories" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">All Categories</SelectItem>
+                                    {allCategories.map((cat) => (
+                                        <SelectItem key={cat.id} value={cat.id}>
+                                            {cat.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         </div>
                         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                             <DialogTrigger asChild>
@@ -231,14 +322,72 @@ export const ProductManagement = () => {
                                             <Label>Name</Label>
                                             <Input value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} />
                                         </div>
-                                        <div className="space-y-2">
+                                        <div className="space-y-2 flex flex-col">
                                             <Label>Category</Label>
-                                            <Select value={formData.category} onValueChange={v => setFormData({ ...formData, category: v })}>
-                                                <SelectTrigger><SelectValue placeholder="Category" /></SelectTrigger>
-                                                <SelectContent>
-                                                    {categories.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
-                                                </SelectContent>
-                                            </Select>
+                                            <Popover open={openCategory} onOpenChange={setOpenCategory}>
+                                                <PopoverTrigger asChild>
+                                                    <Button
+                                                        variant="outline"
+                                                        role="combobox"
+                                                        aria-expanded={openCategory}
+                                                        className="justify-between"
+                                                    >
+                                                        {formData.category
+                                                            ? allCategories.find((category) => category.id === formData.category)?.name || formData.category
+                                                            : "Select category..."}
+                                                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                    </Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+                                                    <Command>
+                                                        <CommandInput
+                                                            placeholder="Search category..."
+                                                            onValueChange={setSearchValue}
+                                                        />
+                                                        <CommandList>
+                                                            <CommandEmpty>
+                                                                <div className="flex flex-col items-center gap-2 p-2">
+                                                                    <p className="text-sm text-muted-foreground">No category found.</p>
+                                                                    <Button
+                                                                        variant="secondary"
+                                                                        size="sm"
+                                                                        className="w-full"
+                                                                        onClick={() => {
+                                                                            // Create new category logic: just set the value
+                                                                            const newCat = searchValue.toLowerCase().replace(/\s+/g, '-');
+                                                                            setFormData({ ...formData, category: newCat });
+                                                                            setOpenCategory(false);
+                                                                            toast.info(`New category "${searchValue}" selected. Save product to persist.`);
+                                                                        }}
+                                                                    >
+                                                                        Create "{searchValue}"
+                                                                    </Button>
+                                                                </div>
+                                                            </CommandEmpty>
+                                                            <CommandGroup>
+                                                                {allCategories.map((category) => (
+                                                                    <CommandItem
+                                                                        key={category.id}
+                                                                        value={category.name} // Search by name
+                                                                        onSelect={() => {
+                                                                            setFormData({ ...formData, category: category.id });
+                                                                            setOpenCategory(false);
+                                                                        }}
+                                                                    >
+                                                                        <Check
+                                                                            className={cn(
+                                                                                "mr-2 h-4 w-4",
+                                                                                formData.category === category.id ? "opacity-100" : "opacity-0"
+                                                                            )}
+                                                                        />
+                                                                        {category.name}
+                                                                    </CommandItem>
+                                                                ))}
+                                                            </CommandGroup>
+                                                        </CommandList>
+                                                    </Command>
+                                                </PopoverContent>
+                                            </Popover>
                                         </div>
                                     </div>
                                     <div className="space-y-2">
@@ -304,12 +453,56 @@ export const ProductManagement = () => {
                                         </div>
 
                                         {/* Additional Images */}
-                                        <div className="space-y-2">
+                                        <div className="space-y-4">
                                             <div className="flex items-center justify-between">
                                                 <Label>Additional Images (Carousel)</Label>
-                                                <div className="relative overflow-hidden">
-                                                    <Button type="button" variant="secondary" size="sm" className="gap-2">
-                                                        <Plus className="w-3 h-3" /> Add Image
+                                            </div>
+
+                                            {/* Add Image Controls */}
+                                            <div className="flex flex-col gap-3 p-3 border rounded-md bg-muted/20">
+                                                <Label className="text-xs text-muted-foreground uppercase font-semibold">Add New Image</Label>
+
+                                                {/* Option 1: URL */}
+                                                <div className="flex gap-2">
+                                                    <Input
+                                                        placeholder="Enter image URL..."
+                                                        id="url-input-images"
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Enter') {
+                                                                e.preventDefault();
+                                                                const val = e.currentTarget.value;
+                                                                if (val.trim()) {
+                                                                    setFormData(prev => ({ ...prev, images: [...(prev.images || []), val.trim()] }));
+                                                                    e.currentTarget.value = '';
+                                                                }
+                                                            }
+                                                        }}
+                                                    />
+                                                    <Button
+                                                        type="button"
+                                                        variant="secondary"
+                                                        onClick={() => {
+                                                            const input = document.getElementById('url-input-images') as HTMLInputElement;
+                                                            if (input && input.value.trim()) {
+                                                                setFormData(prev => ({ ...prev, images: [...(prev.images || []), input.value.trim()] }));
+                                                                input.value = '';
+                                                            }
+                                                        }}
+                                                    >
+                                                        Add URL
+                                                    </Button>
+                                                </div>
+
+                                                <div className="relative flex items-center gap-2">
+                                                    <div className="h-px bg-border flex-1" />
+                                                    <span className="text-xs text-muted-foreground">OR</span>
+                                                    <div className="h-px bg-border flex-1" />
+                                                </div>
+
+                                                {/* Option 2: Upload */}
+                                                <div className="relative">
+                                                    <Button type="button" variant="outline" className="w-full gap-2 dashed-border">
+                                                        <Upload className="w-4 h-4" /> Upload from Computer
                                                     </Button>
                                                     <Input
                                                         type="file"
@@ -348,10 +541,11 @@ export const ProductManagement = () => {
                                                 </div>
                                             </div>
 
+                                            {/* Images Grid */}
                                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
                                                 {(formData.images || []).map((img, i) => (
-                                                    <div key={i} className="relative group border rounded-md overflow-hidden">
-                                                        <img src={img} alt={`Gallery ${i}`} className="w-full h-24 object-cover" />
+                                                    <div key={i} className="relative group border rounded-md overflow-hidden bg-background aspect-square">
+                                                        <img src={img} alt={`Gallery ${i}`} className="w-full h-full object-cover" />
                                                         <button
                                                             type="button"
                                                             onClick={() => {
@@ -359,7 +553,7 @@ export const ProductManagement = () => {
                                                                 newImages.splice(i, 1);
                                                                 setFormData({ ...formData, images: newImages });
                                                             }}
-                                                            className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                                            className="absolute top-1 right-1 bg-destructive text-destructive-foreground p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive/90"
                                                         >
                                                             <X className="w-3 h-3" />
                                                         </button>
@@ -367,7 +561,7 @@ export const ProductManagement = () => {
                                                 ))}
                                             </div>
                                             {(!formData.images || formData.images.length === 0) && (
-                                                <p className="text-sm text-muted-foreground italic">No additional images added.</p>
+                                                <p className="text-sm text-muted-foreground italic text-center py-2">No additional images added.</p>
                                             )}
                                         </div>
                                     </div>
@@ -445,7 +639,11 @@ export const ProductManagement = () => {
                                                 <div><p className="font-medium">{product.name}</p><p className="text-xs text-muted-foreground">{product.price}</p></div>
                                             </div>
                                         </td>
-                                        <td className="p-3"><Badge variant="secondary">{categories.find(c => c.id === product.category)?.name}</Badge></td>
+                                        <td className="p-3">
+                                            <Badge variant="secondary">
+                                                {allCategories.find(c => c.id === product.category)?.name || product.category}
+                                            </Badge>
+                                        </td>
                                         <td className="p-3 text-center"><Switch checked={product.canBuy} onCheckedChange={() => toggleAvailability(product._id, 'canBuy', product.canBuy)} /></td>
                                         <td className="p-3 text-center"><Switch checked={product.canRent} onCheckedChange={() => toggleAvailability(product._id, 'canRent', product.canRent)} /></td>
                                         <td className="p-3 text-center"><Switch checked={product.canRepair} onCheckedChange={() => toggleAvailability(product._id, 'canRepair', product.canRepair)} /></td>
@@ -480,7 +678,6 @@ export const ProductManagement = () => {
                                         />
                                     </PaginationItem>
 
-                                    {/* Simple pagination logic for now - can be improved for many pages */}
                                     {Array.from({ length: pagination.pages }, (_, i) => i + 1).map((p) => (
                                         <PaginationItem key={p}>
                                             <PaginationLink

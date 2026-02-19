@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -7,7 +8,7 @@ import { ProductCard } from '@/components/common/ProductCard';
 import { TestimonialsCarousel } from '@/components/common/TestimonialsCarousel';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { categories } from '@/data/products';
+import { categories as staticCategories } from '@/data/products';
 import { industries } from '@/data/services';
 import { company, getWhatsAppLink } from '@/data/company';
 import {
@@ -36,6 +37,34 @@ const Index = () => {
     queryKey: ['testimonials'],
     queryFn: () => api.get('/testimonials'),
   });
+
+  const { data: fetchedCategories = [] } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => api.get('/products/categories'),
+  });
+
+  const allCategories = useMemo(() => {
+    const uniqueCategories = new Map();
+
+    // Add static categories first to preserve icons and nice names
+    staticCategories.forEach(c => {
+      uniqueCategories.set(c.id, { id: c.id, name: c.name, icon: c.icon });
+    });
+
+    // Add fetched categories if not present
+    if (Array.isArray(fetchedCategories)) {
+      fetchedCategories.forEach((cat: string) => {
+        if (!uniqueCategories.has(cat)) {
+          // Capitalize first letter for display name if it's a simple string ID
+          const name = cat.charAt(0).toUpperCase() + cat.slice(1).replace(/-/g, ' ');
+          // Provide a default icon for new categories
+          uniqueCategories.set(cat, { id: cat, name: name, icon: '📦' });
+        }
+      });
+    }
+
+    return Array.from(uniqueCategories.values());
+  }, [fetchedCategories]);
 
   const products = data?.products || [];
   const featuredProducts = products.slice(0, 6);
@@ -113,7 +142,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <SectionHeader badge="Our Products" title="Browse by Category" description="Explore our wide range of IT hardware and security solutions" />
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {categories.map((category, index) => (
+            {allCategories.map((category, index) => (
               <motion.div key={category.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: index * 0.05 }}>
                 <Link to={`/products?category=${category.id}`}>
                   <Card className="group hover:shadow-glow transition-all duration-300 h-full">

@@ -28,6 +28,6 @@ const ProductSchema: Schema = new Schema({
     canRepair: { type: Boolean, default: true },
     price: { type: String },
     rentPrice: { type: String }
-});
+}, { timestamps: true });
 
 export default mongoose.model<IProduct>('Product', ProductSchema);

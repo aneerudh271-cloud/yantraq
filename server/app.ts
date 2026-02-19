@@ -279,7 +279,7 @@ app.get('/api/products', async (req: any, res) => {
         const skip = (page - 1) * limit;
 
         const total = await Product.countDocuments(query);
-        const products = await Product.find(query).skip(skip).limit(limit);
+        const products = await Product.find(query).sort({ _id: -1 }).skip(skip).limit(limit);
 
         res.json({
             products,
@@ -290,6 +290,15 @@ app.get('/api/products', async (req: any, res) => {
                 limit
             }
         });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+app.get('/api/products/categories', async (req, res) => {
+    try {
+        const categories = await Product.distinct('category');
+        res.json(categories);
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
