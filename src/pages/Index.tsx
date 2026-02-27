@@ -260,7 +260,7 @@ const Index = () => {
       </section>
 
       {/* Industries */}
-      <section className="py-20">
+      {/* <section className="py-20">
         <div className="container mx-auto px-4">
           <SectionHeader badge="Industries" title="Industries We Serve" description="Trusted by businesses across various sectors" />
           <div className="flex flex-wrap justify-center gap-4">
@@ -272,7 +272,7 @@ const Index = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* FAQ Section */}
       <FAQ />
