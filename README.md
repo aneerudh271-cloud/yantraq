@@ -4,7 +4,6 @@ This is a full-stack web application for YantraQ, featuring a public-facing webs
 
 ## Tech Stack
  
-
 **Frontend:**
 - React (Vite)
 - TypeScript
