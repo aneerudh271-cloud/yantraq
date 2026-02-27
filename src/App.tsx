@@ -14,6 +14,8 @@ import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
+import ScrollToTop from "./components/common/ScrollToTop";
+import SmoothScroll from "./components/common/SmoothScroll";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,26 +41,29 @@ const App = () => (
       <Sonner />
       <AuthProvider>
         <BrowserRouter>
-          <AnalyticsTracker />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/product/:id" element={<ProductDetail />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/login" element={<Login />} />
+          <ScrollToTop />
+          <SmoothScroll>
+            <AnalyticsTracker />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/product/:id" element={<ProductDetail />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/login" element={<Login />} />
 
-            {/* Protected Admin Route */}
-            <Route element={<AdminRoute />}>
-              <Route path="/admin" element={<Admin />} />
-            </Route>
+              {/* Protected Admin Route */}
+              <Route element={<AdminRoute />}>
+                <Route path="/admin" element={<Admin />} />
+              </Route>
 
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </SmoothScroll>
         </BrowserRouter>
       </AuthProvider>
     </TooltipProvider>

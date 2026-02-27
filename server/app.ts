@@ -17,6 +17,7 @@ console.log("----------------------------------------");
 import Service from './models/Service.js';
 import Testimonial from './models/Testimonial.js';
 import Product from './models/Product.js';
+import Portfolio from './models/Portfolio.js';
 import { sendEmail } from './services/email.js';
 import PageView from './models/PageView.js';
 import authRoutes from './routes/authRoutes.js';
@@ -173,7 +174,7 @@ app.delete('/api/leads/:id', protect, admin, async (req: any, res) => {
 // Services
 app.get('/api/services', async (req, res) => {
     try {
-        const services = await Service.find();
+        const services = await Service.find().sort({ order: 1, _id: 1 });
         res.json(services);
     } catch (error: any) {
         res.status(500).json({ message: error.message });
@@ -185,6 +186,22 @@ app.post('/api/services', protect, admin, async (req: any, res) => {
         const service = new Service(req.body);
         const savedService = await service.save();
         res.status(201).json(savedService);
+    } catch (error: any) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+app.put('/api/services/reorder', protect, admin, async (req: any, res) => {
+    try {
+        const { items } = req.body; // [{ id, order }]
+        const ops = items.map((item: { id: string; order: number }) => ({
+            updateOne: {
+                filter: { _id: item.id },
+                update: { $set: { order: item.order } }
+            }
+        }));
+        await Service.bulkWrite(ops);
+        res.json({ message: 'Services reordered' });
     } catch (error: any) {
         res.status(400).json({ message: error.message });
     }
@@ -345,6 +362,69 @@ app.delete('/api/products/:id', protect, admin, async (req: any, res) => {
     try {
         await Product.findByIdAndDelete(req.params.id);
         res.json({ message: 'Product deleted' });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Portfolio (Software Works)
+app.get('/api/portfolio', async (req, res) => {
+    try {
+        const portfolio = await Portfolio.find({ isActive: true }).sort({ order: 1, createdAt: -1 });
+        res.json(portfolio);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+app.get('/api/portfolio/all', protect, admin, async (req: any, res) => {
+    try {
+        const portfolio = await Portfolio.find().sort({ order: 1, createdAt: -1 });
+        res.json(portfolio);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+app.post('/api/portfolio', protect, admin, async (req: any, res) => {
+    try {
+        const item = new Portfolio(req.body);
+        const saved = await item.save();
+        res.status(201).json(saved);
+    } catch (error: any) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+app.put('/api/portfolio/reorder', protect, admin, async (req: any, res) => {
+    try {
+        const { items } = req.body; // [{ id, order }]
+        const ops = items.map((item: { id: string; order: number }) => ({
+            updateOne: {
+                filter: { _id: item.id },
+                update: { $set: { order: item.order } }
+            }
+        }));
+        await Portfolio.bulkWrite(ops);
+        res.json({ message: 'Portfolio reordered' });
+    } catch (error: any) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+app.put('/api/portfolio/:id', protect, admin, async (req: any, res) => {
+    try {
+        const updated = await Portfolio.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.json(updated);
+    } catch (error: any) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+app.delete('/api/portfolio/:id', protect, admin, async (req: any, res) => {
+    try {
+        await Portfolio.findByIdAndDelete(req.params.id);
+        res.json({ message: 'Portfolio item deleted' });
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }

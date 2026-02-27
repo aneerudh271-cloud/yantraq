@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { useMemo, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Layout } from '@/components/layout/Layout';
@@ -13,7 +13,8 @@ import { industries } from '@/data/services';
 import { company, getWhatsAppLink } from '@/data/company';
 import {
   ShoppingCart, Clock, Wrench, Phone, Shield, Award,
-  HeadphonesIcon, Zap, ArrowRight, CheckCircle, MessageCircle, Loader2
+  HeadphonesIcon, Zap, ArrowRight, CheckCircle, MessageCircle, Loader2,
+  Code, Globe, Smartphone, ExternalLink
 } from 'lucide-react';
 import { api } from '@/lib/api';
 import { SEO } from '@/components/common/SEO';
@@ -28,10 +29,6 @@ const Index = () => {
     queryFn: () => api.get('/products'),
   });
 
-  const { data: services = [] } = useQuery({
-    queryKey: ['services'],
-    queryFn: () => api.get('/services'),
-  });
 
   const { data: testimonials = [] } = useQuery({
     queryKey: ['testimonials'],
@@ -69,14 +66,13 @@ const Index = () => {
   const products = data?.products || [];
   const featuredProducts = products.slice(0, 6);
   const featuredTestimonials = testimonials.slice(0, 3);
-  const featuredServices = services.slice(0, 4);
 
   return (
     <Layout>
       <SEO
         title="Home"
-        description="YantraQ (yantraq.com) is Bhopal's #1 trusted IT hardware sales and rental company. Buy or rent laptops, servers, desktops, networking equipment for businesses, startups & enterprises. Best prices, fast delivery, expert support in Bhopal, Madhya Pradesh."
-        keywords="yantraq, yantra q, yantraq.com, yantraq bhopal, IT hardware sales bhopal, IT hardware rental bhopal, laptop rental bhopal, server rental bhopal, computer hardware shop bhopal, best IT hardware company bhopal, IT products near me, IT equipment rental near me, affordable IT hardware bhopal, enterprise IT solutions bhopal"
+        description="YantraQ — Bhopal's #1 IT & Digital Solutions company. IT hardware sales & rental, custom software development, website & mobile app development, SEO, AEO, GEO services. Enterprise-grade laptops, servers, networking equipment. Best prices, expert support in Bhopal, Madhya Pradesh."
+        keywords="yantraq, yantraq.com, yantraq bhopal, IT hardware sales bhopal, IT hardware rental bhopal, software development bhopal, website development bhopal, mobile app development bhopal, SEO services bhopal, AEO services, GEO services, custom digital solutions bhopal, best IT company bhopal, IT products near me, laptop rental bhopal, server rental bhopal, web design bhopal"
         schema={faqSchema}
       />
       {/* Hero Section */}
@@ -90,37 +86,39 @@ const Index = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="text-white">
               <span className="inline-block px-4 py-2 bg-white/10 backdrop-blur rounded-full text-sm font-medium mb-6">
-                🔒 Bhopal's Leading IT Hardware Provider
+                🚀 Bhopal's Leading IT & Digital Solutions Company
               </span>
               <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-                Best IT Hardware{' '}
-                <span className="text-gradient">Sales & Rental</span>{' '}
-                Company in Bhopal
+                IT Hardware, {' '}
+                <span className="text-gradient">Software Development</span>{' '}
+                & Digital Solutions
               </h1>
               <p className="text-lg text-gray-300 mb-8 max-w-xl">
-                <strong>YantraQ</strong> (yantraq.com) is Bhopal's most trusted IT hardware sales and rental company,
-                offering enterprise-grade laptops, servers, desktops, and networking equipment with flexible
-                rental solutions and complete IT infrastructure support for businesses, startups, and enterprises
-                across Madhya Pradesh.
+                <strong>YantraQ</strong> is Bhopal's most trusted IT & digital solutions company.
+                From enterprise-grade hardware sales & rental to custom website development, mobile apps,
+                and digital marketing — we deliver end-to-end technology solutions powered by
+                <strong> SEO, AEO & GEO</strong> strategies for businesses, startups, and enterprises across Madhya Pradesh.
               </p>
 
-              <div className="flex flex-wrap gap-4 mb-8">
-                <Link to="/products"><Button size="lg" className="gradient-primary gap-2"><ShoppingCart className="w-5 h-5" />Buy Products</Button></Link>
-                <Link to="/products?action=rent"><Button size="lg" variant="outline" className="border-white/30 text-white bg-white/10 gap-2"><Clock className="w-5 h-5" />Rent Equipment</Button></Link>
-                <Link to="/services"><Button size="lg" variant="outline" className="border-white/30 text-white bg-white/10 gap-2"><Wrench className="w-5 h-5" />Repair Service</Button></Link>
+              <div className="flex flex-wrap gap-3 mb-8">
+                <Link to="/products"><Button size="lg" className="gradient-primary gap-2"><ShoppingCart className="w-5 h-5" />IT Hardware</Button></Link>
+                <Link to="/services"><Button size="lg" variant="outline" className="border-white/30 text-white bg-white/10 gap-2"><Code className="w-5 h-5" />Software Dev</Button></Link>
+                <Link to="/services"><Button size="lg" variant="outline" className="border-white/30 text-white bg-white/10 gap-2"><Globe className="w-5 h-5" />Web & SEO</Button></Link>
+                <Link to="/services"><Button size="lg" variant="outline" className="border-white/30 text-white bg-white/10 gap-2"><Smartphone className="w-5 h-5" />Mobile Apps</Button></Link>
               </div>
 
-              <div className="flex items-center gap-6 text-sm text-gray-400">
-                <div className="flex items-center gap-2"><CheckCircle className="w-5 h-5 text-success" /><span>Genuine Products</span></div>
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-400">
+                <div className="flex items-center gap-2"><CheckCircle className="w-5 h-5 text-success" /><span>Genuine Hardware</span></div>
+                <div className="flex items-center gap-2"><CheckCircle className="w-5 h-5 text-success" /><span>Custom Software</span></div>
+                <div className="flex items-center gap-2"><CheckCircle className="w-5 h-5 text-success" /><span>SEO · AEO · GEO</span></div>
                 <div className="flex items-center gap-2"><CheckCircle className="w-5 h-5 text-success" /><span>Expert Support</span></div>
-                <div className="flex items-center gap-2"><CheckCircle className="w-5 h-5 text-success" /><span>Best Prices</span></div>
               </div>
             </motion.div>
 
             <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="hidden lg:block">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 rounded-3xl blur-2xl" />
-                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600" alt="IT Hardware Solutions" className="relative rounded-3xl shadow-2xl animate-float" loading="lazy" />
+                <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=600" alt="IT Hardware & Software Development Solutions" className="relative rounded-3xl shadow-2xl animate-float" loading="lazy" />
               </div>
             </motion.div>
           </div>
@@ -171,26 +169,63 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Services */}
+      {/* Software Development Services */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <SectionHeader badge="Our Services" title="What We Offer" description="Complete IT solutions from sales to support" />
+          <SectionHeader badge="Our Services" title="Software & Digital Solutions" description="End-to-end software development, web & mobile apps, and digital marketing to grow your business" />
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredServices.map((service: any, index: number) => (
-              <motion.div key={service._id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: index * 0.1 }}>
-                <Card className="h-full hover:shadow-glow transition-all duration-300">
-                  <CardContent className="p-6">
-                    <div className="text-4xl mb-4">{service.icon}</div>
+            {[
+              {
+                icon: <Globe className="w-8 h-8" />,
+                title: 'Website Development',
+                description: 'Custom, responsive, and high-performance websites built with modern technologies. From business websites to e-commerce platforms — designed to convert visitors into customers.',
+                color: 'from-blue-500 to-cyan-500',
+              },
+              {
+                icon: <Smartphone className="w-8 h-8" />,
+                title: 'Mobile App Development',
+                description: 'Native and cross-platform mobile applications for Android & iOS. Feature-rich, user-friendly apps tailored to your business needs with seamless performance.',
+                color: 'from-purple-500 to-pink-500',
+              },
+              {
+                icon: <Zap className="w-8 h-8" />,
+                title: 'SEO · AEO · GEO',
+                description: 'Boost your online visibility with Search Engine Optimization, Answer Engine Optimization, and Generative Engine Optimization strategies that drive organic traffic and leads.',
+                color: 'from-orange-500 to-red-500',
+              },
+              {
+                icon: <Code className="w-8 h-8" />,
+                title: 'Custom Digital Solutions',
+                description: 'Bespoke software solutions including CRM, ERP, automation tools, and API integrations. We build scalable systems that streamline your operations and accelerate growth.',
+                color: 'from-emerald-500 to-teal-500',
+              },
+            ].map((service, index) => (
+              <motion.div key={index} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: index * 0.1 }}>
+                <Card className="group h-full hover:shadow-glow transition-all duration-300 overflow-hidden">
+                  <CardContent className="p-6 flex flex-col h-full">
+                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${service.color} flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                      {service.icon}
+                    </div>
                     <h3 className="font-display font-semibold text-lg mb-2">{service.title}</h3>
-                    <p className="text-muted-foreground text-sm mb-4">{service.description}</p>
-                    <Link to="/services" className="text-primary text-sm font-medium flex items-center gap-1 hover:gap-2 transition-all">Learn More <ArrowRight className="w-4 h-4" /></Link>
+                    <p className="text-muted-foreground text-sm mb-4 flex-1">{service.description}</p>
+                    <Link to="/services" className="text-primary text-sm font-medium flex items-center gap-1 hover:gap-2 transition-all">
+                      Learn More <ArrowRight className="w-4 h-4" />
+                    </Link>
                   </CardContent>
                 </Card>
               </motion.div>
             ))}
           </div>
+          <div className="text-center mt-10">
+            <Link to="/services">
+              <Button size="lg" variant="outline" className="gap-2">View All Services <ArrowRight className="w-5 h-5" /></Button>
+            </Link>
+          </div>
         </div>
       </section>
+
+      {/* Portfolio / Software Works */}
+      <PortfolioSection />
 
       {/* Leadership */}
       <Leadership />
@@ -256,6 +291,90 @@ const Index = () => {
         </div>
       </section>
     </Layout>
+  );
+};
+
+// Static fallback portfolio data
+const staticPortfolio = [
+  { _id: '1', name: 'Pushpako2', url: 'https://pushpako2.com', description: 'Aerospace & Aviation — Drone systems and smart aerial solutions', color: '187 85% 53%' },
+  { _id: '2', name: 'YantraQ', url: 'https://yantraq.com', description: 'Hardware & IoT — Smart devices, robotics kits, and electronics', color: '200 90% 50%' },
+  { _id: '3', name: 'AgniqTech', url: 'https://agniqtech.com', description: 'Software & Digital — Enterprise apps, CRM, and web platforms', color: '160 70% 45%' },
+  { _id: '4', name: 'SarvatraLabs', url: 'https://sarvatralabs.com', description: 'Research & Innovation — R&D lab for next-gen technology solutions', color: '270 60% 55%' },
+  { _id: '5', name: 'Erohan Foundation', url: 'https://erohanfoundation.org', description: 'Social Impact — Education, sustainability, and community development', color: '35 85% 55%' },
+  { _id: '6', name: 'Royal Wedding Sanctuary', url: 'https://royal-wedding-sanctuary.vercel.app/', description: 'Luxury Wedding Venue — Royal destination weddings, premium event planning, and grand celebration experiences', color: '330 75% 60%' },
+];
+
+const PortfolioSection = () => {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-100px' });
+
+  const { data: apiPortfolio = [] } = useQuery({
+    queryKey: ['portfolio'],
+    queryFn: () => api.get('/portfolio'),
+  });
+
+  const portfolio = apiPortfolio.length > 0 ? apiPortfolio : staticPortfolio;
+
+  return (
+    <section className="py-20 bg-muted/50" ref={ref}>
+      <div className="container mx-auto px-4">
+        <SectionHeader
+          badge="Our Work"
+          title="Software We've Built"
+          description="Real-world digital products and platforms crafted by our team"
+        />
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {portfolio.map((p: any, i: number) => (
+            <motion.a
+              key={p._id || p.name}
+              href={p.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, y: 25 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: 0.15 + i * 0.1 }}
+              className="group relative rounded-2xl border border-border bg-card p-6 flex flex-col justify-between cursor-pointer hover:shadow-glow transition-all duration-300"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div
+                    className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+                    style={{ background: `hsl(${p.color} / 0.12)` }}
+                  >
+                    <Globe
+                      className="w-5 h-5 transition-colors duration-300"
+                      style={{ color: `hsl(${p.color})` }}
+                    />
+                  </div>
+                  <ExternalLink
+                    className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  />
+                </div>
+                <h4 className="text-lg font-semibold text-foreground mb-1.5 group-hover:text-primary transition-colors duration-300">
+                  {p.name}
+                </h4>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                  {p.description}
+                </p>
+              </div>
+              <span
+                className="text-xs font-mono tracking-wide opacity-60 group-hover:opacity-100 transition-opacity duration-300"
+                style={{ color: `hsl(${p.color})` }}
+              >
+                {p.url.replace('https://', '')} →
+              </span>
+            </motion.a>
+          ))}
+        </div>
+
+        <div className="text-center mt-10">
+          <Link to="/services">
+            <Button size="lg" variant="outline" className="gap-2">View All Projects <ArrowRight className="w-5 h-5" /></Button>
+          </Link>
+        </div>
+      </div>
+    </section>
   );
 };
 

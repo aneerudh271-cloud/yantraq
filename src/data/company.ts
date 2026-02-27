@@ -3,7 +3,7 @@ export const company = {
   shortName: 'YANTRAQ',
   tagline: 'Yield-Driven Advanced Networked Technology Research Quotient',
   slogan: 'Engineering The Future',
-  description: 'Your trusted partner for enterprise IT hardware sales, services, and rental solutions. From CCTV surveillance and biometric systems to servers and networking infrastructure — we deliver comprehensive IT solutions for businesses of all sizes.',
+  description: 'Your trusted partner for IT hardware, software development, and digital solutions. From enterprise hardware sales & rental to custom websites, mobile apps, and SEO/AEO/GEO-powered digital marketing — we deliver end-to-end technology solutions for businesses of all sizes.',
   sisterCompany: 'PushpakO2',
   domain: 'https://yantraq.com',
 
@@ -41,18 +41,18 @@ export const company = {
 
   about: {
     founded: '2014',
-    overview: `Y.A.N.T.R.A.Q. Pvt. Ltd. (Yield-Driven Advanced Networked Technology Research Quotient) was founded with a vision to provide businesses with reliable, affordable, and cutting-edge IT hardware solutions. As a sister company of PushpakO2, we bring a legacy of trust and innovation to every project.
+    overview: `Y.A.N.T.R.A.Q. Pvt. Ltd. (Yield-Driven Advanced Networked Technology Research Quotient) was founded with a vision to provide businesses with reliable, affordable, and cutting-edge technology solutions. As a sister company of PushpakO2, we bring a legacy of trust and innovation to every project.
 
-Today, we serve over 500+ businesses across various industries, offering comprehensive solutions from CCTV surveillance and biometric systems to enterprise servers and networking infrastructure. Our team of certified professionals ensures that every client receives personalized attention and top-quality service.`,
+Today, we serve over 500+ businesses across various industries, offering comprehensive solutions spanning IT hardware sales & rental, custom software development, website & mobile app development, and digital marketing powered by SEO, AEO & GEO strategies. Our team of certified professionals ensures that every client receives personalized attention and top-quality service.`,
 
-    mission: 'To empower businesses with reliable, innovative, and cost-effective IT solutions that enhance security, productivity, and growth. We strive to be the go-to partner for all IT hardware needs, delivering excellence in every project.',
+    mission: 'To empower businesses with reliable, innovative, and cost-effective IT & digital solutions that enhance security, productivity, and growth. We strive to be the go-to partner for IT hardware, custom software, and digital marketing needs, delivering excellence in every project.',
 
-    vision: 'To become the leading IT solutions provider in Central India, known for our commitment to quality, customer satisfaction, and technological innovation. We aim to set industry standards in IT hardware sales, service, and rental.',
+    vision: 'To become the leading IT & digital solutions provider in Central India, known for our commitment to quality, customer satisfaction, and technological innovation. We aim to set industry standards in IT hardware, software development, and digital marketing.',
   },
 };
 
 export const getWhatsAppLink = (message?: string) => {
-  const defaultMessage = 'Hi! I am interested in your IT services.';
+  const defaultMessage = 'Hi! I am interested in your IT & digital solutions.';
   const encodedMessage = encodeURIComponent(message || defaultMessage);
   return `https://wa.me/${company.contact.whatsapp}?text=${encodedMessage}`;
 };

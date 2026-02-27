@@ -14,7 +14,7 @@ const Contact = () => {
     <Layout>
       <SEO
         title="Contact Us"
-        description="Contact YantraQ (yantraq.com) - Bhopal's best IT hardware sales and rental company. Get instant support for laptops, servers, desktops, networking equipment. Call now or visit our Bhopal office for IT solutions."
+        description="Contact YantraQ - Bhopal's best IT hardware sales and rental company. Get instant support for laptops, servers, desktops, networking equipment. Call now or visit our Bhopal office for IT solutions."
         keywords="contact yantraq, yantraq contact, yantra q bhopal contact, IT hardware shop bhopal contact, laptop rental bhopal contact number, server sales bhopal phone, IT support bhopal, yantraq address bhopal, computer shop near me bhopal"
       />
       {/* Hero */}

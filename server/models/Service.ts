@@ -6,6 +6,7 @@ export interface IService extends Document {
     icon: string;
     features: string[];
     image: string;
+    order: number;
 }
 
 const ServiceSchema: Schema = new Schema({
@@ -13,7 +14,8 @@ const ServiceSchema: Schema = new Schema({
     description: { type: String, required: true },
     icon: { type: String, required: true },
     features: [{ type: String }],
-    image: { type: String, required: true }
+    image: { type: String, required: true },
+    order: { type: Number, default: 0 }
 });
 
 export default mongoose.model<IService>('Service', ServiceSchema);
