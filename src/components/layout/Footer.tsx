@@ -35,7 +35,7 @@ export const Footer = () => {
           {/* Brand & Social */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <img src="/logo.jpg" alt="YantraQ Logo" className="w-8 h-auto object-contain bg-white rounded p-0.5" />
+              <img src="/logo.jpg" alt="YantraQ Logo" width={32} height={32} className="w-8 h-auto object-contain bg-white rounded p-0.5" />
               <span className="font-display font-bold text-lg">{company.shortName}</span>
             </div>
             <p className="text-gray-400 leading-relaxed max-w-xs font-medium">

@@ -119,7 +119,7 @@ const Index = () => {
             <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="hidden lg:block">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 rounded-3xl blur-2xl" />
-                <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=600" alt="IT Hardware & Software Development Solutions" className="relative rounded-3xl shadow-2xl animate-float" loading="lazy" />
+                <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=600" alt="IT Hardware & Software Development Solutions" width="600" height="400" className="relative rounded-3xl shadow-2xl animate-float" fetchPriority="high" />
               </div>
             </motion.div>
           </div>
@@ -131,7 +131,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3 text-white"><MessageCircle className="w-6 h-6" /><span className="font-medium">Need quick assistance? Chat with us on WhatsApp!</span></div>
-            <a href={whatsappLink} target="_blank" rel="noopener noreferrer"><Button variant="secondary" className="gap-2"><MessageCircle className="w-5 h-5" />Chat Now</Button></a>
+            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp for quick assistance"><Button variant="secondary" className="gap-2"><MessageCircle className="w-5 h-5" />Chat Now</Button></a>
           </div>
         </div>
       </section>
@@ -286,7 +286,7 @@ const Index = () => {
             <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto">Contact us today for a free consultation. Our team is ready to help you find the perfect IT solutions.</p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/contact"><Button size="lg" variant="secondary" className="gap-2"><Phone className="w-5 h-5" />Get Free Quote</Button></Link>
-              <a href={whatsappLink} target="_blank" rel="noopener noreferrer"><Button size="lg" variant="outline" className="border-white/30 text-white bg-white/10 gap-2"><MessageCircle className="w-5 h-5" />WhatsApp Us</Button></a>
+              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Us for a free consultation"><Button size="lg" variant="outline" className="border-white/30 text-white bg-white/10 gap-2"><MessageCircle className="w-5 h-5" />WhatsApp Us</Button></a>
             </div>
           </motion.div>
         </div>

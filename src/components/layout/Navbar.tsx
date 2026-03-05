@@ -43,6 +43,8 @@ export const Navbar: React.FC = () => {
               <motion.img
                 src="/logo.jpg"
                 alt="YantraQ Logo"
+                width={40}
+                height={40}
                 className="w-10 h-auto object-contain"
                 whileHover={{ scale: 1.1 }}
                 transition={{ duration: 0.2 }}
@@ -124,6 +126,7 @@ export const Navbar: React.FC = () => {
                 <Button
                   variant="ghost"
                   size="icon"
+                  aria-label="Close menu"
                   onClick={() => setIsOpen(false)}
                 >
                   <X className="w-5 h-5" />
