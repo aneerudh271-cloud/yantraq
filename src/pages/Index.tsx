@@ -21,6 +21,7 @@ import { SEO } from '@/components/common/SEO';
 import Leadership from '@/components/common/Leadership';
 import FAQ, { faqSchema } from '@/components/common/FAQ';
 import { pageKeywords } from '@/data/seo-keywords';
+import { BrandMarquee } from '@/components/common/BrandMarquee';
 
 const Index = () => {
   const whatsappLink = getWhatsAppLink();
@@ -135,6 +136,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Brand Marquee */}
+      <BrandMarquee />
 
       {/* Categories */}
       <section className="py-20">
