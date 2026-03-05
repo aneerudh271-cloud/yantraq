@@ -230,8 +230,9 @@ const FAQ = () => {
                 href={whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Contact YantraQ directly on WhatsApp"
               >
-                <Button variant="outline" className="gap-2">
+                <Button variant="outline" className="gap-2" aria-label="Chat on WhatsApp">
                   <MessageCircle className="w-4 h-4" />
                   WhatsApp
                 </Button>

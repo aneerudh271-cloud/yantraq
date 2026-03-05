@@ -225,8 +225,15 @@ export const serviceKeywords = [
     'custom software development bhopal', 'software development company bhopal',
     'software company bhopal', 'IT company bhopal', 'tech company bhopal',
     'CRM development bhopal', 'ERP development bhopal',
+    'custom CRM for business bhopal', 'business software solutions bhopal',
+    'enterprise resource planning bhopal', 'inventory management software bhopal',
+    'billing software development bhopal', 'hospital management system bhopal',
+    'school management software bhopal', 'hotel management system bhopal',
+    'real estate software bhopal', 'lead management system bhopal',
     'API development bhopal', 'SaaS development bhopal',
     'cloud solutions bhopal', 'cloud computing bhopal',
+    'bespoke software development central india', 'software outsourcing bhopal',
+    'dedicated developers bhopal', 'hire software engineers bhopal',
 
     // SEO / AEO / GEO / Digital Marketing
     'SEO services bhopal', 'SEO company bhopal', 'SEO agency bhopal',

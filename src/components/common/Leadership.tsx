@@ -65,7 +65,9 @@ const Leadership = () => {
                                     <div className="relative w-24 h-24 rounded-2xl overflow-hidden border-4 border-card shadow-xl group-hover:scale-105 transition-transform duration-500">
                                         <img
                                             src={executive.image}
-                                            alt={executive.name}
+                                            alt={`${executive.name} - ${executive.title} at YantraQ`}
+                                            width={96}
+                                            height={96}
                                             className="w-full h-full object-cover"
                                             loading="lazy"
                                         />

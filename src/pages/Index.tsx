@@ -72,8 +72,8 @@ const Index = () => {
   return (
     <Layout>
       <SEO
-        title="Home"
-        description="YantraQ — Bhopal's #1 IT & Digital Solutions company. IT hardware sales & rental, custom software development, website & mobile app development, SEO, AEO, GEO services. Enterprise-grade laptops, servers, networking equipment. Best prices, expert support in Bhopal, Madhya Pradesh."
+        title="Bhopal's Best IT Hardware & Software Solutions"
+        description="YantraQ — Bhopal's #1 IT & Digital Solutions company. We provide expert IT hardware sales & rental, custom software development, ERP/CRM solutions, website & mobile app development, and AI-driven SEO services. Enterprise laptops, servers, and bespoke tech for Bhopal, MP."
         keywords={pageKeywords.home}
         schema={faqSchema}
       />
@@ -120,7 +120,7 @@ const Index = () => {
             <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="hidden lg:block">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 rounded-3xl blur-2xl" />
-                <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=600" alt="IT Hardware & Software Development Solutions" width="600" height="400" className="relative rounded-3xl shadow-2xl animate-float" fetchPriority="high" />
+                <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=600" alt="Bhopal Best IT Hardware & Software Solutions" width="600" height="400" className="relative rounded-3xl shadow-2xl animate-float" fetchPriority="high" />
               </div>
             </motion.div>
           </div>
@@ -340,6 +340,7 @@ const PortfolioSection = () => {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.15 + i * 0.1 }}
               className="group relative rounded-2xl border border-border bg-card p-6 flex flex-col justify-between cursor-pointer hover:shadow-glow transition-all duration-300"
+              aria-label={`Visit project website: ${p.name}`}
             >
               <div>
                 <div className="flex items-center justify-between mb-4">

@@ -10,7 +10,8 @@ import { UserManagement } from '@/components/admin/UserManagement';
 import { AMCManagement } from '@/components/admin/AMCManagement';
 import { AnalyticsDashboard } from '@/components/admin/AnalyticsDashboard';
 import { PortfolioManagement } from '@/components/admin/PortfolioManagement';
-import { Shield, ArrowLeft, Package, Settings, BarChart3, Star, Users, Calendar, Briefcase } from 'lucide-react';
+import { PartnerManagement } from '@/components/admin/PartnerManagement';
+import { Shield, ArrowLeft, Package, Settings, BarChart3, Star, Users, Calendar, Briefcase, Handshake } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 
 import { useNavigate } from 'react-router-dom';
@@ -60,6 +61,7 @@ const Admin = () => {
               <TabsTrigger value="users" className="gap-2 flex-grow md:flex-grow-0"><Users className="w-4 h-4" />Users</TabsTrigger>
               <TabsTrigger value="amc" className="gap-2 flex-grow md:flex-grow-0"><Calendar className="w-4 h-4" />AMC</TabsTrigger>
               <TabsTrigger value="portfolio" className="gap-2 flex-grow md:flex-grow-0"><Briefcase className="w-4 h-4" />Portfolio</TabsTrigger>
+              <TabsTrigger value="partners" className="gap-2 flex-grow md:flex-grow-0"><Handshake className="w-4 h-4" />Partners</TabsTrigger>
             </TabsList>
 
             <TabsContent value="analytics"><AnalyticsDashboard /></TabsContent>
@@ -70,6 +72,7 @@ const Admin = () => {
             <TabsContent value="users"><UserManagement /></TabsContent>
             <TabsContent value="amc"><AMCManagement /></TabsContent>
             <TabsContent value="portfolio"><PortfolioManagement /></TabsContent>
+            <TabsContent value="partners"><PartnerManagement /></TabsContent>
           </Tabs>
         </div>
       </div>
