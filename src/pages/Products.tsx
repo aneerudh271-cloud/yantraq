@@ -11,6 +11,7 @@ import { categories as staticCategories } from '@/data/products';
 import { Search, X, Loader2 } from 'lucide-react';
 import { api } from '@/lib/api';
 import { SEO } from '@/components/common/SEO';
+import { pageKeywords } from '@/data/seo-keywords';
 import {
   Pagination,
   PaginationContent,
@@ -113,7 +114,19 @@ const Products = () => {
 
   return (
     <Layout>
-      <SEO title="Products" description="Browse our wide range of IT hardware and security products." />
+      <SEO
+        title="IT Hardware Products"
+        description="Buy or rent laptops, desktops, servers, CCTV cameras, biometric devices, GPS trackers, printers, networking equipment at best prices in Bhopal. Genuine products, flexible rental plans, same-day delivery by YantraQ."
+        keywords={pageKeywords.products}
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "YantraQ IT Hardware Products — Buy & Rent in Bhopal",
+          "description": "Browse and buy or rent IT hardware products including laptops, desktops, servers, CCTV cameras, biometric devices, and networking equipment in Bhopal.",
+          "url": "https://yantraq.com/products",
+          "isPartOf": { "@type": "WebSite", "name": "YantraQ", "url": "https://yantraq.com" }
+        }}
+      />
       {/* Hero */}
       <section className="py-16 gradient-dark text-white">
         <div className="container mx-auto px-4">

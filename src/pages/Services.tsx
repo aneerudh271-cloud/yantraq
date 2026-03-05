@@ -9,6 +9,7 @@ import { CheckCircle, ArrowRight, Phone, Loader2 } from 'lucide-react';
 import { api } from '@/lib/api';
 import { SEO } from '@/components/common/SEO';
 import { AMCPlansList } from '@/components/common/AMCPlansList';
+import { pageKeywords } from '@/data/seo-keywords';
 
 interface Service {
   _id: string;
@@ -27,7 +28,32 @@ const Services = () => {
 
   return (
     <Layout>
-      <SEO title="Services" description="Comprehensive IT services including sales, rentals, repairs, and AMC." />
+      <SEO
+        title="IT Services"
+        description="Complete IT services in Bhopal — hardware sales & rental, laptop/server/CCTV repair, AMC plans, website & mobile app development, SEO/AEO/GEO digital marketing, network installation. Best prices, expert support by YantraQ."
+        keywords={pageKeywords.services}
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "Service",
+          "serviceType": "IT Hardware & Digital Solutions",
+          "provider": {
+            "@type": "LocalBusiness",
+            "name": "YantraQ",
+            "url": "https://yantraq.com"
+          },
+          "areaServed": { "@type": "City", "name": "Bhopal" },
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "IT Services",
+            "itemListElement": [
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "IT Hardware Sales & Rental" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "IT Repair & AMC Services" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Website & App Development" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "SEO, AEO & GEO Marketing" } }
+            ]
+          }
+        }}
+      />
       {/* Hero */}
       <section className="py-16 gradient-dark text-white">
         <div className="container mx-auto px-4">

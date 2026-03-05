@@ -96,6 +96,9 @@ export const Footer = () => {
                 {link.name}
               </Link>
             ))}
+            <Link to="/sitemap" className="hover:text-gray-300 transition-colors">
+              Sitemap
+            </Link>
           </div>
         </div>
       </div>

@@ -3,13 +3,45 @@ import { Layout } from '@/components/layout/Layout';
 import { SectionHeader } from '@/components/common/SectionHeader';
 import { Card, CardContent } from '@/components/ui/card';
 import { industries } from '@/data/services';
+import { company } from '@/data/company';
 import { Shield, Target, Eye, Users, Award, Clock } from 'lucide-react';
 import { SEO } from '@/components/common/SEO';
+import { pageKeywords } from '@/data/seo-keywords';
 
 const About = () => {
   return (
     <Layout>
-      <SEO title="About Us" description="Learn about SecureNet IT Solutions - your trusted partner for IT hardware since 2010. Discover our mission, vision, and commitment to quality." />
+      <SEO
+        title="About YantraQ"
+        description={`Learn about YantraQ (${company.name}) — Bhopal's most trusted IT hardware, software development, and digital solutions company. Founded in ${company.about.founded}, serving ${company.stats.happyClients} businesses across Madhya Pradesh.`}
+        keywords={pageKeywords.about}
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "AboutPage",
+          "mainEntity": {
+            "@type": "Organization",
+            "name": "YantraQ",
+            "legalName": company.name,
+            "alternateName": ["Yantra Q", "YANTRAQ", "yantraq.com"],
+            "foundingDate": company.about.founded,
+            "description": company.about.overview,
+            "url": company.domain,
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": company.address.full,
+              "addressLocality": company.address.city,
+              "addressRegion": company.address.state,
+              "postalCode": company.address.pincode,
+              "addressCountry": "IN"
+            },
+            "numberOfEmployees": { "@type": "QuantitativeValue", "minValue": 10 },
+            "areaServed": [
+              { "@type": "City", "name": "Bhopal" },
+              { "@type": "State", "name": "Madhya Pradesh" }
+            ]
+          }
+        }}
+      />
       {/* Hero */}
       <section className="py-16 gradient-dark text-white">
         <div className="container mx-auto px-4">
@@ -19,10 +51,10 @@ const About = () => {
             className="text-center"
           >
             <h1 className="font-display text-4xl md:text-5xl font-bold mb-4">
-              About SecureNet
+              About YantraQ
             </h1>
             <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-              Your trusted partner for IT hardware solutions since 2010
+              Your trusted partner for IT hardware, software development, and digital solutions since {company.about.founded}
             </p>
           </motion.div>
         </div>
@@ -44,29 +76,29 @@ const About = () => {
                 Building Trust Through Technology
               </h2>
               <p className="text-muted-foreground mb-6">
-                SecureNet IT Solutions was founded in 2010 with a simple mission: to provide
-                businesses with reliable, affordable, and cutting-edge IT hardware solutions.
-                What started as a small venture has grown into one of the region's most trusted
-                IT service providers.
+                {company.name} was founded in {company.about.founded} with a simple mission: to provide
+                businesses with reliable, affordable, and cutting-edge IT and digital solutions.
+                What started as a small venture has grown into one of Bhopal's most trusted
+                IT and technology service providers.
               </p>
               <p className="text-muted-foreground mb-6">
-                Today, we serve over 500+ businesses across various industries, offering
-                comprehensive solutions from CCTV surveillance and biometric systems to
-                enterprise servers and networking infrastructure. Our team of certified
-                professionals ensures that every client receives personalized attention and
-                top-quality service.
+                Today, we serve over {company.stats.happyClients} businesses across various industries, offering
+                comprehensive solutions from IT hardware sales & rental, CCTV surveillance, and biometric systems to
+                custom software development, website & mobile app development, and SEO/AEO/GEO-powered digital marketing.
+                As a sister company of {company.sisterCompany}, our team of certified professionals ensures that every client
+                receives personalized attention and top-quality service.
               </p>
               <div className="grid grid-cols-3 gap-4">
                 <div className="text-center p-4 bg-muted rounded-xl">
-                  <p className="font-display text-3xl font-bold text-primary">15+</p>
+                  <p className="font-display text-3xl font-bold text-primary">{company.stats.yearsExperience}</p>
                   <p className="text-sm text-muted-foreground">Years Experience</p>
                 </div>
                 <div className="text-center p-4 bg-muted rounded-xl">
-                  <p className="font-display text-3xl font-bold text-primary">500+</p>
+                  <p className="font-display text-3xl font-bold text-primary">{company.stats.happyClients}</p>
                   <p className="text-sm text-muted-foreground">Happy Clients</p>
                 </div>
                 <div className="text-center p-4 bg-muted rounded-xl">
-                  <p className="font-display text-3xl font-bold text-primary">10K+</p>
+                  <p className="font-display text-3xl font-bold text-primary">{company.stats.installations}</p>
                   <p className="text-sm text-muted-foreground">Installations</p>
                 </div>
               </div>
@@ -80,9 +112,11 @@ const About = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 rounded-3xl blur-2xl" />
               <img
                 src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600"
-                alt="Our Team"
+                alt="YantraQ Team — IT Hardware and Digital Solutions Team in Bhopal"
                 className="relative rounded-3xl shadow-xl"
                 loading="lazy"
+                width={600}
+                height={400}
               />
             </motion.div>
           </div>
@@ -105,10 +139,7 @@ const About = () => {
                   </div>
                   <h3 className="font-display text-2xl font-bold mb-4">Our Mission</h3>
                   <p className="text-muted-foreground">
-                    To empower businesses with reliable, innovative, and cost-effective IT
-                    solutions that enhance security, productivity, and growth. We strive to
-                    be the go-to partner for all IT hardware needs, delivering excellence
-                    in every project.
+                    {company.about.mission}
                   </p>
                 </CardContent>
               </Card>
@@ -126,10 +157,7 @@ const About = () => {
                   </div>
                   <h3 className="font-display text-2xl font-bold mb-4">Our Vision</h3>
                   <p className="text-muted-foreground">
-                    To become the leading IT solutions provider in the region, known for
-                    our commitment to quality, customer satisfaction, and technological
-                    innovation. We aim to set industry standards in IT hardware sales,
-                    service, and rental.
+                    {company.about.vision}
                   </p>
                 </CardContent>
               </Card>
@@ -144,7 +172,7 @@ const About = () => {
           <SectionHeader
             badge="Our Values"
             title="What Drives Us"
-            description="The principles that guide everything we do"
+            description="The principles that guide everything we do at YantraQ"
           />
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -182,7 +210,7 @@ const About = () => {
           <SectionHeader
             badge="Industries"
             title="Who We Serve"
-            description="Trusted by businesses across various sectors"
+            description="Trusted by businesses across various sectors in Bhopal and Madhya Pradesh"
           />
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">

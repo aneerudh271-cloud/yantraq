@@ -20,6 +20,7 @@ import { api } from '@/lib/api';
 import { SEO } from '@/components/common/SEO';
 import Leadership from '@/components/common/Leadership';
 import FAQ, { faqSchema } from '@/components/common/FAQ';
+import { pageKeywords } from '@/data/seo-keywords';
 
 const Index = () => {
   const whatsappLink = getWhatsAppLink();
@@ -72,7 +73,7 @@ const Index = () => {
       <SEO
         title="Home"
         description="YantraQ — Bhopal's #1 IT & Digital Solutions company. IT hardware sales & rental, custom software development, website & mobile app development, SEO, AEO, GEO services. Enterprise-grade laptops, servers, networking equipment. Best prices, expert support in Bhopal, Madhya Pradesh."
-        keywords="yantraq, yantraq.com, yantraq bhopal, IT hardware sales bhopal, IT hardware rental bhopal, software development bhopal, website development bhopal, mobile app development bhopal, SEO services bhopal, AEO services, GEO services, custom digital solutions bhopal, best IT company bhopal, IT products near me, laptop rental bhopal, server rental bhopal, web design bhopal"
+        keywords={pageKeywords.home}
         schema={faqSchema}
       />
       {/* Hero Section */}

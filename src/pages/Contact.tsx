@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Phone, Mail, MapPin, Clock, MessageCircle, ExternalLink } from 'lucide-react';
 import { company, getWhatsAppLink } from '@/data/company';
 import { SEO } from '@/components/common/SEO';
+import { pageKeywords } from '@/data/seo-keywords';
 
 const Contact = () => {
   const whatsappLink = getWhatsAppLink();
@@ -14,8 +15,33 @@ const Contact = () => {
     <Layout>
       <SEO
         title="Contact Us"
-        description="Contact YantraQ - Bhopal's best IT hardware sales and rental company. Get instant support for laptops, servers, desktops, networking equipment. Call now or visit our Bhopal office for IT solutions."
-        keywords="contact yantraq, yantraq contact, yantra q bhopal contact, IT hardware shop bhopal contact, laptop rental bhopal contact number, server sales bhopal phone, IT support bhopal, yantraq address bhopal, computer shop near me bhopal"
+        description="Contact YantraQ — Bhopal's best IT hardware sales & rental company. Call +91 70003 02682 or visit our Bagsewaniya office. Instant WhatsApp support for laptops, servers, CCTV, networking. Free consultation & same-day delivery."
+        keywords={pageKeywords.contact}
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "ContactPage",
+          "mainEntity": {
+            "@type": "LocalBusiness",
+            "name": "YantraQ",
+            "telephone": "+91 70003 02682",
+            "email": "connect@yantraq.com",
+            "url": "https://yantraq.com/contact",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "1, Adi Parisar, Bagsewaniya, Bagh Swaniya",
+              "addressLocality": "Bhopal",
+              "addressRegion": "Madhya Pradesh",
+              "postalCode": "462026",
+              "addressCountry": "IN"
+            },
+            "openingHoursSpecification": {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+              "opens": "09:00",
+              "closes": "19:00"
+            }
+          }
+        }}
       />
       {/* Hero */}
       <section className="py-16 gradient-dark text-white">

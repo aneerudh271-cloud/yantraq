@@ -14,6 +14,7 @@ import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
+import Sitemap from "./pages/Sitemap";
 import ScrollToTop from "./components/common/ScrollToTop";
 import SmoothScroll from "./components/common/SmoothScroll";
 
@@ -55,6 +56,7 @@ const App = () => (
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/sitemap" element={<Sitemap />} />
 
               {/* Protected Admin Route */}
               <Route element={<AdminRoute />}>

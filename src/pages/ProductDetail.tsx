@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { categories } from '@/data/products';
 import { api } from '@/lib/api';
 import { SEO } from '@/components/common/SEO';
+import { generateDynamicProductKeywords, pageKeywords } from '@/data/seo-keywords';
 import {
   ShoppingCart,
   Clock,
@@ -104,7 +105,13 @@ const ProductDetail = () => {
 
   return (
     <Layout>
-      <SEO title={product.name} description={product.description} image={product.image} schema={productSchema} />
+      <SEO
+        title={`${product.name} — ${categoryName}`}
+        description={`${product.name} available for ${[product.canBuy && 'purchase', product.canRent && 'rent', product.canRepair && 'repair'].filter(Boolean).join(', ')} in Bhopal. ${product.price ? `Buy: ${product.price}` : ''} ${product.rentPrice ? `Rent: ${product.rentPrice}` : ''}. ${product.description}. Same-day delivery. YantraQ.`}
+        image={product.image}
+        schema={productSchema}
+        keywords={`${generateDynamicProductKeywords(product)}, ${pageKeywords.productDetail}`}
+      />
       <div className="container mx-auto px-4 py-8">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
