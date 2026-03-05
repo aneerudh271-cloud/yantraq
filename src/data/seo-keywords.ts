@@ -17,6 +17,11 @@ export const brandKeywords = [
     // Core brand
     'yantraq', 'yantra q', 'yantra-q', 'yantraq.com', 'yantraq pvt ltd',
     'yantraq private limited', 'YANTRAQ', 'YantraQ',
+    // Parent "Yantra" variants
+    'yantra', 'yantra bhopal', 'yantara', 'yanta', 'yantra hardware',
+    'yantra solutions', 'yantra technology', 'yantra IT', 'yantra repair',
+    'yantra computers', 'yantra laptops', 'yantra store', 'yantra shop',
+    'buy yantra', 'yantra systems', 'yantra devices', 'yantra networking',
     // Common typos & misspellings
     'yantarq', 'yantrak', 'yantrq', 'yantrraq', 'yantraqq', 'yantaq',
     'yantra que', 'yantra queue', 'yantra kue', 'yentraq', 'yantraq1',

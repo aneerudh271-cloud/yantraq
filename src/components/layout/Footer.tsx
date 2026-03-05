@@ -30,7 +30,7 @@ export const Footer = () => {
   return (
     <footer className="bg-tech-navy text-white text-sm py-12">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
 
           {/* Brand & Social */}
           <div className="space-y-4">
@@ -84,6 +84,28 @@ export const Footer = () => {
                 <a href={`mailto:${company.contact.emails.sales}`} className="hover:text-white transition-colors">{company.contact.emails.sales}</a>
               </li>
             </ul>
+          </div>
+
+          {/* SEO Authority Backlinks */}
+          <div>
+            <h4 className="font-semibold mb-4 text-gray-200">Connect & Find Us</h4>
+            <div className="flex flex-col gap-2">
+              <a href="https://www.google.com/maps/search/YantraQ+IT+Hardware+Bhopal" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary transition-colors w-fit" aria-label="Find YantraQ on Google Maps">
+                Google Business Profile
+              </a>
+              <a href="https://www.indiamart.com/yantraq/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary transition-colors w-fit" aria-label="YantraQ IndiaMart Profile">
+                IndiaMart Authorized
+              </a>
+              <a href="https://www.justdial.com/Bhopal/Yantraq/9999PX755-X755-230101150000-X1X1_BZDET" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary transition-colors w-fit" aria-label="YantraQ JustDial Verified">
+                JustDial Verified
+              </a>
+              <a href="https://www.linkedin.com/company/yantraq/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary transition-colors w-fit" aria-label="Follow YantraQ on LinkedIn">
+                LinkedIn Company
+              </a>
+              <a href="https://www.facebook.com/yantraq" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary transition-colors w-fit" aria-label="Follow YantraQ on Facebook">
+                Facebook Page
+              </a>
+            </div>
           </div>
         </div>
 
