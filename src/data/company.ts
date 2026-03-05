@@ -24,13 +24,13 @@ export const company = {
     pincode: '462026',
     country: 'India',
     full: '1,1, Adi Parisar, Bagsewaniya, Bagh Swaniya, Bhopal, Madhya Pradesh 462026',
-    mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3665.967882260124!2d77.4646543!3d23.2351984!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x397c4270da6d2673%3A0x8909890538058284!2sBagsewaniya%2C%20Bhopal%2C%20Madhya%20Pradesh%20462026!5e0!3m2!1sen!2sin!4v1705234567890!5m2!1sen!2sin',
-    googleMapsLink: 'https://www.google.com/maps/place/Pushpako2/@23.1987744,77.4619296,17z/data=!3m1!4b1!4m6!3m5!1s0x87de1398d45f4f7d:0x562aeff123c01dd4!8m2!3d23.1987744!4d77.4619296!16s%2Fg%2F11mz04vqbh?entry=ttu&g_ep=EgoyMDI2MDExMy4wIKXMDSoKLDEwMDc5MjA2N0gBUAM%3D',
+    mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3667.6256!2d77.4573705!3d23.193912!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x397c43e1c84a1fd5%3A0x42d79f825a3c76cb!2sYantraQ!5e0!3m2!1sen!2sin!4v1710000000000!5m2!1sen!2sin',
+    googleMapsLink: 'https://www.google.com/maps/place/YantraQ/@23.193912,77.4547956,17z/data=!4m14!1m7!3m6!1s0x397c43e1c84a1fd5:0x42d79f825a3c76cb!2sYantraQ!8m2!3d23.193912!4d77.4573705!16s%2Fg%2F11n54rk3k1!3m5!1s0x397c43e1c84a1fd5:0x42d79f825a3c76cb!8m2!3d23.193912!4d77.4573705!16s%2Fg%2F11n54rk3k1',
   },
 
   businessHours: {
     days: 'Monday - Saturday',
-    time: '9:00 AM - 7:00 PM',
+    time: '10:30 AM - 7:30 PM',
   },
 
   stats: {

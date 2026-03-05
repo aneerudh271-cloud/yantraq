@@ -37,8 +37,8 @@ const Contact = () => {
             "openingHoursSpecification": {
               "@type": "OpeningHoursSpecification",
               "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-              "opens": "09:00",
-              "closes": "19:00"
+              "opens": "10:30",
+              "closes": "19:30"
             }
           }
         }}
