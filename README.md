@@ -3,7 +3,7 @@
 This is a full-stack web application for YantraQ, featuring a public-facing website for browsing products/services and an admin dashboard for content management.
 
 ## Tech Stack
- 
+  
 **Frontend:**
 - React (Vite)
 - TypeScript
