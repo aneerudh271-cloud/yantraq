@@ -92,8 +92,8 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
               </Link>
             )}
             {product.canRepair && (
-              <Link to={`/product/${product.id}?action=repair`}>
-                <Button size="sm" variant="ghost" className="gap-1">
+              <Link to={`/product/${product.id}?action=repair`} aria-label={`Request repair service for ${product.name}`}>
+                <Button size="sm" variant="ghost" className="gap-1" aria-label="Repair">
                   <Wrench className="w-4 h-4" />
                 </Button>
               </Link>

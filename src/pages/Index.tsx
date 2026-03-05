@@ -209,8 +209,8 @@ const Index = () => {
                     </div>
                     <h3 className="font-display font-semibold text-lg mb-2">{service.title}</h3>
                     <p className="text-muted-foreground text-sm mb-4 flex-1">{service.description}</p>
-                    <Link to="/services" className="text-primary text-sm font-medium flex items-center gap-1 hover:gap-2 transition-all">
-                      Learn More <ArrowRight className="w-4 h-4" />
+                    <Link to="/services" className="text-primary text-sm font-medium flex items-center gap-1 hover:gap-2 transition-all" aria-label={`Learn more about ${service.title} services`}>
+                      Learn More <ArrowRight className="w-4 h-4" aria-hidden="true" />
                     </Link>
                   </CardContent>
                 </Card>

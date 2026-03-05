@@ -116,9 +116,9 @@ const Services = () => {
                         </li>
                       ))}
                     </ul>
-                    <Link to="/contact">
+                    <Link to="/contact" aria-label={`Get started with ${service.title}`}>
                       <Button className="gap-2">
-                        Get Started <ArrowRight className="w-4 h-4" />
+                        Get Started <ArrowRight className="w-4 h-4" aria-hidden="true" />
                       </Button>
                     </Link>
                   </div>
