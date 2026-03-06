@@ -19,7 +19,7 @@ export const Layout = ({ children }: LayoutProps) => {
       </main>
       <Footer />
       <WhatsAppButton />
-      <ChatBot />
+      {/* <ChatBot /> */}
     </div>
   );
 };
