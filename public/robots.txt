@@ -1,13 +1,56 @@
-# YantraQ - IT Hardware Sales & Rental Bhopal
-# Allow all search engines to crawl the entire site
+# =============================================================================
+# YantraQ - IT Hardware Sales, Rental & Software Development | Bhopal, MP
+# https://yantraq.com
+# =============================================================================
 
+# Allow all search engines
 User-agent: *
 Allow: /
+Allow: /products
+Allow: /services
+Allow: /about
+Allow: /contact
+Allow: /faq
+Allow: /sitemap
 Disallow: /admin
+Disallow: /login
 Disallow: /api/
+
+# Google Bot
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+# Google Image Bot
+User-agent: Googlebot-Image
+Allow: /
+
+# Bing Bot
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 2
+
+# AI Crawlers / AEO & GEO targeting
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Anthropic-ai
+Allow: /
+
+User-agent: Cohere-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
 
 # Sitemap
 Sitemap: https://yantraq.com/sitemap.xml
 
-# Crawl-delay for respectful crawling
-Crawl-delay: 1
+# Host
+Host: https://yantraq.com

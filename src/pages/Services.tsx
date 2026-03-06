@@ -29,27 +29,64 @@ const Services = () => {
   return (
     <Layout>
       <SEO
-        title="IT Services"
-        description="Complete IT services in Bhopal — hardware sales & rental, laptop/server/CCTV repair, AMC plans, website & mobile app development, SEO/AEO/GEO digital marketing, network installation. Best prices, expert support by YantraQ."
+        title="IT Services & Software Development in Bhopal"
+        description="Complete IT services in Bhopal — hardware sales & rental, laptop/server/CCTV repair, AMC plans, website & mobile app development, custom CRM/ERP software, SEO/AEO/GEO digital marketing. Best prices, expert support by YantraQ."
         keywords={pageKeywords.services}
+        pageCategory="software"
+        ogType="service"
+        articleSection="Software Development & IT Services"
         schema={{
           "@context": "https://schema.org",
           "@type": "Service",
-          "serviceType": "IT Hardware & Digital Solutions",
+          "serviceType": "IT Hardware & Software Development Solutions",
           "provider": {
             "@type": "LocalBusiness",
             "name": "YantraQ",
             "url": "https://yantraq.com"
           },
-          "areaServed": { "@type": "City", "name": "Bhopal" },
+          "areaServed": [
+            { "@type": "City", "name": "Bhopal" },
+            { "@type": "State", "name": "Madhya Pradesh" },
+            { "@type": "Country", "name": "India" }
+          ],
+          "url": "https://yantraq.com/services",
+          "description": "End-to-end IT services including hardware sales, rental, repair, AMC, website development, mobile app development, custom software, and SEO/AEO/GEO digital marketing",
           "hasOfferCatalog": {
             "@type": "OfferCatalog",
-            "name": "IT Services",
+            "name": "IT & Software Services",
             "itemListElement": [
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "IT Hardware Sales & Rental" } },
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "IT Repair & AMC Services" } },
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Website & App Development" } },
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "SEO, AEO & GEO Marketing" } }
+              {
+                "@type": "OfferCatalog",
+                "name": "Hardware Services",
+                "itemListElement": [
+                  { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "IT Hardware Sales & Procurement", "description": "New and refurbished laptops, desktops, servers, CCTV, printers, biometric devices from HP, Dell, Lenovo, Hikvision" } },
+                  { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "IT Hardware Rental", "description": "Flexible daily, weekly, monthly rental of laptops, servers, projectors, printers for businesses and events" } },
+                  { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "IT Repair & AMC Services", "description": "Expert laptop repair, desktop repair, printer service, CCTV maintenance with annual maintenance contracts" } },
+                  { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "CCTV & Security Installation", "description": "Complete surveillance system design, installation, and maintenance for homes, offices, factories" } },
+                  { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Network Infrastructure Setup", "description": "LAN cabling, WiFi installation, server room setup, structured cabling for offices and enterprises" } }
+                ]
+              },
+              {
+                "@type": "OfferCatalog",
+                "name": "Software & Digital Services",
+                "itemListElement": [
+                  { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Website Development", "description": "Custom responsive websites, e-commerce platforms, landing pages built with React, Next.js, Node.js" } },
+                  { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Mobile App Development", "description": "Android & iOS apps using React Native and Flutter — native performance, cross-platform development" } },
+                  { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Custom Software Development", "description": "CRM, ERP, inventory management, billing, hospital management, school management, lead tracking software" } },
+                  { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "SEO Services", "description": "Search Engine Optimization for Google rankings improvement, local SEO for Bhopal businesses" } },
+                  { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AEO & GEO Services", "description": "Answer Engine Optimization for AI-powered search and Generative Engine Optimization for ChatGPT/Gemini visibility" } },
+                  { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Digital Marketing", "description": "Google Ads, social media marketing, content marketing, video marketing for business growth" } },
+                  { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "API & SaaS Development", "description": "RESTful API development, microservices architecture, SaaS application development" } },
+                  { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Cloud Solutions", "description": "AWS, Azure, Google Cloud deployment, setup, and management for scalable infrastructure" } }
+                ]
+              }
+            ]
+          },
+          "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://yantraq.com/" },
+              { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://yantraq.com/services" }
             ]
           }
         }}
@@ -63,13 +100,25 @@ const Services = () => {
             className="text-center"
           >
             <h1 className="font-display text-4xl md:text-5xl font-bold mb-4">
-              Our Services
+              IT Services &amp; Software Development in Bhopal
             </h1>
             <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-              Comprehensive IT solutions from sales to support — we've got you covered
+              From hardware sales &amp; rental to custom website development, mobile apps, CRM/ERP software, and AI-powered SEO — comprehensive IT solutions for Bhopal businesses by YantraQ.
             </p>
           </motion.div>
         </div>
+      </section>
+
+      {/* SEO-rich content for software services (visually hidden but crawlable) */}
+      <section className="sr-only" aria-hidden="true">
+        <h2>Software Development & Digital Services by YantraQ Bhopal</h2>
+        <p>
+          YantraQ is a full-service software development and digital solutions company in Bhopal, Madhya Pradesh. We build custom websites using React, Next.js, and Node.js for businesses, e-commerce stores, and startups. Our mobile app development team creates high-performance Android and iOS applications using React Native and Flutter. We develop bespoke CRM, ERP, billing software, hospital management systems, school management systems, hotel management systems, lead management tools, and inventory management solutions. Our digital marketing division provides comprehensive SEO (Search Engine Optimization), AEO (Answer Engine Optimization) for AI search engines like ChatGPT and Google Gemini, and GEO (Generative Engine Optimization) to ensure your business is discoverable across all platforms. We also handle Google Ads, social media marketing, content marketing, and local SEO for Bhopal businesses. From API development and SaaS products to cloud deployment on AWS and Azure, YantraQ delivers end-to-end technology solutions.
+        </p>
+        <h3>Hardware Services in Bhopal</h3>
+        <p>
+          Our IT hardware services include laptop and desktop sales, rental, and repair; server room setup and maintenance; CCTV surveillance system design and installation; biometric attendance system configuration; networking and WiFi installation; printer repair and AMC; and complete IT infrastructure setup for offices, schools, hospitals, factories, and government organizations across Bhopal and Madhya Pradesh.
+        </p>
       </section>
 
       {/* Services Grid */}

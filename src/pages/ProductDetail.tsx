@@ -111,6 +111,9 @@ const ProductDetail = () => {
         image={product.image}
         schema={productSchema}
         keywords={`${generateDynamicProductKeywords(product)}, ${pageKeywords.productDetail}`}
+        pageCategory="hardware"
+        ogType="product"
+        articleSection={categoryName || 'IT Hardware'}
       />
       <div className="container mx-auto px-4 py-8">
         {/* Breadcrumb */}

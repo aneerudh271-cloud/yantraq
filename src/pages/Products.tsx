@@ -115,16 +115,35 @@ const Products = () => {
   return (
     <Layout>
       <SEO
-        title="IT Hardware Products"
+        title="IT Hardware Products — Buy, Rent & Repair in Bhopal"
         description="Buy or rent laptops, desktops, servers, CCTV cameras, biometric devices, GPS trackers, printers, networking equipment at best prices in Bhopal. Genuine products, flexible rental plans, same-day delivery by YantraQ."
         keywords={pageKeywords.products}
+        pageCategory="hardware"
+        ogType="product"
+        articleSection="IT Hardware"
         schema={{
           "@context": "https://schema.org",
           "@type": "CollectionPage",
-          "name": "YantraQ IT Hardware Products — Buy & Rent in Bhopal",
-          "description": "Browse and buy or rent IT hardware products including laptops, desktops, servers, CCTV cameras, biometric devices, and networking equipment in Bhopal.",
+          "name": "YantraQ IT Hardware Products — Buy, Rent & Repair in Bhopal",
+          "description": "Browse and buy or rent IT hardware products including laptops, desktops, servers, CCTV cameras, biometric devices, printers, GPS trackers and networking equipment in Bhopal, Madhya Pradesh.",
           "url": "https://yantraq.com/products",
-          "isPartOf": { "@type": "WebSite", "name": "YantraQ", "url": "https://yantraq.com" }
+          "isPartOf": { "@type": "WebSite", "name": "YantraQ", "url": "https://yantraq.com" },
+          "about": [
+            { "@type": "Thing", "name": "IT Hardware" },
+            { "@type": "Thing", "name": "Laptop Sales & Rental" },
+            { "@type": "Thing", "name": "CCTV Surveillance Systems" },
+            { "@type": "Thing", "name": "Biometric Attendance Systems" },
+            { "@type": "Thing", "name": "Enterprise Servers" },
+            { "@type": "Thing", "name": "Networking Equipment" },
+            { "@type": "Thing", "name": "GPS Tracking Devices" }
+          ],
+          "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://yantraq.com/" },
+              { "@type": "ListItem", "position": 2, "name": "Products", "item": "https://yantraq.com/products" }
+            ]
+          }
         }}
       />
       {/* Hero */}
@@ -136,14 +155,23 @@ const Products = () => {
             className="text-center"
           >
             <h1 className="font-display text-4xl md:text-5xl font-bold mb-4">
-              Our Products
+              IT Hardware Products in Bhopal
             </h1>
             <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-              Explore our comprehensive range of IT hardware and security solutions
+              Buy, rent, or repair enterprise-grade IT hardware — laptops, servers, CCTV cameras, biometric devices, networking equipment &amp; more. Best prices in Bhopal with same-day delivery by YantraQ.
             </p>
           </motion.div>
         </div>
       </section>
+
+      {/* SEO-rich content for hardware categories (visually hidden but crawlable) */}
+      <section className="sr-only" aria-hidden="true">
+        <h2>IT Hardware Solutions Available at YantraQ Bhopal</h2>
+        <p>
+          YantraQ offers a comprehensive range of IT hardware products for businesses, government offices, educational institutions, hospitals, and homes in Bhopal. Our hardware catalog includes HP, Dell, and Lenovo laptops and desktops for sale and rental; Hikvision, Dahua, and CP Plus CCTV cameras with professional installation; eSSL and ZKTeco biometric attendance machines; Cisco, TP-Link, and D-Link networking equipment including managed switches, enterprise routers, and access points; Canon, HP, and Epson printers; GPS vehicle tracking devices; LED monitors from Samsung and LG; and Intel Xeon-powered tower and rack servers. Whether you need a laptop on rent for exams, bulk computer lab setup for schools, factory CCTV installation, or enterprise server room infrastructure, YantraQ Bhopal delivers genuine products with warranty at the best prices in Madhya Pradesh.
+        </p>
+      </section>
+
 
       <section className="py-12">
         <div className="container mx-auto px-4">
