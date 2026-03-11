@@ -105,6 +105,9 @@ export const Footer = () => {
               <a href="https://www.facebook.com/yantraq" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary transition-colors w-fit" aria-label="Follow YantraQ on Facebook">
                 Facebook Page
               </a>
+              <a href="https://www.instagram.com/yantraq/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary transition-colors w-fit" aria-label="Follow YantraQ on Instagram">
+                Instagram Profile
+              </a>
             </div>
           </div>
         </div>
