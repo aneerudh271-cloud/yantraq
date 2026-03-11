@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
 import { company } from '@/data/company';
@@ -15,9 +16,8 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { categories } from '@/data/products';
-import { services } from '@/data/services';
 import { cn } from "@/lib/utils";
+import { api } from '@/lib/api';
 
 /* ================= TYPES ================= */
 interface NavLink {
@@ -30,6 +30,47 @@ export const Navbar: React.FC = () => {
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const location = useLocation();
+
+  const { data: fetchedCategories = [] } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => api.get('/products/categories'),
+  });
+
+  const { data: fetchedServices = [] } = useQuery({
+    queryKey: ['services'],
+    queryFn: () => api.get('/services'),
+  });
+
+  const allCategories = useMemo(() => {
+    const uniqueCategories = new Map();
+    if (Array.isArray(fetchedCategories)) {
+      fetchedCategories.forEach((cat: string) => {
+        if (!uniqueCategories.has(cat)) {
+          const name = cat.charAt(0).toUpperCase() + cat.slice(1).replace(/-/g, ' ');
+          uniqueCategories.set(cat, { id: cat, name, icon: '📦', description: `Explore our range of ${name}` });
+        }
+      });
+    }
+    return Array.from(uniqueCategories.values());
+  }, [fetchedCategories]);
+
+  const allServices = useMemo(() => {
+    const uniqueServices = new Map();
+    if (Array.isArray(fetchedServices)) {
+      fetchedServices.forEach((s: any) => {
+        const id = s.id || s._id;
+        if (id && !uniqueServices.has(id)) {
+          uniqueServices.set(id, {
+             id,
+             title: s.title || s.name || 'Service',
+             description: s.description || 'Explore our custom service',
+             icon: s.icon || '💼'
+          });
+        }
+      });
+    }
+    return Array.from(uniqueServices.values());
+  }, [fetchedServices]);
 
   /* Close mobile menu on route change */
   useEffect((): void => {
@@ -91,14 +132,14 @@ export const Navbar: React.FC = () => {
                       Products
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
-                      <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-popover shadow-xl rounded-xl border border-border">
+                      <ul className="grid w-[400px] max-h-[80vh] overflow-y-auto overflow-x-hidden gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-popover shadow-xl rounded-xl border border-border">
                         <li className="col-span-full">
                            <Link to="/products" className="flex items-center justify-between p-2 rounded-md hover:bg-muted">
                              <span className="font-semibold">All Products</span>
                              <span className="text-sm text-primary font-medium">View Store &rarr;</span>
                            </Link>
                         </li>
-                        {categories.map((category) => (
+                        {allCategories.map((category) => (
                           <li key={category.id}>
                             <NavigationMenuLink asChild>
                               <Link
@@ -129,14 +170,14 @@ export const Navbar: React.FC = () => {
                       Services
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
-                      <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-popover shadow-xl rounded-xl border border-border">
+                      <ul className="grid w-[400px] max-h-[80vh] overflow-y-auto overflow-x-hidden gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-popover shadow-xl rounded-xl border border-border">
                         <li className="col-span-full">
                            <Link to="/services" className="flex items-center justify-between p-2 rounded-md hover:bg-muted">
                              <span className="font-semibold">All Services</span>
                              <span className="text-sm text-primary font-medium">View Details &rarr;</span>
                            </Link>
                         </li>
-                        {services.map((service) => (
+                        {allServices.map((service) => (
                           <li key={service.id}>
                             <NavigationMenuLink asChild>
                               <Link
@@ -268,7 +309,7 @@ export const Navbar: React.FC = () => {
                          <Link to="/products" className="block px-4 py-3 rounded-lg text-sm font-medium text-foreground hover:bg-muted">
                            ➔ View All Products
                          </Link>
-                        {categories.map((category) => (
+                        {allCategories.map((category) => (
                            <Link
                              key={category.id}
                              to={`/products?category=${category.id}`}
@@ -288,7 +329,7 @@ export const Navbar: React.FC = () => {
                          <Link to="/services" className="block px-4 py-3 rounded-lg text-sm font-medium text-foreground hover:bg-muted">
                            ➔ View All Services
                          </Link>
-                        {services.map((service) => (
+                        {allServices.map((service) => (
                            <Link
                              key={service.id}
                              to={`/services#${service.id}`}
