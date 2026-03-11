@@ -5,21 +5,25 @@ import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
 import { company } from '@/data/company';
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { categories } from '@/data/products';
+import { services } from '@/data/services';
+import { cn } from "@/lib/utils";
 
 /* ================= TYPES ================= */
 interface NavLink {
   name: string;
   href: string;
 }
-
-/* ================= DATA ================= */
-const navLinks: NavLink[] = [
-  { name: 'Home', href: '/' },
-  { name: 'Products', href: '/products' },
-  { name: 'Services', href: '/services' },
-  { name: 'About', href: '/about' },
-  { name: 'Contact', href: '/contact' },
-];
 
 /* ================= COMPONENT ================= */
 export const Navbar: React.FC = () => {
@@ -60,19 +64,132 @@ export const Navbar: React.FC = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-1">
-              {navLinks.map((link: NavLink) => (
-                <Link
-                  key={link.name}
-                  to={link.href}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${location.pathname === link.href
-                    ? 'text-primary bg-primary/10'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                    }`}
-                >
-                  {link.name}
-                </Link>
-              ))}
+            <div className="hidden md:flex items-center">
+              <NavigationMenu>
+                <NavigationMenuList>
+                  {/* Home */}
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        to="/"
+                        className={cn(
+                          navigationMenuTriggerStyle(),
+                          location.pathname === '/' ? 'text-primary bg-primary/10 hover:bg-primary/20 hover:text-primary' : 'bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground'
+                        )}
+                      >
+                        Home
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+
+                  {/* Products */}
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger className={cn(
+                          "bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground",
+                          location.pathname === '/products' && 'text-primary bg-primary/10 hover:bg-primary/20 hover:text-primary'
+                        )}>
+                      Products
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                      <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-popover shadow-xl rounded-xl border border-border">
+                        <li className="col-span-full">
+                           <Link to="/products" className="flex items-center justify-between p-2 rounded-md hover:bg-muted">
+                             <span className="font-semibold">All Products</span>
+                             <span className="text-sm text-primary font-medium">View Store &rarr;</span>
+                           </Link>
+                        </li>
+                        {categories.map((category) => (
+                          <li key={category.id}>
+                            <NavigationMenuLink asChild>
+                              <Link
+                                to={`/products?category=${category.id}`}
+                                className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                              >
+                                <div className="text-sm font-semibold leading-none flex items-center gap-2">
+                                  <span className="text-lg">{category.icon}</span>
+                                  {category.name}
+                                </div>
+                                <p className="line-clamp-2 text-xs leading-snug text-muted-foreground mt-1.5 font-medium">
+                                  {category.description}
+                                </p>
+                              </Link>
+                            </NavigationMenuLink>
+                          </li>
+                        ))}
+                      </ul>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+
+                  {/* Services */}
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger className={cn(
+                          "bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground",
+                          location.pathname === '/services' && 'text-primary bg-primary/10 hover:bg-primary/20 hover:text-primary'
+                        )}>
+                      Services
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                      <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-popover shadow-xl rounded-xl border border-border">
+                        <li className="col-span-full">
+                           <Link to="/services" className="flex items-center justify-between p-2 rounded-md hover:bg-muted">
+                             <span className="font-semibold">All Services</span>
+                             <span className="text-sm text-primary font-medium">View Details &rarr;</span>
+                           </Link>
+                        </li>
+                        {services.map((service) => (
+                          <li key={service.id}>
+                            <NavigationMenuLink asChild>
+                              <Link
+                                to={`/services#${service.id}`}
+                                className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                              >
+                                <div className="text-sm font-semibold leading-none flex items-center gap-2">
+                                  <span className="text-lg">{service.icon}</span>
+                                  {service.title}
+                                </div>
+                                <p className="line-clamp-2 text-xs leading-snug text-muted-foreground mt-1.5 font-medium">
+                                  {service.description}
+                                </p>
+                              </Link>
+                            </NavigationMenuLink>
+                          </li>
+                        ))}
+                      </ul>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+
+                  {/* About */}
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        to="/about"
+                        className={cn(
+                          navigationMenuTriggerStyle(),
+                          location.pathname === '/about' ? 'text-primary bg-primary/10 hover:bg-primary/20 hover:text-primary' : 'bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground'
+                        )}
+                      >
+                        About
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+
+                  {/* Contact */}
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        to="/contact"
+                        className={cn(
+                          navigationMenuTriggerStyle(),
+                          location.pathname === '/contact' ? 'text-primary bg-primary/10 hover:bg-primary/20 hover:text-primary' : 'bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground'
+                        )}
+                      >
+                        Contact
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+
+                </NavigationMenuList>
+              </NavigationMenu>
             </div>
 
             {/* Desktop CTA */}
@@ -135,18 +252,68 @@ export const Navbar: React.FC = () => {
 
               {/* Links */}
               <div className="flex-1 overflow-y-auto p-4 space-y-2">
-                {navLinks.map((link: NavLink) => (
-                  <Link
-                    key={link.name}
-                    to={link.href}
-                    className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${location.pathname === link.href
-                      ? 'bg-primary/10 text-primary'
-                      : 'hover:bg-muted'
-                      }`}
-                  >
-                    {link.name}
-                  </Link>
-                ))}
+                <Link
+                  to="/"
+                  className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${location.pathname === '/' ? 'bg-primary/10 text-primary' : 'hover:bg-muted'}`}
+                >
+                  Home
+                </Link>
+
+                 <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="products" className="border-b-0">
+                      <AccordionTrigger className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors hover:no-underline ${location.pathname === '/products' ? 'bg-primary/10 text-primary' : 'hover:bg-muted'}`}>
+                        Products
+                      </AccordionTrigger>
+                      <AccordionContent className="pb-0 pl-4 border-l-2 border-primary/20 ml-6 mt-1 space-y-1">
+                         <Link to="/products" className="block px-4 py-3 rounded-lg text-sm font-medium text-foreground hover:bg-muted">
+                           ➔ View All Products
+                         </Link>
+                        {categories.map((category) => (
+                           <Link
+                             key={category.id}
+                             to={`/products?category=${category.id}`}
+                             className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                           >
+                             <span className="text-lg">{category.icon}</span> {category.name}
+                           </Link>
+                        ))}
+                      </AccordionContent>
+                    </AccordionItem>
+                    
+                    <AccordionItem value="services" className="border-b-0">
+                      <AccordionTrigger className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors hover:no-underline ${location.pathname === '/services' ? 'bg-primary/10 text-primary' : 'hover:bg-muted'}`}>
+                        Services
+                      </AccordionTrigger>
+                      <AccordionContent className="pb-0 pl-4 border-l-2 border-primary/20 ml-6 mt-1 space-y-1">
+                         <Link to="/services" className="block px-4 py-3 rounded-lg text-sm font-medium text-foreground hover:bg-muted">
+                           ➔ View All Services
+                         </Link>
+                        {services.map((service) => (
+                           <Link
+                             key={service.id}
+                             to={`/services#${service.id}`}
+                             className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                           >
+                             <span className="text-lg">{service.icon}</span> {service.title}
+                           </Link>
+                        ))}
+                      </AccordionContent>
+                    </AccordionItem>
+                 </Accordion>
+
+                <Link
+                  to="/about"
+                  className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${location.pathname === '/about' ? 'bg-primary/10 text-primary' : 'hover:bg-muted'}`}
+                >
+                  About
+                </Link>
+
+                <Link
+                  to="/contact"
+                  className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${location.pathname === '/contact' ? 'bg-primary/10 text-primary' : 'hover:bg-muted'}`}
+                >
+                  Contact
+                </Link>
               </div>
 
               {user?.role === 'admin' && (
