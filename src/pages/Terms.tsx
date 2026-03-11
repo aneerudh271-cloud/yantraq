@@ -51,13 +51,13 @@ const Terms = () => {
             <h2 className="font-display text-2xl font-bold mb-4">4. Warranty</h2>
             <p className="text-muted-foreground mb-6">
               New products carry manufacturer's warranty as specified. Refurbished products carry
-              a 6-month warranty from Y.A.N.T.R.A.Q. Pvt. Ltd. (YantraQ). Warranty does not cover damage due to
+              a 6-month warranty from Y.A.N.T.R.A.Q. (YantraQ). Warranty does not cover damage due to
               misuse, accidents, or unauthorized modifications.
             </p>
 
             <h2 className="font-display text-2xl font-bold mb-4">5. Rental Terms</h2>
             <ul className="list-disc pl-6 text-muted-foreground mb-6 space-y-2">
-              <li>Rental equipment remains the property of Y.A.N.T.R.A.Q. Pvt. Ltd. (YantraQ)</li>
+              <li>Rental equipment remains the property of Y.A.N.T.R.A.Q. (YantraQ)</li>
               <li>Customer is responsible for the equipment during the rental period</li>
               <li>Equipment must be returned in good working condition</li>
               <li>Damage or loss will be charged to the customer</li>
@@ -73,7 +73,7 @@ const Terms = () => {
 
             <h2 className="font-display text-2xl font-bold mb-4">7. Limitation of Liability</h2>
             <p className="text-muted-foreground mb-6">
-              Y.A.N.T.R.A.Q. Pvt. Ltd. (YantraQ) shall not be liable for any indirect, incidental, special,
+              Y.A.N.T.R.A.Q. (YantraQ) shall not be liable for any indirect, incidental, special,
               or consequential damages arising from the use of our products or services.
             </p>
 
@@ -88,7 +88,7 @@ const Terms = () => {
             <p className="text-muted-foreground mb-6">
               For any questions regarding these Terms & Conditions, please contact us at:
               <br /><br />
-              <strong>Y.A.N.T.R.A.Q. Pvt. Ltd.</strong><br />
+              <strong>Y.A.N.T.R.A.Q.</strong><br />
               Email: {company.contact.emails.sales}<br />
               Phone: {company.contact.phone}<br />
               Address: {company.address.line1}, {company.address.line2}, {company.address.city}, {company.address.state} {company.address.pincode}

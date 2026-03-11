@@ -1,5 +1,5 @@
 export const company = {
-  name: 'Y.A.N.T.R.A.Q. Pvt. Ltd.',
+  name: 'Y.A.N.T.R.A.Q.',
   shortName: 'YANTRAQ',
   tagline: 'Yield-Driven Advanced Networked Technology Research Quotient',
   slogan: 'Engineering The Future',
@@ -40,8 +40,8 @@ export const company = {
   },
 
   about: {
-    founded: '2014',
-    overview: `Y.A.N.T.R.A.Q. Pvt. Ltd. (Yield-Driven Advanced Networked Technology Research Quotient) was founded with a vision to provide businesses with reliable, affordable, and cutting-edge technology solutions. As a sister company of PushpakO2, we bring a legacy of trust and innovation to every project.
+    founded: '2026',
+    overview: `Y.A.N.T.R.A.Q. (Yield-Driven Advanced Networked Technology Research Quotient) was founded with a vision to provide businesses with reliable, affordable, and cutting-edge technology solutions. As a sister company of PushpakO2, we bring a legacy of trust and innovation to every project.
 
 Today, we serve over 500+ businesses across various industries, offering comprehensive solutions spanning IT hardware sales & rental, custom software development, website & mobile app development, and digital marketing powered by SEO, AEO & GEO strategies. Our team of certified professionals ensures that every client receives personalized attention and top-quality service.`,
 

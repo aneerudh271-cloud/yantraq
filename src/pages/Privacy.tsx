@@ -75,7 +75,7 @@ const Privacy = () => {
             <p className="text-muted-foreground mb-6">
               If you have any questions about this Privacy Policy, please contact us at:
               <br /><br />
-              <strong>Y.A.N.T.R.A.Q. Pvt. Ltd.</strong><br />
+              <strong>Y.A.N.T.R.A.Q.</strong><br />
               Email: {company.contact.emails.sales}<br />
               Phone: {company.contact.phone}<br />
               Address: {company.address.line1}, {company.address.line2}, {company.address.city}, {company.address.state} {company.address.pincode}

@@ -13,7 +13,7 @@ const faqs = [
     // ── Core Business FAQs ──────────────────────────────────────────
     {
         question: "What is YantraQ and what services does it offer in Bhopal?",
-        answer: "YantraQ (Y.A.N.T.R.A.Q. Pvt. Ltd.) is Bhopal's leading IT and digital solutions company. We offer comprehensive services including IT hardware sales and rental (laptops, desktops, servers, networking equipment, CCTV cameras, biometric systems, GPS trackers), custom software development, website and mobile app development, SEO/AEO/GEO-powered digital marketing, and complete IT infrastructure setup. As a sister company of PushpakO2, we bring 10+ years of trust and innovation to 500+ businesses across Madhya Pradesh."
+        answer: "YantraQ (Y.A.N.T.R.A.Q.) is Bhopal's leading IT and digital solutions company. We offer comprehensive services including IT hardware sales and rental (laptops, desktops, servers, networking equipment, CCTV cameras, biometric systems, GPS trackers), custom software development, website and mobile app development, SEO/AEO/GEO-powered digital marketing, and complete IT infrastructure setup. As a sister company of PushpakO2, we bring 10+ years of trust and innovation to 500+ businesses across Madhya Pradesh."
     },
     {
         question: "What IT hardware products does YantraQ sell and rent in Bhopal?",
