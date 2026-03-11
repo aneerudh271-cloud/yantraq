@@ -6,6 +6,7 @@ export interface IAMCPlan extends Document {
     features: string[];
     popular: boolean;
     isActive: boolean;
+    order: number;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -32,6 +33,10 @@ const AMCPlanSchema: Schema = new Schema({
     isActive: {
         type: Boolean,
         default: true,
+    },
+    order: {
+        type: Number,
+        default: 0,
     },
 }, {
     timestamps: true,

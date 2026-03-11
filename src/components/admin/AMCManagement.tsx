@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Search, Plus, Loader2, Edit, Trash2 } from 'lucide-react';
+import { Search, Plus, Loader2, Edit, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -48,6 +48,7 @@ interface AMCPlan {
     features: string[];
     popular: boolean;
     isActive: boolean;
+    order?: number;
 }
 
 export const AMCManagement = () => {
@@ -379,6 +380,17 @@ const PlanManagement = () => {
         },
     });
 
+    const reorderMutation = useMutation({
+        mutationFn: (items: { id: string; order: number }[]) => api.put('/amc-plans/reorder', { items }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['amc-plans-admin'] });
+            toast.success('Plans reordered');
+        },
+        onError: (error: any) => {
+            toast.error(error.message);
+        },
+    });
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
@@ -407,6 +419,25 @@ const PlanManagement = () => {
         if (confirm('Are you sure you want to delete this plan?')) {
             deleteMutation.mutate(id);
         }
+    };
+
+    const handleMove = (index: number, direction: number) => {
+        if (!plans) return;
+        const newPlans = [...plans];
+        const targetIndex = index + direction;
+        
+        if (targetIndex < 0 || targetIndex >= newPlans.length) return;
+
+        // Swap directly
+        const temp = newPlans[index];
+        newPlans[index] = newPlans[targetIndex];
+        newPlans[targetIndex] = temp;
+
+        const items = newPlans.map((p: any, i: number) => ({ id: p._id, order: i }));
+        
+        // Optimistic update
+        queryClient.setQueryData(['amc-plans-admin'], newPlans);
+        reorderMutation.mutate(items);
     };
 
     return (
@@ -486,22 +517,42 @@ const PlanManagement = () => {
                         <Loader2 className="w-8 h-8 animate-spin text-primary" />
                     </div>
                 ) : (
-                    plans?.map((plan: AMCPlan) => (
-                        <div key={plan._id} className={`border rounded-xl p-6 relative bg-card ${!plan.isActive ? 'opacity-60' : ''}`}>
-                            {plan.popular && (
-                                <Badge className="absolute top-4 right-4">Popular</Badge>
-                            )}
-                            <div className="mb-4">
+                    plans?.map((plan: AMCPlan, index: number) => (
+                        <div key={plan._id} className={`border rounded-xl p-6 relative bg-card flex flex-col h-full ${!plan.isActive ? 'opacity-60' : ''}`}>
+                            <div className="absolute top-4 right-4 flex items-center gap-2">
+                                <div className="flex bg-muted rounded-md overflow-hidden mr-2">
+                                    <button 
+                                        className="p-1 hover:bg-background disabled:opacity-50" 
+                                        onClick={() => handleMove(index, -1)}
+                                        disabled={index === 0}
+                                        title="Move Left"
+                                    >
+                                        <ChevronLeft className="w-4 h-4" />
+                                    </button>
+                                    <button 
+                                        className="p-1 hover:bg-background disabled:opacity-50" 
+                                        onClick={() => handleMove(index, 1)}
+                                        disabled={index === plans.length - 1}
+                                        title="Move Right"
+                                    >
+                                        <ChevronRight className="w-4 h-4" />
+                                    </button>
+                                </div>
+                                {plan.popular && (
+                                    <Badge>Popular</Badge>
+                                )}
+                            </div>
+                            <div className="mb-4 mt-2">
                                 <h3 className="text-xl font-bold">{plan.name}</h3>
                                 <p className="text-2xl font-bold text-primary">{plan.price}</p>
                             </div>
-                            <ul className="space-y-2 mb-6 text-sm text-muted-foreground">
+                            <ul className="space-y-2 mb-6 text-sm text-muted-foreground flex-grow">
                                 {plan.features.slice(0, 3).map((f, i) => (
                                     <li key={i}>• {f}</li>
                                 ))}
                                 {plan.features.length > 3 && <li>+ {plan.features.length - 3} more...</li>}
                             </ul>
-                            <div className="flex gap-2">
+                            <div className="flex gap-2 mt-auto pt-4">
                                 <Button variant="outline" className="flex-1" onClick={() => handleEdit(plan)}>
                                     <Edit className="w-4 h-4 mr-2" /> Edit
                                 </Button>

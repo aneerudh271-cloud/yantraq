@@ -7,7 +7,7 @@ const router = express.Router();
 // Get all active plans (Public)
 router.get('/', async (req, res) => {
     try {
-        const plans = await AMCPlan.find({ isActive: true }).sort({ price: 1 });
+        const plans = await AMCPlan.find({ isActive: true }).sort({ order: 1, price: 1 });
         res.json(plans);
     } catch (error: any) {
         res.status(500).json({ message: error.message });
@@ -17,11 +17,27 @@ router.get('/', async (req, res) => {
 // Get all plans including inactive (Admin)
 router.get('/all', protect, admin, async (req, res) => {
     try {
-        // Sort by 'popular' first (descending), then by price or creation
-        const plans = await AMCPlan.find().sort({ createdAt: 1 });
+        const plans = await AMCPlan.find().sort({ order: 1, createdAt: 1 });
         res.json(plans);
     } catch (error: any) {
         res.status(500).json({ message: error.message });
+    }
+});
+
+// Reorder plans (Admin)
+router.put('/reorder', protect, admin, async (req: any, res) => {
+    try {
+        const { items } = req.body; // [{ id, order }]
+        const ops = items.map((item: { id: string; order: number }) => ({
+            updateOne: {
+                filter: { _id: item.id },
+                update: { $set: { order: item.order } }
+            }
+        }));
+        await AMCPlan.bulkWrite(ops);
+        res.json({ message: 'Plans reordered' });
+    } catch (error: any) {
+        res.status(400).json({ message: error.message });
     }
 });
 
