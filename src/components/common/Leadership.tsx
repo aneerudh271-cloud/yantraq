@@ -33,7 +33,7 @@ const executives: Executive[] = [
         name: "Mr. Vardan Khurana",
         title: "Executive Sales Director",
         bio: "With 16+ years of experience in industrial sales, Vardan successfully drives business growth across vital sectors like HVAC, defence, and heavy electricals. He specializes in cultivating strategic client relationships, delivering tailored industrial solutions, and spearheading high-impact regional business initiatives.",
-        image: "/vardan.jpg"
+        image: "/vardan.jpeg"
     },
     {
         name: 'Mr. Sahil Rai',
