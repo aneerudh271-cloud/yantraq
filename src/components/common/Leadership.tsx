@@ -29,12 +29,12 @@ const executives: Executive[] = [
         bio: 'As Co-Founder and Technology Lead of PushpakO2, Aneerudh is the principal architect behind core engineering systems. He leads the end-to-end development of advanced aviation and unmanned aerial solutions, masterfully spanning concept design, system architecture, prototyping, rigorous testing, and implementation.',
         image: '/aneerudh.jpeg'
     },
-    {
-        name: "Mr. Vardan Khurana",
-        title: "Executive Sales Director",
-        bio: "With 16+ years of experience in industrial sales, Vardan successfully drives business growth across vital sectors like HVAC, defence, and heavy electricals. He specializes in cultivating strategic client relationships, delivering tailored industrial solutions, and spearheading high-impact regional business initiatives.",
-        image: "/vardan.jpeg"
-    },
+    // {
+    //     name: "Mr. Vardan Khurana",
+    //     title: "Executive Sales Director",
+    //     bio: "With 16+ years of experience in industrial sales, Vardan successfully drives business growth across vital sectors like HVAC, defence, and heavy electricals. He specializes in cultivating strategic client relationships, delivering tailored industrial solutions, and spearheading high-impact regional business initiatives.",
+    //     image: "/vardan.jpeg"
+    // },
     {
         name: 'Mr. Sahil Rai',
         title: 'Sales Manager',
@@ -84,7 +84,7 @@ const Leadership = () => {
                             {executives.map((executive, index) => (
                                 <CarouselItem
                                     key={index}
-                                    className="pl-4 basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/4 flex"
+                                    className="pl-4 basis-full md:basis-1/2 lg:basis-1/3 flex"
                                 >
                                     <motion.div
                                         initial={{ opacity: 0, y: 20 }}
@@ -96,7 +96,7 @@ const Leadership = () => {
                                         {/* Glow Effect on Hover */}
                                         <div className="absolute inset-x-0 inset-y-2 bg-gradient-to-b from-primary/50 to-transparent rounded-2xl blur opacity-0 group-hover:opacity-20 transition duration-500" />
 
-                                        <div className="relative w-full h-full bg-card border border-border rounded-2xl overflow-hidden hover:border-primary/30 transition-all duration-300 flex flex-col flex-grow">
+                                        <div className="relative w-full h-full bg-card border border-border rounded-2xl overflow-hidden hover:border-primary/30 transition-all duration-300 flex flex-col flex-grow shadow-sm hover:shadow-xl">
                                             {/* Top Section with Background Gradient */}
                                             <div className="relative h-24 bg-gradient-to-b from-primary/10 to-transparent flex-shrink-0" />
 
@@ -118,7 +118,7 @@ const Leadership = () => {
                                                     <h3 className="text-xl font-bold mb-1 group-hover:text-primary transition-colors">
                                                         {executive.name}
                                                     </h3>
-                                                    <p className="text-sm font-medium text-primary">
+                                                    <p className="text-sm font-medium text-primary/80">
                                                         {executive.title}
                                                     </p>
                                                 </div>
@@ -132,7 +132,7 @@ const Leadership = () => {
                                 </CarouselItem>
                             ))}
                         </CarouselContent>
-                        <div className={`hidden md:block ${executives.length <= 4 ? 'xl:hidden' : ''} ${executives.length <= 3 ? 'lg:hidden' : ''} ${executives.length <= 2 ? 'md:hidden' : ''}`}>
+                        <div className={`hidden md:block ${executives.length <= 3 ? 'lg:hidden' : ''} ${executives.length <= 2 ? 'md:hidden' : ''}`}>
                             <CarouselPrevious className="-left-12 opacity-80 hover:opacity-100" />
                             <CarouselNext className="-right-12 opacity-80 hover:opacity-100" />
                         </div>
